@@ -1,0 +1,102 @@
+// Prisma schema file for User and Admin databases
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int     @id @unique @default(autoincrement())
+  email      String? @unique
+  password   String?
+  first_name String?
+  last_name  String?
+  address    String?
+  phone      String?
+  dob        String?
+  status     UserStatus? @default(ACTIVE)
+  
+  // Relations to User Database
+  sessions Session[]
+  transactions Transaction[]
+}
+
+model Session {
+  id            Int       @id @unique @default(autoincrement())
+  account_id    Int      
+  token         String?   @unique
+  session_start DateTime?
+
+  // Relation to User
+  user          User      @relation(fields: [account_id], references: [id])
+}
+
+model Transaction {
+  id               Int       @id @unique @default(autoincrement())
+  account_id       Int
+  transfer_id      Int?
+  transaction_type TransactionType?
+  amount           Decimal?
+  origin           String?
+  destination      String?
+  description      String?
+  created_at       DateTime?
+
+  // Relation to User
+  user             User    @relation(fields: [account_id], references: [id])
+  // Relation to Recurring Transaction
+  recurring_id               Int
+  recurring_transaction      Recurring_Transaction    @relation(fields: [recurring_id], references: [id])
+}
+
+model Recurring_Transaction {
+  id               Int       @id @unique @default(autoincrement())
+  transaction_list Transaction[]
+  day_of_month     Int?
+  account_id       Int?
+  transfer_id      Int?
+  transaction_type TransactionType?
+  amount           Decimal?
+  origin           String?
+  destination      String?
+  description      String?
+  created_at       DateTime?
+}
+
+model Admin {
+  id       Int     @id @unique @default(autoincrement())
+  email    String?
+  password String?
+
+  // Relations to Admin Database
+  admin_sessions Admin_Session[] 
+}
+
+model Admin_Session {
+  id            Int       @id @unique @default(autoincrement())
+  account_id    Int
+  token         String?   @unique
+  session_start DateTime?
+
+  // Relation to Admin
+  admin      Admin    @relation(fields: [account_id], references: [id])
+}
+
+// Enums 
+
+enum UserStatus {
+  ACTIVE
+  DELETED
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAW
+  TRANSFER_INTERNAL
+  TRANSFER_EXTERNAL
+  INTEREST
+}
