@@ -32,7 +32,7 @@ model Session {
   session_start DateTime?
 
   // Relation to User
-  user          User      @relation(fields: [account_id], references: [id])
+  // user          User      @relation(fields: [account_id], references: [id])
 }
 
 model Transaction {
