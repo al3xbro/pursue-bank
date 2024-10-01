@@ -14,7 +14,7 @@ export default function TopBar() {
 
   return (
     <div className="bg-indigo-600 text-white p-6 flex items-center shadow-md">
-      <h1 className="text-xl font-bold">Pursue Bank</h1>
+      <h1 className="text-xl font-bold">PB</h1>
       <nav className="ml-auto">
         <ul className="flex space-x-6">
           <li><a href="/" className="hover:text-indigo-300">Home</a></li>
