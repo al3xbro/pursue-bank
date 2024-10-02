@@ -38,7 +38,7 @@ export default function Login() {
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-500"
+            className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
             placeholder="Enter your email"
           />
         </div>
@@ -50,14 +50,14 @@ export default function Login() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-500"
+            className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
             placeholder="Enter your password"
           />
         </div>
 
         <button
           onClick={handleLogin}
-          className="w-full bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700 transition"
+          className="w-full bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-600 transition"
         >
           Login
         </button>
