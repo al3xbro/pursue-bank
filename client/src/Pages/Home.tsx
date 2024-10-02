@@ -23,10 +23,10 @@ export default function Home(){
         <div className="flex flex-col justify-start items-center h-screen bg-gray-100 pt-16">
             
             {/* Link to backend to display correct balance*/}
-            <h1 className="text-6xl font-bold">$15,000 </h1> 
-            <h1 className="text-2xl">Current Balance: </h1> 
+            <h1 className="text-6xl font-bold">$15,000</h1> 
+            <h1 className="text-2xl">Current Balance</h1> 
             
-            <div className="container m-auto grid grid-cols-2 gap-4 bg-indigo-600 p-20 rounded-lg shadow-lg w-100">
+            <div className="grid grid-cols-[3fr,2fr] gap-10 w-1/2 p-8 bg-indigo-600 rounded-lg shadow-lg">
 
             <button 
                 onClick={handleTransactions}
