@@ -4,20 +4,48 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(''); // For displaying error messages
   const navigate = useNavigate(); // Initialize navigate
 
   // Function declaration for login handler
-  function handleLogin() {
-    console.log('Login clicked');
-    // Assuming login validation logic here
-    // After successful login, navigate to home page
-    navigate('/');
+  async function handleLogin() {
+    // Prepare login payload
+    const loginData = { email, password };
+
+    try {
+      // Send POST request to your login endpoint (replace 'https://your-api/login' with your actual API)
+      const response = await fetch('https://your-api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(loginData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Assuming the API returns the accessToken in the response
+        const { accessToken } = data;
+        console.log('Login successful, Access Token:', accessToken);
+        
+        // Store the accessToken in localStorage or sessionStorage (or any storage mechanism)
+        localStorage.setItem('accessToken', accessToken);
+
+        // Navigate to home page after successful login
+        navigate('/');
+      } else {
+        // Handle login error (e.g., incorrect password)
+        setError(data.message || 'Login failed, please try again');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setError('Something went wrong, please try again later.');
+    }
   }
 
   // Function declaration for signup handler
   function handleSignup() {
     console.log('Signup clicked');
-    // You could also navigate to a signup page if needed
+    // Navigate to signup page or handle signup logic
   }
 
   return (
@@ -30,6 +58,8 @@ export default function Login() {
       {/* Login Form */}
       <div className="bg-white p-8 rounded-lg shadow-lg w-80">
         <h2 className="text-2xl font-bold text-center mb-6">Welcome</h2>
+
+        {error && <div className="mb-4 text-red-600 text-center">{error}</div>}
 
         <div className="mb-4">
           <label htmlFor="email" className="block text-sm font-semibold text-gray-700">Email</label>
@@ -57,7 +87,7 @@ export default function Login() {
 
         <button
           onClick={handleLogin}
-          className="w-full bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-600 transition"
+          className="w-full bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700 transition"
         >
           Login
         </button>
