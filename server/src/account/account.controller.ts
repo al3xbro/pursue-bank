@@ -23,6 +23,7 @@ export class AccountController {
         );
     }
 
+    // Made this to test guard.
     @UseGuards(AuthGuard)
     @Get('test')
     async justForTesting() {
