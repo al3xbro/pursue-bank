@@ -4,6 +4,6 @@ import { AutopayService } from './autopay.service';
 
 @Module({
   controllers: [AutopayController],
-  providers: [AutopayService]
+  providers: [AutopayService],
 })
 export class AutopayModule {}

@@ -10,19 +10,23 @@ export default function TopBar() {
   };
 
   // Determine if the current path is the login page
-  const isLoginPage = location.pathname === '/login';
+  const isLoginPage = location.pathname === '/login' || location.pathname === '/signup';
 
   return (
     <div className="bg-indigo-600 text-white p-6 flex items-center shadow-md">
       <h1 className="text-xl font-bold">PB</h1>
       <nav className="ml-auto">
-        <ul className="flex space-x-6">
-          <li><a href="/" className="hover:text-indigo-300">Home</a></li>
-          <li><a href="/about" className="hover:text-indigo-300">About</a></li>
+        <ul className="flex gap-4">
+          <li className='m-auto'>
+            <a href="/" className="hover:text-indigo-300">Home</a>
+          </li>
+          <li className='m-auto'>
+            <a href="/about" className="hover:text-indigo-300">About</a>
+          </li>
+          {!isLoginPage && <AccountIcon onClick={handleAccountClick} />}
         </ul>
       </nav>
       {/* Account Icon hidden on login page */}
-      {!isLoginPage && <AccountIcon onClick={handleAccountClick} />}
     </div>
   );
 }

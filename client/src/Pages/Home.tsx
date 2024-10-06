@@ -1,65 +1,80 @@
 import React, { useState } from 'react';
 
-export default function Home(){
+export default function Home() {
 
-    //Frameworks for buttons
-    function handleTransactions() {
+  const [balance, setBalance] = useState<number | undefined>(undefined);
 
-    }
+  const fetchBalance = async () => {
+    const res = await fetch('http://localhost:3000/api/internal/user/test', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    });
+    const json = await res.json();
+    setBalance(json.balance);
+  }
+  fetchBalance();
 
-    function handlePayment() {
+  //Frameworks for buttons
+  function handleTransactions() {
 
-    }
+  }
 
-    function handleWithDepo() {
+  function handlePayment() {
 
-    }
+  }
 
-    function handleTransfer() {
+  function handleWithDepo() {
 
-    }
+  }
 
-    return (
-        <div className="flex flex-col justify-start items-center h-screen bg-gray-100 pt-16">
-            
-            {/* Link to backend to display correct balance*/}
-            <h1 className="text-6xl font-bold">$15,000</h1> 
-            <h1 className="text-2xl">Current Balance</h1> 
-            
-            <div className="grid grid-cols-[3fr,2fr] gap-10 w-1/2 p-8 bg-indigo-600 rounded-lg shadow-lg">
+  function handleTransfer() {
 
-            <button 
-                onClick={handleTransactions}
-                className="text-4xl font-semibold w-50 mt-4 bg-gray-50 text-black p-20 rounded-md hover:bg-gray-100 transition"
-            >
-                My Transactions
-            </button>
+  }
 
-            <button 
-                onClick={handlePayment} 
-                className="text-4xl font-semibold w-50 mt-4 bg-gray-50 text-black p-20 rounded-md hover:bg-gray-100 transition"
-            >
-                Make a payment
-            </button>
+  return (
+    <div className="flex flex-col items-center h-[calc(100vh-88px)] justify-center bg-gray-100 gap-5">
 
-            <button 
-                onClick={handleWithDepo}
-                className="text-4xl font-semibold w-50 mt-4 bg-gray-50 text-black p-20 rounded-md hover:bg-gray-100 transition"
-            >
-                Withdraw/Deposit        
-            </button>
+      {/* Link to backend to display correct balance*/}
+      <h1 className="text-6xl font-bold">{balance?.toLocaleString() ?? 'unable to fetch'}</h1>
+      <h1 className="text-2xl">Current Balance</h1>
 
-            <button 
-                onClick={handleTransfer}
-                className="text-4xl font-semibold w-50 mt-4 bg-gray-50 text-black p-20 rounded-md hover:bg-gray-100 transition"
-            >
-                Transfer
-            </button>
+      <div className="grid grid-cols-[3fr,2fr] gap-10 w-1/2 p-8 bg-indigo-600 rounded-lg shadow-lg">
 
-                
-            </div>
-        </div>
-        
-    );
+        <button
+          onClick={handleTransactions}
+          className="text-4xl font-semibold w-50 mt-4 bg-gray-50 text-black p-20 rounded-md hover:bg-gray-100 transition"
+        >
+          My Transactions
+        </button>
+
+        <button
+          onClick={handlePayment}
+          className="text-4xl font-semibold w-50 mt-4 bg-gray-50 text-black p-20 rounded-md hover:bg-gray-100 transition"
+        >
+          Make a payment
+        </button>
+
+        <button
+          onClick={handleWithDepo}
+          className="text-4xl font-semibold w-50 mt-4 bg-gray-50 text-black p-20 rounded-md hover:bg-gray-100 transition"
+        >
+          Withdraw/Deposit
+        </button>
+
+        <button
+          onClick={handleTransfer}
+          className="text-4xl font-semibold w-50 mt-4 bg-gray-50 text-black p-20 rounded-md hover:bg-gray-100 transition"
+        >
+          Transfer
+        </button>
+
+
+      </div>
+    </div>
+
+  );
 
 }

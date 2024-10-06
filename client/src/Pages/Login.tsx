@@ -14,7 +14,7 @@ export default function Login() {
 
     try {
       // Send POST request to your login endpoint (replace 'https://your-api/login' with your actual API)
-      const response = await fetch('https://your-api/login', {
+      const response = await fetch('http://localhost:3000/api/internal/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(loginData),
@@ -26,7 +26,7 @@ export default function Login() {
         // Assuming the API returns the accessToken in the response
         const { accessToken } = data;
         console.log('Login successful, Access Token:', accessToken);
-        
+
         // Store the accessToken in localStorage or sessionStorage (or any storage mechanism)
         localStorage.setItem('accessToken', accessToken);
 
@@ -42,11 +42,6 @@ export default function Login() {
     }
   }
 
-  // Function declaration for signup handler
-  function handleSignup() {
-    console.log('Signup clicked');
-    // Navigate to signup page or handle signup logic
-  }
 
   return (
     <div className="flex flex-col justify-start items-center h-screen bg-gray-100 pt-16">
@@ -93,7 +88,7 @@ export default function Login() {
         </button>
 
         <button
-          onClick={handleSignup}
+          onClick={() => navigate('/signup')}
           className="w-full mt-4 bg-gray-200 text-gray-700 p-2 rounded-md hover:bg-gray-300 transition"
         >
           Signup

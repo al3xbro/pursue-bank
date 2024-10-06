@@ -4,6 +4,7 @@ import './index.css';
 import Home from './Pages/Home';
 import Login from './Pages/Login';
 import TopBar from './Components/TopBar'
+import Signup from './Pages/Signup';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />         {/* Home Page */}
         <Route path="/login" element={<Login />} />   {/* Login Page */}
+        <Route path='/signup' element={<Signup />} />
       </Routes>
     </Router>
   );
