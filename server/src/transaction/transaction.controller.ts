@@ -3,35 +3,35 @@ import { TransactionService } from './transaction.service';
 import { Prisma, User, Transaction } from '@prisma/client';
 import { AuthGuard } from 'src/auth/auth.guard';
 
-@Controller('transaction')
+@Controller('api/internal/transaction')
 export class TransactionController {
     constructor(
         private transactionService: TransactionService
     ) {}
 
     @UseGuards(AuthGuard)
-    @Get('transaction/{user_id}')
+    @Get(':id')
     async getTransactionsByUserId(@Param('id') id: number): Promise<Transaction[] | null> {
         return this.transactionService.transactions({where: { account_id: id}})
     }
 
     @UseGuards(AuthGuard)
-    @Get('transaction/{user_id}/balance')
+    @Get(':id/balance')
     async getUserBalance(@Param('id') id: number): Promise<Prisma.Decimal | null> {
-        const temp: Transaction[] = this.transactionService.getTransactionsForBalance(id)
+        const temp: Transaction[] | null = await this.transactionService.getTransactionsForBalance(id)
         if (!temp == null) {
-            return this.transactionService.sumOfTransactions(temp, id);
+            return this.transactionService.sumOfTransactions(temp as Transaction[], id);
         }
         return null;
     }
 
     @UseGuards(AuthGuard)
-    @Post('transaction')
+    @Post()
     async createTransaction(@Body() transactionData: Prisma.TransactionCreateInput): Promise<Transaction> {
         if (transactionData.transaction_type == 'WITHDRAW' || 'TRANSFER_INTERNAL' || 'TRANSFER_EXTERNAL') {
             return this.transactionService.createTransaction({
                 ...transactionData,
-                amount: transactionData.amount.mul(-1),
+                amount: (transactionData.amount as Prisma.Decimal).mul(-1),
                 created_at: '',
             });
         } else {
