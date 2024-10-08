@@ -44,7 +44,7 @@ export default function Login() {
 
 
   return (
-    <div className="flex flex-col justify-start items-center h-screen bg-gray-100 pt-16">
+    <div className="flex flex-col items-center h-[calc(100vh-88px)] justify-center bg-gray-100">
       {/* Bank Name Section */}
       <div className="mb-8">
         <h1 className="text-6xl font-bold text-indigo-600">Pursue Bank</h1>
