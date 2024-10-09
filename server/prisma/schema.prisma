@@ -39,18 +39,18 @@ model Transaction {
   id               Int       @id @unique @default(autoincrement())
   account_id       Int
   transfer_id      Int?
-  transaction_type TransactionType?
-  amount           Decimal?
+  transaction_type TransactionType
+  amount           Decimal
   origin           String?
   destination      String?
   description      String?
-  created_at       DateTime?
+  created_at       DateTime
 
   // Relation to User
   user             User    @relation(fields: [account_id], references: [id])
   // Relation to Recurring Transaction
-  recurring_id               Int
-  recurring_transaction      Recurring_Transaction    @relation(fields: [recurring_id], references: [id])
+  recurring_id               Int?
+  recurring_transaction      Recurring_Transaction?    @relation(fields: [recurring_id], references: [id])
 }
 
 model Recurring_Transaction {
