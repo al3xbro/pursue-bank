@@ -11,34 +11,41 @@ export class TransactionController {
 
     @UseGuards(AuthGuard)
     @Get(':id')
-    async getTransactionsByUserId(@Param('id') id: number): Promise<Transaction[] | null> {
-        return this.transactionService.transactions({where: { account_id: id}})
+    async getTransactionsByUserId(@Param('id') id: string): Promise<Transaction[] | null> {
+        const uid = Number(id)
+        return this.transactionService.transactions({where: { account_id: uid}})
     }
 
     @UseGuards(AuthGuard)
     @Get(':id/balance')
-    async getUserBalance(@Param('id') id: number): Promise<Prisma.Decimal | null> {
-        const temp: Transaction[] | null = await this.transactionService.getTransactionsForBalance(id)
-        if (!temp == null) {
-            return this.transactionService.sumOfTransactions(temp as Transaction[], id);
+    async getUserBalance(@Param('id') id: string): Promise<Prisma.Decimal | null> {
+        const uid = Number(id)
+        const temp: Transaction[] | null = await this.transactionService.getTransactionsForBalance(uid)
+        if (temp != null) {
+            return this.transactionService.sumOfTransactions(temp as Transaction[], uid);
         }
         return null;
     }
 
     @UseGuards(AuthGuard)
     @Post()
-    async createTransaction(@Body() transactionData: Prisma.TransactionCreateInput): Promise<Transaction> {
-        if (transactionData.transaction_type == 'WITHDRAW' || 'TRANSFER_INTERNAL' || 'TRANSFER_EXTERNAL') {
+    async createTransaction(@Body() transactionData: Omit<Prisma.TransactionCreateInput, "created_at">): Promise<Transaction> {
+        const amount = transactionData.amount;
+        const decimalAmount = new Prisma.Decimal(amount as number)
+        if (transactionData.transaction_type == 'WITHDRAW' || 
+            transactionData.transaction_type == 'TRANSFER_INTERNAL' || 
+            transactionData.transaction_type == 'TRANSFER_EXTERNAL') {
             return this.transactionService.createTransaction({
                 ...transactionData,
-                amount: (transactionData.amount as Prisma.Decimal).mul(-1),
-                created_at: '',
+                amount: decimalAmount.mul(-1),
+                created_at: new Date(),
             });
         } else {
             return this.transactionService.createTransaction({
                 ...transactionData,
-                created_at: '',
-              });
+                created_at: new Date(),
+                amount: decimalAmount,
+            });
         }
     }
     

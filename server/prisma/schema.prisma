@@ -49,8 +49,8 @@ model Transaction {
   // Relation to User
   user             User    @relation(fields: [account_id], references: [id])
   // Relation to Recurring Transaction
-  recurring_id               Int
-  recurring_transaction      Recurring_Transaction    @relation(fields: [recurring_id], references: [id])
+  recurring_id               Int?
+  recurring_transaction      Recurring_Transaction?    @relation(fields: [recurring_id], references: [id])
 }
 
 model Recurring_Transaction {
