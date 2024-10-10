@@ -55,7 +55,7 @@ export class AuthService {
     console.log(JSON.stringify(sessionData)); // for debug
     return { 
         accessToken: token,
-        account_id: user.id,
+        accountId: user.id,
      };
   }
 }

@@ -18,11 +18,13 @@ export class TransactionController {
 
     @UseGuards(AuthGuard)
     @Get(':id/balance')
-    async getUserBalance(@Param('id') id: string): Promise<Prisma.Decimal | null> {
+    async getUserBalance(@Param('id') id: string) {
         const uid = Number(id)
         const temp: Transaction[] | null = await this.transactionService.getTransactionsForBalance(uid)
         if (temp != null) {
-            return this.transactionService.sumOfTransactions(temp as Transaction[], uid);
+            return {
+                balance: this.transactionService.sumOfTransactions(temp as Transaction[], uid)
+            }
         }
         return null;
     }
