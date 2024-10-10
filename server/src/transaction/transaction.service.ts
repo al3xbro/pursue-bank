@@ -1,107 +1,57 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
-import { Prisma, Transaction, User } from '@prisma/client';
-import { Decimal } from '@prisma/client/runtime/library';
+import * as _ from 'lodash';
+import { TransactionPostgresService } from './postgres/transaction.postgres.service';
+import { $Enums, Transaction, TransactionType } from '@prisma/client';
 
 @Injectable()
-export class TransactionService { 
-  constructor(private prisma: PrismaService) {}
+export class TransactionService {
+  constructor(
+    private transactionPostgresService: TransactionPostgresService
+  ) { }
 
-  // Business logic methods
+  async getTransactionsByAccountId(id: number): Promise<Transaction[]> {
+    return await this.transactionPostgresService.getTransactionsByAccountId(id);
+  }
 
-  async getTransactionsForBalance(id: number): Promise<Transaction[] | null> {
-    return await this.prisma.transaction.findMany({
-      where: {OR: [
-        {account_id: id},
-        {transfer_id: id}
-      ]}
+  async getBalance(id: number): Promise<number> {
+    const transactions = await this.transactionPostgresService.getTransactionsByAccountId(id);
+    const transactionsByType = _.groupBy(transactions, 'transaction_type');
+
+    let balance = 0;
+    balance += _.sumBy(transactionsByType['INTEREST'], 'amount');
+    balance += _.sumBy(transactionsByType['DEPOSIT'], 'amount');
+    balance -= _.sumBy(transactionsByType['WITHDRAW'], 'amount');
+    balance += _.sumBy([
+      ...transactionsByType['TRANSFER_INTERNAL'] || [],
+      ...transactionsByType['TRANSFER_EXTERNAL'] || []
+    ], (transaction) => {
+      return transaction.account_id === id
+        ? -transaction.amount.toNumber()
+        : transaction.amount.toNumber()
     })
+
+    return balance;
   }
 
-  async sumOfTransactions(transactions: Transaction[], u_id: number): Promise<Prisma.Decimal | null> {
-    var sum = new Decimal(0);
-    for (let i=0; i<transactions.length; i++) {
-      const t = transactions[i];
-      if (t.amount != null) {
-        switch (t.transaction_type) {
-          case "WITHDRAW":                    // WITHDRAW will always be -ve  
-          case "DEPOSIT":                     // DEPOSIT will always be +ve
-            sum = sum.plus(t.amount);             
-            break;
-          case "TRANSFER_INTERNAL":
-            if (u_id == t.account_id) {
-              sum = sum.plus(t.amount);         // TRANSFER_INTERNAL from user will always be -ve
-            } else if (u_id == t.transfer_id) {
-              sum = sum.minus(t.amount);         // TRANSFER_INTERNAL into user will always be -ve FOR THE ORIGINAL USER
-            }
-            break;
-          case "TRANSFER_EXTERNAL":
-            if (u_id == t.account_id) {
-              sum = sum.plus(t.amount);         // TRANSFER_INTERNAL from user will always be -ve
-            } else if (u_id == t.transfer_id) {
-              sum = sum.minus(t.amount);         // TRANSFER_INTERNAL into user will always be -ve FOR THE ORIGINAL USER
-            }
-            break;
-          case "INTEREST":
-            sum = sum.mul(t.amount);
-            break;
-          default:
-            break;
-        }
-      }
-    }
-    return sum;
-  }
-
-  // Prisma database access methods (copied and modified from Nest documentation)
-
-  // retrieve from Transaction table by specific ID(?)
-  async transaction(
-    transactionWhereUniqueInput: Prisma.TransactionWhereUniqueInput,
-  ): Promise<Transaction | null> {
-    return this.prisma.transaction.findUnique({
-      where: transactionWhereUniqueInput,
-    });
-  }
-
-  // retreive any number of Transactions by where parameter
-  async transactions(params: {
-    skip?: number;
-    take?: number;
-    cursor?: Prisma.TransactionWhereUniqueInput;
-    where?: Prisma.TransactionWhereInput;
-    orderBy?: Prisma.TransactionOrderByWithRelationInput;
-  }): Promise<Transaction[]> {
-    const { skip, take, cursor, where, orderBy } = params;
-    return this.prisma.transaction.findMany({
-      skip,
-      take,
-      cursor,
-      where,
-      orderBy,
-    });
-  }
-
-  async createTransaction(data: Prisma.TransactionCreateInput): Promise<Transaction> {
-    return this.prisma.transaction.create({
-      data,
-    });
-  }
-
-  async updateTransaction(params: {
-    where: Prisma.TransactionWhereUniqueInput;
-    data: Prisma.TransactionUpdateInput;
+  async createSingleTransaction(data: {
+    accountId: number,
+    transferId: number,
+    amount: number,
+    transactionType: string
   }): Promise<Transaction> {
-    const { data, where } = params;
-    return this.prisma.transaction.update({
-      data,
-      where,
-    });
-  }
+    if (!(data.transactionType in $Enums.TransactionType)) {
+      throw new Error('Invalid transaction type');
+    }
 
-  async deleteTransaction(where: Prisma.TransactionWhereUniqueInput): Promise<Transaction> {
-    return this.prisma.transaction.delete({
-      where,
+    return await this.transactionPostgresService.createTransaction({
+      amount: data.amount,
+      transfer_id: data.transferId,
+      transaction_type: data.transactionType as TransactionType,
+      user: {
+        connect: { id: data.accountId }
+      },
+      recurring_transaction: undefined
     });
   }
 }
+

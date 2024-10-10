@@ -1,54 +1,39 @@
-import { Controller, Get, Param, Post, Body, Put, Delete, UseGuards } from '@nestjs/common';
-import { TransactionService } from './transaction.service';
-import { Prisma, User, Transaction } from '@prisma/client';
+import { Body, Controller, Get, Headers, Post, UseGuards } from '@nestjs/common';
+import { Transaction } from '@prisma/client';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { TransactionService } from './transaction.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Controller('api/internal/transaction')
 export class TransactionController {
   constructor(
-    private transactionService: TransactionService
+    private transactionService: TransactionService,
+    private jwtService: JwtService
   ) { }
 
   @UseGuards(AuthGuard)
-  @Get(':id')
-  async getTransactionsByUserId(@Param('id') id: string): Promise<Transaction[] | null> {
-    const uid = Number(id)
-    return this.transactionService.transactions({ where: { account_id: uid } })
+  @Get('')
+  async getTransactionsByUserId(@Headers('Authorization') authToken: string): Promise<Transaction[]> {
+    const id = this.jwtService.decode(authToken.split(' ')[1])['sub'];
+    return this.transactionService.getTransactionsByAccountId(id)
   }
 
   @UseGuards(AuthGuard)
-  @Get(':id/balance')
-  async getUserBalance(@Param('id') id: string) {
-    const uid = Number(id)
-    const temp: Transaction[] | null = await this.transactionService.getTransactionsForBalance(uid)
-    if (temp != null) {
-      return {
-        balance: (await this.transactionService.sumOfTransactions(temp as Transaction[], uid))?.toNumber()
-      }
-    }
-    return null;
+  @Get('/balance')
+  async getUserBalance(@Headers('Authorization') authToken: string): Promise<number> {
+    const id = this.jwtService.decode(authToken.split(' ')[1])['sub'];
+    return this.transactionService.getBalance(id)
   }
 
   @UseGuards(AuthGuard)
   @Post()
-  async createTransaction(@Body() transactionData: Omit<Prisma.TransactionCreateInput, "created_at">): Promise<Transaction> {
-    const amount = transactionData.amount;
-    const decimalAmount = new Prisma.Decimal(amount as number)
-    if (transactionData.transaction_type == 'WITHDRAW' ||
-      transactionData.transaction_type == 'TRANSFER_INTERNAL' ||
-      transactionData.transaction_type == 'TRANSFER_EXTERNAL') {
-      return this.transactionService.createTransaction({
-        ...transactionData,
-        amount: decimalAmount.mul(-1),
-        created_at: new Date(),
-      });
-    } else {
-      return this.transactionService.createTransaction({
-        ...transactionData,
-        created_at: new Date(),
-        amount: decimalAmount,
-      });
-    }
+  async createSingleTransaction(@Headers('Authorization') authToken: string, @Body() data: {
+    transferId: number,
+    amount: number,
+    transactionType: string
+  }): Promise<Transaction> {
+    const accountId = this.jwtService.decode(authToken.split(' ')[1])['sub'];
+    return this.transactionService.createSingleTransaction({ accountId, ...data });
   }
 
 }
