@@ -53,6 +53,9 @@ export class AuthService {
       data: sessionData as Prisma.SessionCreateInput,
     });
     console.log(JSON.stringify(sessionData)); // for debug
-    return { accessToken: token };
+    return { 
+        accessToken: token,
+        account_id: user.id,
+     };
   }
 }
