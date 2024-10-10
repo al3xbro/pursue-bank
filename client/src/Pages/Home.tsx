@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
 import LargeButton from '../atoms/LargeButton';
+import { createTransaction } from '../services/transaction';
 
 export default function Home() {
 
@@ -8,7 +9,7 @@ export default function Home() {
   const [transactions, setTransactions] = useState<any[]>([]);
 
   const fetchBalance = async () => {
-    const res = await fetch('http://localhost:3000/api/internal/user/test', { // TODO: change to correct endpoint
+    const res = await fetch(`http://localhost:3000/api/internal/transaction/${localStorage.getItem('accountId')}/balance`, { // TODO: change to correct endpoint
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -16,6 +17,7 @@ export default function Home() {
       },
     });
     const json = await res.json();
+    console.log(json);
     setBalance(json.balance);
   }
 
@@ -61,12 +63,12 @@ export default function Home() {
         </div>
         <div className='flex flex-col w-[40%] gap-8'>
           <div className='font-semibold text-xl'>Transfer</div>
-          <LargeButton>
+          <LargeButton onClick={() => createTransaction(parseInt(localStorage.getItem('accountId') ?? '0'), 2)}>
             <div className='text-xl'>
               Internal
             </div>
           </LargeButton>
-          <LargeButton>
+          <LargeButton onClick={() => console.log('unimplemented')}>
             <div className='text-xl'>
               External
             </div>

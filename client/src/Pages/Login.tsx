@@ -24,11 +24,12 @@ export default function Login() {
 
       if (response.ok) {
         // Assuming the API returns the accessToken in the response
-        const { accessToken } = data;
+        const { accessToken, accountId } = data;
         console.log('Login successful, Access Token:', accessToken);
 
         // Store the accessToken in localStorage or sessionStorage (or any storage mechanism)
         localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('accountId', accountId)
 
         // Navigate to home page after successful login
         navigate('/');
