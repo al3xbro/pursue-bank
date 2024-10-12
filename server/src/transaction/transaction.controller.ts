@@ -13,16 +13,16 @@ export class TransactionController {
 
   @UseGuards(AuthGuard)
   @Get('')
-  async getTransactionsByUserId(@Headers('Authorization') authToken: string): Promise<Transaction[]> {
+  async getTransactions(@Headers('Authorization') authToken: string): Promise<Transaction[]> {
     const id = this.jwtService.decode(authToken.split(' ')[1])['sub'];
     return this.transactionService.getTransactionsByAccountId(id)
   }
 
   @UseGuards(AuthGuard)
   @Get('/balance')
-  async getUserBalance(@Headers('Authorization') authToken: string): Promise<number> {
+  async getUserBalance(@Headers('Authorization') authToken: string): Promise<{ balance: number }> {
     const id = this.jwtService.decode(authToken.split(' ')[1])['sub'];
-    return this.transactionService.getBalance(id)
+    return { balance: await this.transactionService.getBalanceByAccountId(id) }
   }
 
   @UseGuards(AuthGuard)

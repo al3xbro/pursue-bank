@@ -13,7 +13,7 @@ export class TransactionService {
     return await this.transactionPostgresService.getTransactionsByAccountId(id);
   }
 
-  async getBalance(id: number): Promise<number> {
+  async getBalanceByAccountId(id: number): Promise<number> {
     const transactions = await this.transactionPostgresService.getTransactionsByAccountId(id);
     const transactionsByType = _.groupBy(transactions, 'transaction_type');
 
