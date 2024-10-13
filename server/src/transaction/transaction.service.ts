@@ -18,10 +18,10 @@ export class TransactionService {
     const transactionsByType = _.groupBy(transactions, 'transaction_type');
 
     let balance = 0;
-    balance += _.sumBy(transactionsByType['INTEREST'], 'amount');
-    balance += _.sumBy(transactionsByType['DEPOSIT'], 'amount');
-    balance -= _.sumBy(transactionsByType['WITHDRAW'], 'amount');
     balance += _.sumBy([
+      ...transactionsByType['INTEREST'] || [],
+      ...transactionsByType['DEPOSIT'] || [],
+      ...transactionsByType['WITHDRAW'] || [],
       ...transactionsByType['TRANSFER_INTERNAL'] || [],
       ...transactionsByType['TRANSFER_EXTERNAL'] || []
     ], (transaction) => {
