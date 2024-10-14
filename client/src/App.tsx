@@ -7,6 +7,7 @@ import TopBar from './Components/TopBar'
 import Signup from './Pages/Signup';
 import Transactions from './Pages/Transactions';
 import FindATMs from './Pages/FindATMs';
+import Transfer from './Pages/Transfer';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path='/signup' element={<Signup />} />
         <Route path='/transactions' element={<Transactions />} />
         <Route path='/findATMs' element={<FindATMs />} />
+        <Route path='/transfer' element={<Transfer />} />
       </Routes>
     </Router>
   );
