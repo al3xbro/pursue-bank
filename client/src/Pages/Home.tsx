@@ -73,12 +73,12 @@ export default function Home() {
         </div>
         <div className='flex flex-col w-[40%] gap-8'>
           <div className='font-semibold text-xl'>Transfer Money</div>
-          <LargeButton>
+          <LargeButton onClick={() => navigate('/transfer')}>
             <div className='text-xl'>
               Internal
             </div>
           </LargeButton>
-          <LargeButton>
+          <LargeButton onClick={() => navigate('/transfer')}>
             <div className='text-xl'>
               External
             </div>
