@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 export default function Transfer() {
   const [amount, setAmount] = useState('');
   const [bankAccount, setBankAccount] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate(); // Initialize navigate
 
   const handleConfirm = () => {
     if (!amount || !bankAccount) {
@@ -18,6 +20,7 @@ export default function Transfer() {
     setAmount('');
     setBankAccount('');
     setError('');
+    navigate('/');
   };
 
   return (
