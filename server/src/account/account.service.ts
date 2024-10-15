@@ -18,10 +18,10 @@ export class AccountService {
     }
 
     return await this.accountPostgresService.createAccount({
-      email: data.email,
-      password: data.password,
-      first_name: data.first_name,
-      last_name: data.last_name,
+      ...data,
+      address: "",
+      phone: "",
+      dob: "",
     });
   }
 }
