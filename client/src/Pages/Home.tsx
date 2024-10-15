@@ -44,7 +44,7 @@ export default function Home() {
               Internal
             </div>
           </LargeButton>
-          <LargeButton onClick={() => console.log('unimplemented')}>
+          <LargeButton onClick={() => navigate('/transfer')}>
             <div className='text-xl'>
               External
             </div>
