@@ -1,10 +1,9 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
-// import { AuthGuard } from './auth.guard';
 
 @Controller('api/internal/auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   // should use DTOs for parameter and return value I guess
   @HttpCode(HttpStatus.OK)

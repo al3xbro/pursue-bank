@@ -10,61 +10,53 @@ datasource db {
 }
 
 model User {
-  id         Int     @id @unique @default(autoincrement())
-  email      String  @unique
-  password   String 
-  first_name String 
-  last_name  String 
-  address    String 
-  phone      String 
-  dob        String 
-  status     UserStatus  @default(ACTIVE)
-  
+  id         Int        @id @unique @default(autoincrement())
+  email      String     @unique
+  password   String
+  first_name String
+  last_name  String
+  address    String
+  phone      String
+  dob        String
+  status     UserStatus @default(ACTIVE)
+
   // Relations to User Database
-  sessions Session[]
   transactions Transaction[]
 }
 
-model Session {
-  id            Int       @id @unique @default(autoincrement())
-  account_id    Int      
-  token         String?   @unique
-  session_start DateTime?
-
-  // Relation to User
-  user          User      @relation(fields: [account_id], references: [id])
-}
-
 model Transaction {
-  id               Int       @id @unique @default(autoincrement())
-  account_id       Int
-  transfer_id      Int?
-  transaction_type TransactionType?
-  amount           Decimal?
-  origin           String?
-  destination      String?
+  id               Int             @id @unique @default(autoincrement())
+  created_at       DateTime        @default(now())
+  transaction_type TransactionType
+  amount           Decimal
   description      String?
-  created_at       DateTime?
 
-  // Relation to User
-  user             User    @relation(fields: [account_id], references: [id])
-  // Relation to Recurring Transaction
-  recurring_id               Int
-  recurring_transaction      Recurring_Transaction    @relation(fields: [recurring_id], references: [id])
+  account_id  Int
+  transfer_id Int?
+
+  origin      String?
+  destination String?
+
+  user User @relation(fields: [account_id], references: [id])
+
+  recurring_transaction Recurring_Transaction? @relation(fields: [recurring_id], references: [id])
+  recurring_id          Int?
 }
 
 model Recurring_Transaction {
-  id               Int       @id @unique @default(autoincrement())
+  id               Int              @id @unique @default(autoincrement())
+  transaction_type TransactionType?
   transaction_list Transaction[]
   day_of_month     Int?
-  account_id       Int?
-  transfer_id      Int?
-  transaction_type TransactionType?
   amount           Decimal?
-  origin           String?
-  destination      String?
-  description      String?
-  created_at       DateTime?
+
+  account_id  Int?
+  transfer_id Int?
+
+  origin      String?
+  destination String?
+  description String?
+  created_at  DateTime?             @default(now())
 }
 
 model Admin {
@@ -72,8 +64,7 @@ model Admin {
   email    String?
   password String?
 
-  // Relations to Admin Database
-  admin_sessions Admin_Session[] 
+  admin_sessions Admin_Session[]
 }
 
 model Admin_Session {
@@ -82,11 +73,8 @@ model Admin_Session {
   token         String?   @unique
   session_start DateTime?
 
-  // Relation to Admin
-  admin      Admin    @relation(fields: [account_id], references: [id])
+  admin Admin @relation(fields: [account_id], references: [id])
 }
-
-// Enums 
 
 enum UserStatus {
   ACTIVE

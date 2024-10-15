@@ -17,22 +17,19 @@ export class AccountController {
   // }
 
   @Post()
-  async createAccount(@Body() userData: Prisma.UserCreateInput): Promise<User> {
-    return this.accountService.createAccount({
-      ...userData,
-      status: 'ACTIVE',
-      first_name: '',
-      last_name: '',
-      address: '',
-      phone: '',
-      dob: '',
-    });
+  async createAccount(@Body() data: {
+    email: string,
+    password: string,
+    first_name: string,
+    last_name: string
+  }): Promise<User> {
+    return this.accountService.createAccount({ ...data });
   }
 
   // Made this to test guard.
-  @UseGuards(AuthGuard)
-  @Get('test')
-  async justForTesting() {
-    return 'success';
-  }
+  //@UseGuards(AuthGuard)
+  //@Get('test')
+  //async justForTesting() {
+  //  return 'success';
+  //}
 }

@@ -1,4 +1,39 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Post, UseGuards } from '@nestjs/common';
+import { Transaction } from '@prisma/client';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { TransactionService } from './transaction.service';
+import { JwtService } from '@nestjs/jwt';
 
-@Controller('transaction')
-export class TransactionController {}
+@Controller('api/internal/transaction')
+export class TransactionController {
+  constructor(
+    private transactionService: TransactionService,
+    private jwtService: JwtService
+  ) { }
+
+  @UseGuards(AuthGuard)
+  @Get('')
+  async getTransactions(@Headers('Authorization') authToken: string): Promise<Transaction[]> {
+    const id = this.jwtService.decode(authToken.split(' ')[1])['sub'];
+    return this.transactionService.getTransactionsByAccountId(id)
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/balance')
+  async getUserBalance(@Headers('Authorization') authToken: string): Promise<{ balance: number }> {
+    const id = this.jwtService.decode(authToken.split(' ')[1])['sub'];
+    return { balance: await this.transactionService.getBalanceByAccountId(id) }
+  }
+
+  @UseGuards(AuthGuard)
+  @Post()
+  async createSingleTransaction(@Headers('Authorization') authToken: string, @Body() data: {
+    transferId: number,
+    amount: number,
+    transactionType: string
+  }): Promise<Transaction> {
+    const accountId = this.jwtService.decode(authToken.split(' ')[1])['sub'];
+    return this.transactionService.createSingleTransaction({ accountId, ...data });
+  }
+
+}
