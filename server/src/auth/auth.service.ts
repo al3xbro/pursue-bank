@@ -1,6 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
-import { Prisma, Recurring_Transaction, Session } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -8,51 +7,26 @@ export class AuthService {
   constructor(
     private prismaService: PrismaService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async signIn(signInInfo: { email: string; password: string }): Promise<any> {
     const user = await this.prismaService.user.findUnique({
       where: { email: signInInfo.email },
     });
-    if (user === null) {
-      throw new UnauthorizedException('Invalid email');
-    }
-    if (user.password !== signInInfo.password) {
-      throw new UnauthorizedException('Incorrect password');
+
+    if (user === null || user.password !== signInInfo.password) {
+      throw new UnauthorizedException('Invalid credentials');
     }
 
-    // Generate token
     const payload = {
       sub: user.id,
       email: user.email,
     };
     const token = await this.jwtService.signAsync(payload);
 
-    // Create new session in database
-    const sessionData: Prisma.SessionCreateInput = {
-      token: token,
-      session_start: new Date(),
-      user: {
-        connect: { id: user.id },
-      },
+    return {
+      accessToken: token,
+      accountId: user.id,
     };
-    const sessionData1: Omit<Session, 'id'> = {
-      account_id: user.id,
-      token: token,
-      session_start: new Date(),
-    };
-    const sessionData2 = {
-      account_id: user.id,
-      token: token,
-      session_start: new Date(),
-      user: {
-        connect: { id: user.id },
-      },
-    };
-    this.prismaService.session.create({
-      data: sessionData as Prisma.SessionCreateInput,
-    });
-    console.log(JSON.stringify(sessionData)); // for debug
-    return { accessToken: token };
   }
 }

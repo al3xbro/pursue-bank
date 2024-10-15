@@ -56,7 +56,7 @@ export default function Transfer() {
             id="bank-account"
             value={bankAccount}
             onChange={(e) => setBankAccount(e.target.value)}
-            placeholder="Enter bank account"
+            placeholder="Enter account email"
             className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>
