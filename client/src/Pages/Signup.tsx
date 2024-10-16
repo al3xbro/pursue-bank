@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [firstName, setFirst] = useState('');
+    const [lastName, setLast] = useState('');
+
     const [error, setError] = useState(''); // For displaying error messages
     const navigate = useNavigate(); // Initialize navigate
 
@@ -35,7 +38,7 @@ export default function Login() {
     }
 
     return (
-        <div className="flex flex-col justify-start items-center h-screen bg-gray-100 pt-16">
+        <div className="flex flex-col items-center h-[calc(100vh-88px)] justify-center bg-gray-100">
             {/* Bank Name Section */}
             <div className="mb-8">
                 <h1 className="text-6xl font-bold text-indigo-600">Pursue Bank</h1>
@@ -68,6 +71,30 @@ export default function Login() {
                         onChange={(e) => setPassword(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
                         placeholder="Enter your password"
+                    />
+                </div>
+
+                <div className="mb-6">
+                    <label htmlFor="firstName" className="block text-sm font-semibold text-gray-700">First Name</label>
+                    <input
+                        id="firstName"
+                        type="firstName"
+                        value={firstName}
+                        onChange={(e) => setFirst(e.target.value)}
+                        className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
+                        placeholder="Enter your First Name"
+                    />
+                </div>
+
+                <div className="mb-6">
+                    <label htmlFor="lastName" className="block text-sm font-semibold text-gray-700">Last Name</label>
+                    <input
+                        id="lastName"
+                        type="lastName"
+                        value={lastName}
+                        onChange={(e) => setLast(e.target.value)}
+                        className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
+                        placeholder="Enter your Last Name"
                     />
                 </div>
 

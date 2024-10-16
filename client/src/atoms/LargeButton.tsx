@@ -2,7 +2,7 @@ import React from 'react';
 
 interface LargeButtonProps {
   children: React.ReactNode;
-  onClick: () => void;
+  onClick: () => void; 
 }
 
 export default function LargeButton({ children, onClick }: LargeButtonProps) {
