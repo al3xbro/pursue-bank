@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { createTransaction } from '../services/transaction';
 import Popup from 'reactjs-popup';
 
 export default function Transfer() {
@@ -8,7 +9,8 @@ export default function Transfer() {
   const [error, setError] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false); 
   const [showReceipt, setShowReceipt] = useState(false);
-  const navigate = useNavigate(); // Initialize navigate
+  const [transactionId, setTransactionId] = useState('');
+  const navigate = useNavigate(); 
 
   const handleConfirm = () => {
     if (!amount || !bankAccount) {
@@ -21,11 +23,24 @@ export default function Transfer() {
     }
   };
 
-  const handleFinalConfirm = () => {
-    //Implement communication between backend
-    setIsPopupOpen(false);
-    setShowReceipt(true);
-  }
+  const handleFinalConfirm = async () => {
+    try {
+      // Call the createTransaction function with the amount and bank account
+      const response = await createTransaction(bankAccount, amount);
+      if (response.transactionId) {
+        setTransactionId(response.transactionId); // Set the transaction ID from response
+        setIsPopupOpen(false);
+        setShowReceipt(true);
+      } else {
+        setError('Error processing transaction');
+        setIsPopupOpen(false);
+      }
+    } catch (error) {
+      console.error('Transaction Error:', error);
+      setError('Transaction failed. Please try again.');
+      setIsPopupOpen(false);
+    }
+  };
 
   const handleCancel = () => {
     setAmount('');
