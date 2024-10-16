@@ -39,7 +39,7 @@ export default function Home() {
         </div>
         <div className='flex flex-col w-[40%] gap-8'>
           <div className='font-semibold text-xl'>Transfer Money</div>
-          <LargeButton onClick={() => createTransaction(2)}>
+          <LargeButton onClick={() => navigate('/transfer')}>
             <div className='text-xl'>
               Internal
             </div>
