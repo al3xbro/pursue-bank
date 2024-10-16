@@ -2,11 +2,13 @@ import { Injectable } from '@nestjs/common';
 import * as _ from 'lodash';
 import { TransactionPostgresService } from './postgres/transaction.postgres.service';
 import { $Enums, Transaction, TransactionType } from '@prisma/client';
+import { AccountPostgresService } from 'src/account/postgres/account.postgres.service';
 
 @Injectable()
 export class TransactionService {
   constructor(
-    private transactionPostgresService: TransactionPostgresService
+    private transactionPostgresService: TransactionPostgresService,
+    private accountPostgresService: AccountPostgresService
   ) { }
 
   async getTransactionsByAccountId(id: number): Promise<Transaction[]> {
@@ -35,7 +37,7 @@ export class TransactionService {
 
   async createSingleTransaction(data: {
     accountId: number,
-    transferId: number,
+    email: string,
     amount: number,
     transactionType: string
   }): Promise<Transaction> {
@@ -43,9 +45,14 @@ export class TransactionService {
       throw new Error('Invalid transaction type');
     }
 
+    const user = await this.accountPostgresService.getUserFromEmail(data.email);
+    if (user == null) {
+      throw new Error('Unregistered email')
+    }
+
     return await this.transactionPostgresService.createTransaction({
       amount: data.amount,
-      transfer_id: data.transferId,
+      transfer_id: user.id,
       transaction_type: data.transactionType as TransactionType,
       user: {
         connect: { id: data.accountId }

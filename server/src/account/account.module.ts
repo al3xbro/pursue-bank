@@ -8,5 +8,6 @@ import { AccountPostgresModule } from './postgres/account.postgres.module';
   imports: [AccountPostgresModule],
   controllers: [AccountController],
   providers: [AccountService, PrismaService],
+  exports: [AccountPostgresModule],
 })
 export class AccountModule { }
