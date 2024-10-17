@@ -28,7 +28,7 @@ export class TransactionController {
   @UseGuards(AuthGuard)
   @Post()
   async createSingleTransaction(@Headers('Authorization') authToken: string, @Body() data: {
-    transferId: number,
+    email: string,
     amount: number,
     transactionType: string
   }): Promise<Transaction> {
