@@ -1,4 +1,4 @@
-async function createTransaction(toId: number) {
+async function createTransaction(toEmail: string, amt: string) {
   const res = await fetch('http://localhost:3000/api/internal/transaction', {
     method: 'POST',
     headers: {
@@ -7,8 +7,8 @@ async function createTransaction(toId: number) {
     },
     body: JSON.stringify({
       transactionType: 'TRANSFER_INTERNAL',
-      transferId: toId,
-      amount: 100,
+      email: toEmail,
+      amount: Number(amt),
     }),
   });
   const json = await res.json();
