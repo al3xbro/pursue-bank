@@ -26,7 +26,7 @@ export class TransactionController {
   }
 
   @UseGuards(AuthGuard)
-  @Post()
+  @Post('')
   async createSingleTransaction(@Headers('Authorization') authToken: string, @Body() data: {
     email: string,
     amount: number,
