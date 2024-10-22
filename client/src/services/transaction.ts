@@ -11,6 +11,9 @@ async function createTransaction(toEmail: string, amt: string) {
       amount: Number(amt),
     }),
   });
+  if (!res.ok) {
+    throw new Error('Error processing transaction');
+  }
   const json = await res.json();
   return json;
 }
