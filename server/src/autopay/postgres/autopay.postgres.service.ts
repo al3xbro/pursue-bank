@@ -31,7 +31,7 @@ export class AutopayPostgresService {
     });
   }
 
-  // Doesn't implement any checks regarding days 29-31.
+  // Doesn't implement any checks regarding days 29-31. The corresponding method in autopay.service.ts does instead.
   async getRecurringTransactionsByDayOfMonth(dayOfMonth: number): Promise<Recurring_Transaction[]> {
     return await this.prismaService.recurring_Transaction.findMany({
       where: {
