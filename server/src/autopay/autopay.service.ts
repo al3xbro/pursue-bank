@@ -2,14 +2,17 @@ import { Injectable } from '@nestjs/common';
 import * as _ from 'lodash';
 import { AutopayPostgresService } from './postgres/autopay.postgres.service';
 import { $Enums, Transaction, TransactionType, Recurring_Transaction } from '@prisma/client';
+import { Decimal } from '@prisma/client/runtime/library';
 import { AccountPostgresService } from 'src/account/postgres/account.postgres.service';
-
+import { TransactionService } from 'src/transaction/transaction.service';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class AutopayService {
   constructor(
     private autopayPostgresService: AutopayPostgresService,
-    private accountPostgresService: AccountPostgresService
+    private accountPostgresService: AccountPostgresService,
+    private transactionService: TransactionService
   ) { }
 
   // return all automatic payments that the user created
@@ -21,36 +24,52 @@ export class AutopayService {
   // creates a new recurring transaction
   async createAutopay(data: {
     accountId: number,
-    email: string,
     amount: number,
     transactionType: string,
-    day_of_month: number
+    dayOfMonth: number,
+    transferEmail?: string,
+    externalId?: number,
+    origin?: string,
+    destination?: string,
   }): Promise<Recurring_Transaction> {
-    if (!(data.transactionType in $Enums.TransactionType)) {
-      throw new Error('Invalid transaction type');
+    if (data.transactionType !== "TRANSFER_INTERNAL" && data.transactionType !== "TRANSFER_EXTERNAL") {
+      throw new Error('Invalid recurring transaction type');
     }
 
-    const user = await this.accountPostgresService.getUserFromEmail(data.email);
-    if (user == null) {
-      throw new Error('Unregistered email')
-    }
-
-    if (!_.inRange(data.day_of_month,1,32)) {
+    if (!_.inRange(data.dayOfMonth,1,32)) {
       throw new Error('Invalid date')
     }
 
-    if (_.inRange(data.day_of_month,29,32)) {
+    if (_.inRange(data.dayOfMonth,29,32)) {
       // send warning message to user that lets them know any transactions on day 29-31 
       // on months without those days default to the last day of that month
     }
 
-    return await this.autopayPostgresService.createRecurringTransaction({
-      amount: data.amount,
-      transfer_id: user.id,
-      transaction_type: data.transactionType as TransactionType,
-      day_of_month: data.day_of_month,
-      transaction_list: undefined
-    });
+    if (data.transactionType === "TRANSFER_INTERNAL") {
+      const transferUser = await this.accountPostgresService.getUserFromEmail(data.transferEmail as string);
+      if (transferUser == null) {
+        throw new Error('Unregistered email')
+      }
+      return await this.autopayPostgresService.createRecurringTransaction({
+        amount: data.amount,
+        account_id: data.accountId,
+        transfer_id: transferUser.id,
+        transaction_type: data.transactionType as TransactionType,
+        day_of_month: data.dayOfMonth,
+        transaction_list: undefined,       
+      });
+    } else {  // TRANSFER_EXTERNAL
+      return await this.autopayPostgresService.createRecurringTransaction({
+        amount: data.amount,
+        account_id: data.accountId,
+        transfer_id: data.externalId,
+        transaction_type: data.transactionType as TransactionType,
+        origin: data.origin,
+        destination: data.destination,
+        day_of_month: data.dayOfMonth,
+        transaction_list: undefined,
+      })
+    }
   }
 
   // edits an existing recurring transaction
@@ -58,14 +77,8 @@ export class AutopayService {
   async editAutopay(id: number, data: {
     amount: number,
     date_of_month: number,
-    status: 
   }): Promise<Recurring_Transaction> {
-
-
-    return await this.autopayPostgresService.editRecurringTransaction({
-        rtransaction_id: id,
-        data,
-    });
+    return await this.autopayPostgresService.editRecurringTransaction(id, data);
   }
 
   // each day at 00:00, execute this to sweep the entire database
@@ -73,8 +86,40 @@ export class AutopayService {
   // transactions created this way are added to their recurring transaction's array
   // on the 28th+ day of the month, checks if this is the last day of the month
   // executes all payments set to 29-31 if those days do not exist this month
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async performAutopays() {
+    const today = new Date();
+    const currentDayOfMonth = today.getDate();
+    const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+    const isLastDayOfMonth = currentDayOfMonth === lastDayOfMonth;
 
+    let matchingRecurringTransactions = await this.autopayPostgresService.getRecurringTransactionsByDayOfMonth(currentDayOfMonth);
+    if (isLastDayOfMonth) {
+      for (let day = currentDayOfMonth+1; day <= 31; day++) {   // Add all days after last day of month
+        let moreMatchingRecurringTransactions = await this.autopayPostgresService.getRecurringTransactionsByDayOfMonth(day);
+        matchingRecurringTransactions = [...matchingRecurringTransactions, ...moreMatchingRecurringTransactions];
+      }
+    }
+
+    // Create transactions
+    for (const recurringTransaction of matchingRecurringTransactions) {
+      this.transactionService.createSingleTransaction({
+        accountId: recurringTransaction.account_id as number,
+        amount: (recurringTransaction.amount as Decimal).toNumber(),
+        transactionType: recurringTransaction.transaction_type as TransactionType,
+        transferEmail: await this.accountPostgresService.getEmailFromUserId(recurringTransaction.account_id as number),
+        externalId: recurringTransaction.transaction_type === "TRANSFER_EXTERNAL" 
+          ? recurringTransaction.transfer_id as number 
+          : undefined,
+        origin: recurringTransaction.transaction_type === "TRANSFER_EXTERNAL" 
+          ? recurringTransaction.origin as string
+          : undefined,
+        destination: recurringTransaction.transaction_type === "TRANSFER_EXTERNAL" 
+          ? recurringTransaction.destination as string
+          : undefined,
+        recurringTransactionId: recurringTransaction.id,
+      })
+    }
   }
 }
 

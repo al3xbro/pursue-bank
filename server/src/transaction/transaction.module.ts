@@ -9,5 +9,6 @@ import { AccountModule } from 'src/account/account.module';
   imports: [TransactionPostgresModule, JwtModule.register({ secret: process.env.JWT_SECRET }), AccountModule],
   controllers: [TransactionController],
   providers: [TransactionService],
+  exports: [TransactionModule],
 })
 export class TransactionModule { }

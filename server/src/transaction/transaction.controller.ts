@@ -28,9 +28,12 @@ export class TransactionController {
   @UseGuards(AuthGuard)
   @Post('')
   async createSingleTransaction(@Headers('Authorization') authToken: string, @Body() data: {
-    email: string,
     amount: number,
-    transactionType: string
+    transactionType: string,
+    transferEmail?: string,
+    externalId?: number,
+    origin?: string,
+    destination?: string,
   }): Promise<Transaction> {
     const accountId = this.jwtService.decode(authToken.split(' ')[1])['sub'];
     return this.transactionService.createSingleTransaction({ accountId, ...data });
