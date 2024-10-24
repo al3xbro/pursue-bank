@@ -36,6 +36,9 @@ export default function FindATMs() {
         });
 
         // Fetch ATM locations with new coordinates
+        console.log(newLat);
+        console.log(newLng);
+        
         await fetchATMLocations(newLat, newLng); // Ensure to wait for this to complete
       } else {
         console.error('No valid city found. Please check the input format (City, State).');
