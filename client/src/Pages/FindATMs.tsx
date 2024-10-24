@@ -1,5 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { GoogleMap, LoadScript, Marker, Circle } from '@react-google-maps/api';
+import React, { useState } from 'react';
+import { GoogleMap, LoadScript, Marker, Circle, InfoWindow, useLoadScript } from '@react-google-maps/api';
+
+type AtmLocation = {
+  lat: number;
+  lng: number;
+  name: string; // Name of the ATM
+  address: string; // Address of the ATM
+};
 
 const defaultLocation = {
   lat: 37.3382, // Latitude for San Jose, CA
@@ -9,7 +16,14 @@ const defaultLocation = {
 export default function FindATMs() {
   const [location, setLocation] = useState(''); // Set default location
   const [mapCenter, setMapCenter] = useState(defaultLocation);
-  const [atmLocations, setAtmLocations] = useState([]); // Store ATM locations
+  const [atmLocations, setAtmLocations] = useState<AtmLocation[]>([]);
+  const [selectedAtm, setSelectedAtm] = useState<AtmLocation | null>(null); // State to hold selected ATM
+
+  // Load the Google Maps script
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: 'AIzaSyA6XertY-5bqa5hVgTRzkSmd0rIKmZywBg',
+    libraries: ['places'], // Load the 'places' library for nearby search
+  });
 
   // Function to fetch coordinates based on city using Ninja Geocoding API
   const fetchCoordinates = async (input: string) => {
@@ -17,7 +31,7 @@ export default function FindATMs() {
     const options = {
       method: 'GET',
       headers: {
-        'X-Api-Key': 'vaJ7/ASLqE06EHD1TXfvcA==R5MqwbDAwExbG4RS', // Replace with your actual API key
+        'X-Api-Key': 'vaJ7/ASLqE06EHD1TXfvcA==R5MqwbDAwExbG4RS',
       },
       contentType: 'application/json',
     };
@@ -35,8 +49,8 @@ export default function FindATMs() {
           lng: newLng,
         });
 
-        // Fetch ATM locations with new coordinates
-        await fetchATMLocations(newLat, newLng); // Ensure to wait for this to complete
+        // Perform nearby search for Chase ATMs after updating map center
+        performNearbySearch({ lat: newLat, lng: newLng });
       } else {
         console.error('No valid city found. Please check the input format (City, State).');
         setMapCenter(defaultLocation);
@@ -49,25 +63,32 @@ export default function FindATMs() {
     }
   };
 
-  // Function to fetch ATM locations using Yext API
-  const fetchATMLocations = async (lat: number, lng: number) => {
-    const url = `https://prod-cdn.us.yextapis.com/v2/accounts/me/search/vertical/query?experienceKey=locatorchasecom-locator&api_key=1faa61c769b0576b73d8081040aa651c&v=20220511&version=PRODUCTION&locale=en&input=&verticalKey=locations&limit=50&retrieveFacets=true&facetFilters=%7B"c_allowsDeposits"%3A%5B%5D%2C"c_chaseForBusiness"%3A%5B%5D%2C"c_hLAReviewsRating"%3A%5B%5D%2C"c_privateClient"%3A%5B%5D%2C"c_accessType"%3A%5B%5D%2C"c_hLALanguages"%3A%5B%5D%2C"c_bankLocationType"%3A%5B%5D%2C"c_jPMorganAdvisors"%3A%5B%5D%2C"c_limitedAccess"%3A%5B%5D%2C"c_homeLendingLocator"%3A%5B%5D%2C"c_openOnSunday"%3A%5B%5D%7D&skipSpellCheck=false&sessionTrackingEnabled=false&sortBys=%5B%5D&source=STANDARD`;
+  // Function to perform nearby search using Google Places API for Chase ATMs
+  const performNearbySearch = (location: { lat: number; lng: number }) => {
+    if (isLoaded) {
+      const service = new window.google.maps.places.PlacesService(document.createElement('div'));
 
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-      if (data.response && data.response.results.length > 0) {
-        const locations = data.response.results.map((atm: any) => ({
-          lat: atm.data.geocodedCoordinate.latitude,
-          lng: atm.data.geocodedCoordinate.longitude,
-        }));
-        setAtmLocations(locations); // Update ATM locations
-      } else {
-        console.error('No ATMs found in this area.');
-        setAtmLocations([]); // Reset if no ATMs are found
-      }
-    } catch (error) {
-      console.error('Error fetching ATM locations:', error);
+      service.nearbySearch({
+        location,
+        radius: 24140,
+        type: 'atm',
+        keyword: 'Chase',
+      }, (results, status) => {
+        if (status === window.google.maps.places.PlacesServiceStatus.OK && results) {
+          const locations: AtmLocation[] = results
+            .filter((place) => place.geometry && place.geometry.location)
+            .map((place) => ({
+              lat: place.geometry!.location!.lat(),
+              lng: place.geometry!.location!.lng(),
+              name: place.name || 'Unknown Location', // Ensure name is a string
+              address: place.vicinity || 'Address not available', // Get address from vicinity
+            }));
+          setAtmLocations(locations); // Update the ATM locations
+        } else {
+          console.error('No Chase ATMs found or an error occurred.');
+          setAtmLocations([]); // Reset if no ATMs found or error
+        }
+      });
     }
   };
 
@@ -98,7 +119,7 @@ export default function FindATMs() {
 
       {/* Main Content Area */}
       <div className="flex-grow bg-white p-4">
-        <LoadScript googleMapsApiKey="AIzaSyA6XertY-5bqa5hVgTRzkSmd0rIKmZywBg">
+        {isLoaded ? (
           <GoogleMap
             mapContainerStyle={{ height: "100%", width: "100%" }}
             center={mapCenter}
@@ -118,11 +139,30 @@ export default function FindATMs() {
             />
 
             {/* Plot ATM locations as markers */}
-            {atmLocations.map((location, index) => (
-              <Marker key={index} position={location} />
+            {atmLocations.map((atm, index) => (
+              <Marker
+                key={index}
+                position={{ lat: atm.lat, lng: atm.lng }}
+                onClick={() => setSelectedAtm(atm)} // Set selected ATM on click
+              />
             ))}
+
+            {/* InfoWindow to display ATM details */}
+            {selectedAtm && (
+              <InfoWindow
+                position={{ lat: selectedAtm.lat, lng: selectedAtm.lng }}
+                onCloseClick={() => setSelectedAtm(null)} // Close the InfoWindow
+              >
+                <div>
+                  <h2>{selectedAtm.name}</h2>
+                  <p>{selectedAtm.address}</p> {/* Display the address here */}
+                </div>
+              </InfoWindow>
+            )}
           </GoogleMap>
-        </LoadScript>
+        ) : (
+          <div>Loading Map...</div>
+        )}
       </div>
     </div>
   );
