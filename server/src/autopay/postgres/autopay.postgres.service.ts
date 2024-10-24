@@ -39,4 +39,12 @@ export class AutopayPostgresService {
       }
     })
   }
+
+  async getUserIdFromRecurringTransactionId(id: number): Promise<number | undefined>  {
+    return ((await this.prismaService.recurring_Transaction.findUnique({
+      where: {
+        id: id,
+      }
+    }))?.account_id as number)
+  }
 }

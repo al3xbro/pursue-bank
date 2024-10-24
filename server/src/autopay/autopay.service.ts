@@ -74,11 +74,19 @@ export class AutopayService {
 
   // edits an existing recurring transaction
   // users may change the payment date or amount, or switch between ACTIVE and DISABLED
-  async editAutopay(id: number, data: {
+  async editAutopay(accountId: number, data: {
+    id: number,
     amount: number,
-    date_of_month: number,
-  }): Promise<Recurring_Transaction> {
-    return await this.autopayPostgresService.editRecurringTransaction(id, data);
+    day_of_month: number,
+  }): Promise<Recurring_Transaction | null> {
+    const uid = await this.autopayPostgresService.getUserIdFromRecurringTransactionId(data.id);
+    if (uid === undefined) {
+      throw new Error("No recurring transaction with provided id exists");
+    }
+    if (uid as number !== accountId) {
+      throw new Error("Unauthorized");
+    }
+    return await this.autopayPostgresService.editRecurringTransaction(accountId, data);
   }
 
   // each day at 00:00, execute this to sweep the entire database
