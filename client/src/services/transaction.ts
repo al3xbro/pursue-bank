@@ -7,7 +7,7 @@ async function createTransaction(toEmail: string, amt: string) {
     },
     body: JSON.stringify({
       transactionType: 'TRANSFER_INTERNAL',
-      email: toEmail,
+      transforEmail: toEmail,
       amount: Number(amt),
     }),
   });
