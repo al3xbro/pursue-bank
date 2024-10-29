@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import * as _ from 'lodash';
 import { TransactionPostgresService } from './postgres/transaction.postgres.service';
 import { $Enums, Transaction, TransactionType } from '@prisma/client';
@@ -46,7 +46,7 @@ export class TransactionService {
     recurringTransactionId?: number,
   }): Promise<Transaction> {
     if (!(data.transactionType in $Enums.TransactionType)) {
-      throw new Error('Invalid transaction type');
+      throw new BadRequestException('Invalid transaction type');
     }
 
     switch (data.transactionType) {
@@ -57,12 +57,15 @@ export class TransactionService {
           user: {
             connect: { id: data.accountId },
           },
-          recurring_transaction: undefined,        
+          recurring_transaction: undefined,
         });
       case "TRANSFER_INTERNAL":
         const transferUser = await this.accountPostgresService.getUserFromEmail(data.transferEmail as string);
         if (transferUser == null) {
-          throw new Error('Unregistered email')
+          throw new BadRequestException('Unregistered email')
+        }
+        if (transferUser.id === data.accountId) {
+          throw new BadRequestException('Sender and receiver can\'t be the same user')
         }
         return await this.transactionPostgresService.createTransaction({
           amount: data.amount,

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import * as _ from 'lodash';
 import { AutopayPostgresService } from './postgres/autopay.postgres.service';
 import { $Enums, Transaction, TransactionType, Recurring_Transaction } from '@prisma/client';
@@ -33,11 +33,11 @@ export class AutopayService {
     destination?: string,
   }): Promise<Recurring_Transaction> {
     if (data.transactionType !== "TRANSFER_INTERNAL" && data.transactionType !== "TRANSFER_EXTERNAL") {
-      throw new Error('Invalid recurring transaction type');
+      throw new BadRequestException('Invalid recurring transaction type');
     }
 
     if (!_.inRange(data.dayOfMonth,1,32)) {
-      throw new Error('Invalid date')
+      throw new BadRequestException('Invalid date')
     }
 
     if (_.inRange(data.dayOfMonth,29,32)) {
@@ -48,7 +48,10 @@ export class AutopayService {
     if (data.transactionType === "TRANSFER_INTERNAL") {
       const transferUser = await this.accountPostgresService.getUserFromEmail(data.transferEmail as string);
       if (transferUser == null) {
-        throw new Error('Unregistered email')
+        throw new BadRequestException('Unregistered email')
+      }
+      if (transferUser.id === data.accountId) {
+        throw new BadRequestException('Sender and receiver can\'t be the same user')
       }
       return await this.autopayPostgresService.createRecurringTransaction({
         amount: data.amount,
@@ -81,12 +84,15 @@ export class AutopayService {
   }): Promise<Recurring_Transaction | null> {
     const uid = await this.autopayPostgresService.getUserIdFromRecurringTransactionId(data.id);
     if (uid === undefined) {
-      throw new Error("No recurring transaction with provided id exists");
+      throw new BadRequestException("No recurring transaction with provided id exists");
     }
     if (uid as number !== accountId) {
-      throw new Error("Unauthorized");
+      throw new UnauthorizedException();
     }
-    return await this.autopayPostgresService.editRecurringTransaction(accountId, data);
+    return await this.autopayPostgresService.editRecurringTransaction(data.id, {
+      amount: data.amount, 
+      day_of_month: data.day_of_month,
+    });
   }
 
   // each day at 00:00, execute this to sweep the entire database
@@ -115,7 +121,7 @@ export class AutopayService {
         accountId: recurringTransaction.account_id as number,
         amount: (recurringTransaction.amount as Decimal).toNumber(),
         transactionType: recurringTransaction.transaction_type as TransactionType,
-        transferEmail: await this.accountPostgresService.getEmailFromUserId(recurringTransaction.account_id as number),
+        transferEmail: await this.accountPostgresService.getEmailFromUserId(recurringTransaction.transfer_id as number),
         externalId: recurringTransaction.transaction_type === "TRANSFER_EXTERNAL" 
           ? recurringTransaction.transfer_id as number 
           : undefined,
