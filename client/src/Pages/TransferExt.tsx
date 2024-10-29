@@ -13,6 +13,7 @@ export default function Transfer() {
   const [isRecurringTransaction, setRecurringTransaction] = useState(false);
   const [transactionName, setTransactionName] = useState('');
   const [recurringPeriod, setRecurringPeriod] = useState('');
+  const [targetBank, setTargetBank] = useState('');
   
   const navigate = useNavigate();
 
@@ -112,8 +113,20 @@ export default function Transfer() {
             />
           </div>
 
-          <label><input type = "checkbox" checked={isRecurringTransaction} onChange={() => setRecurringTransaction(!isRecurringTransaction)}/> Recurring Transaction</label>
-          
+          <select className="border border-gray-300 p-2 mb-4 text-gray-700" value={targetBank} onChange={e => setTargetBank(e.target.value)}>
+            <option value="chase">Chase</option>
+            <option value="bofa">Bank of America</option>
+            <option value="wellsfargo">Wells Fargo</option>
+            <option value="citi">Citi Bank</option>
+            <option value="us">U.S. Bank</option>
+            <option value="pnc">PNC Bank</option>
+
+          </select>
+
+          <div className='mb-4'>
+            <label><input type = "checkbox" checked={isRecurringTransaction} onChange={() => setRecurringTransaction(!isRecurringTransaction)}/> Recurring Transaction</label>
+          </div>
+
           { isRecurringTransaction ? 
           <div>
               <div className='mb-4'>
