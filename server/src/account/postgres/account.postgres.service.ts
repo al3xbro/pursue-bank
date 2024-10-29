@@ -20,4 +20,9 @@ export class AccountPostgresService {
   async getUserFromEmail(email: string): Promise<User | null> {
     return await this.prismaService.user.findUnique({where: {email : email}});
   }
+
+  async getEmailFromUserId(uid: number): Promise<string | undefined> {
+    const user = await this.prismaService.user.findUnique({where: {id: uid}});
+    return user?.email;
+  }
 }

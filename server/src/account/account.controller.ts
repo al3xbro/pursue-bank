@@ -7,15 +7,6 @@ import { AuthGuard } from 'src/auth/auth.guard';
 export class AccountController {
   constructor(private accountService: AccountService) {}
 
-  // @Post()
-  // async createAccount(
-  //     @Body() userData: Omit<User, "id" | "status">
-  // ): Promise<User> {
-  //     return this.accountService.createAccount(
-  //         {...userData, status: 'ACTIVE'}
-  //     );
-  // }
-
   @Post()
   async createAccount(@Body() data: {
     email: string,
@@ -25,11 +16,5 @@ export class AccountController {
   }): Promise<User> {
     return this.accountService.createAccount({ ...data });
   }
-
-  // Made this to test guard.
-  //@UseGuards(AuthGuard)
-  //@Get('test')
-  //async justForTesting() {
-  //  return 'success';
-  //}
+  
 }

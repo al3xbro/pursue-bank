@@ -2,16 +2,21 @@ import { Injectable } from '@nestjs/common';
 import { Prisma, Transaction } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 
+
 @Injectable()
 export class TransactionPostgresService {
-  constructor(private readonly prismaService: PrismaService) { }
+  constructor(
+    private readonly prismaService: PrismaService,
+  ) { }
 
   async getTransactionsByAccountId(userId: number): Promise<Transaction[]> {
     return await this.prismaService.transaction.findMany({
       where: {
         OR: [
           { account_id: userId },
-          { transfer_id: userId }
+          { transfer_id: userId,
+            transaction_type: {not: "TRANSFER_EXTERNAL"},   // because then transfer_id is someone outside Pursue Bank
+          }
         ]
       }
     })
