@@ -49,8 +49,8 @@ export default function FindATMs() {
           lng: newLng,
         });
 
-        // Fetch ATM locations with new coordinates
-        await fetchATMLocations(newLat, newLng); // Ensure to wait for this to complete
+        // Perform nearby search for Chase ATMs after updating map center
+        performNearbySearch({ lat: newLat, lng: newLng });
       } else {
         console.error('No valid city found. Please check the input format (City, State).');
         setMapCenter(defaultLocation);
