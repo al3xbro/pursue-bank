@@ -9,6 +9,7 @@ import Transactions from './Pages/Transactions';
 import FindATMs from './Pages/FindATMs';
 import TransferInt from './Pages/TransferInt';
 import TransferExt from './Pages/TransferExt';
+import Account from './Pages/Account';
 
 
 function App() {
@@ -18,15 +19,16 @@ function App() {
       <TopBar />
 
 
-      {/*Need to define routes*/}
+
       <Routes>
-        <Route path="/" element={<Home />} />         {/* Home Page */}
-        <Route path="/login" element={<Login />} />   {/* Login Page */}
+        <Route path="/" element={<Home />} />         
+        <Route path="/login" element={<Login />} />   
         <Route path='/signup' element={<Signup />} />
         <Route path='/transactions' element={<Transactions />} />
         <Route path='/findATMs' element={<FindATMs />} />
         <Route path='/transferInt' element={<TransferInt />} />
         <Route path='/transferExt' element={<TransferExt />} />
+        <Route path='/account' element={<Account />} />
       </Routes>
     </Router>
   );

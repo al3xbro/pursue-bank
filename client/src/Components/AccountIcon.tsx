@@ -1,13 +1,15 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface AccountIconProps {
   onClick: () => void; // Prop for handling click events
 }
 
 export default function AccountIcon({ onClick }: AccountIconProps) {
+  const navigate = useNavigate(); // Initialize navigate
   return (
     <div
-      onClick={onClick}
+      onClick={() => navigate('/account')}
       className="w-10 h-10 rounded-full bg-yellow-500 flex items-center justify-center cursor-pointer transition-transform transform hover:scale-110"
     >
       {/* You can replace the SVG with an image or other icons */}

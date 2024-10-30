@@ -40,4 +40,37 @@ async function getTransactions() {
   return json
 }
 
-export { createTransaction, getBalance, getTransactions };
+async function getFirstName() {
+  const res = await fetch('http://localhost:3000/api/internal/user/firstname', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    },
+  });
+  const json = await res.json();
+  return json
+}
+
+async function getLastName() {
+  const res = await fetch('http://localhost:3000/api/internal/user/lastname', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    },
+  });
+  const json = await res.json();
+  return json
+}
+
+async function getEmail() {
+  const res = await fetch('http://localhost:3000/api/internal/user/email', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    },
+  });
+  const json = await res.json();
+  return json
+}
+
+export { createTransaction, getBalance, getTransactions, getFirstName, getLastName, getEmail };
