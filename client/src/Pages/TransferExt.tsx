@@ -72,7 +72,7 @@ export default function Transfer() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+    <div className="flex items-center justify-center h-[calc(100vh-88px)] bg-gray-100 p-4">
       <div className={`absolute inset-0 flex items-center justify-center transition ${isPopupOpen || showReceipt ? 'blur-sm' : ''}`}>
         <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg border-2 border-indigo-500">
           <h1 className="text-3xl font-bold mb-6 text-center">Transfer Money</h1>
