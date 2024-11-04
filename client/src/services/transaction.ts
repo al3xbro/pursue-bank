@@ -73,4 +73,37 @@ async function getEmail() {
   return json
 }
 
-export { createTransaction, getBalance, getTransactions, getFirstName, getLastName, getEmail };
+async function getAddress() {
+  const res = await fetch('http://localhost:3000/api/internal/user/address', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    },
+  });
+  const json = await res.json();
+  return json
+}
+
+async function getPhone() {
+  const res = await fetch('http://localhost:3000/api/internal/user/phone', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    },
+  });
+  const json = await res.json();
+  return json
+}
+
+async function getDOB() {
+  const res = await fetch('http://localhost:3000/api/internal/user/DOB', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    },
+  });
+  const json = await res.json();
+  return json
+}
+
+export { createTransaction, getBalance, getTransactions, getFirstName, getLastName, getEmail, getAddress, getPhone, getDOB };

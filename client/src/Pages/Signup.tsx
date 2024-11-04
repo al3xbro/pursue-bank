@@ -6,6 +6,9 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const [firstName, setFirst] = useState('');
     const [lastName, setLast] = useState('');
+    const [address, setAddress] = useState('');
+    const [phone, setPhone] = useState('');
+    const [DOB, setDOB] = useState('');
 
     const [error, setError] = useState(''); // For displaying error messages
     const navigate = useNavigate(); // Initialize navigate
@@ -13,7 +16,7 @@ export default function Login() {
     // Function declaration for login handler
     async function handleSignup() {
         // Prepare login payload
-        const signupData = { email, password };
+        const signupData = { email, password, firstName, lastName, address, phone, DOB };
 
         try {
             // Send POST request to your login endpoint (replace 'https://your-api/login' with your actual API)
@@ -38,15 +41,13 @@ export default function Login() {
     }
 
     return (
-        <div className="flex flex-col items-center h-[calc(100vh-88px)] justify-center bg-gray-100">
-            {/* Bank Name Section */}
+        <div className="flex flex-col items-center min-h-[calc(100vh-88px)] justify-center bg-gray-100">
             <div className="mb-8">
                 <h1 className="text-6xl font-bold text-indigo-600">Pursue Bank</h1>
             </div>
 
-            {/* Login Form */}
             <div className="bg-white p-8 rounded-lg shadow-lg w-80">
-                <h2 className="text-2xl font-bold text-center mb-6">Sign up</h2>
+                <h2 className="text-2xl font-bold text-center mb-4">Sign up</h2>
 
                 {error && <div className="mb-4 text-red-600 text-center">{error}</div>}
 
@@ -62,7 +63,7 @@ export default function Login() {
                     />
                 </div>
 
-                <div className="mb-6">
+                <div className="mb-4">
                     <label htmlFor="password" className="block text-sm font-semibold text-gray-700">Password</label>
                     <input
                         id="password"
@@ -74,7 +75,7 @@ export default function Login() {
                     />
                 </div>
 
-                <div className="mb-6">
+                <div className="mb-4">
                     <label htmlFor="firstName" className="block text-sm font-semibold text-gray-700">First Name</label>
                     <input
                         id="firstName"
@@ -86,7 +87,7 @@ export default function Login() {
                     />
                 </div>
 
-                <div className="mb-6">
+                <div className="mb-4">
                     <label htmlFor="lastName" className="block text-sm font-semibold text-gray-700">Last Name</label>
                     <input
                         id="lastName"
@@ -95,6 +96,42 @@ export default function Login() {
                         onChange={(e) => setLast(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
                         placeholder="Enter your Last Name"
+                    />
+                </div>
+                
+                <div className="mb-4">
+                    <label htmlFor="address" className="block text-sm font-semibold text-gray-700">Address</label>
+                    <input
+                        id="address"
+                        type="address"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
+                        placeholder="Enter your address"
+                    />
+                </div>
+
+                <div className="mb-4">
+                    <label htmlFor="phone" className="block text-sm font-semibold text-gray-700">Phone Number</label>
+                    <input
+                        id="phone"
+                        type="phone"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
+                        placeholder="Enter your phone number"
+                    />
+                </div>
+
+                <div className="mb-4">
+                    <label htmlFor="DOB" className="block text-sm font-semibold text-gray-700">Date of Birth</label>
+                    <input
+                        id="DOB"
+                        type="DOB"
+                        value={DOB}
+                        onChange={(e) => setDOB(e.target.value)}
+                        className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
+                        placeholder="Enter your date of birth"
                     />
                 </div>
 
