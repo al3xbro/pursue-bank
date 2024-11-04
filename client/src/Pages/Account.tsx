@@ -69,7 +69,7 @@ export default function Account() {
             <div className="mb-8">
                 <h2 className="text-3xl font-bold mt-8 text-black">Account Information</h2>
             </div>
-            <div className="flex flex-col items-left h-full w-1/2 bg-gray-100">
+            <div className="flex flex-col items-left h-full w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 bg-gray-100">
                 <div className="flex w-full justify-end">
                     <button onClick={handleEdit} className="px-2 py-1 shadow bg-gray-300 text-black rounded-md">{isEditing ? "Save" : "Edit"}</button>
                 </div>
