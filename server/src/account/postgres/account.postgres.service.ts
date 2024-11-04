@@ -21,6 +21,10 @@ export class AccountPostgresService {
     return await this.prismaService.user.findUnique({where: {email : email}});
   }
 
+  async getUserFromId(uid: number): Promise<User | null> {
+    return await this.prismaService.user.findUnique({where: {id: uid}});
+  }
+
   async getEmailFromUserId(uid: number): Promise<string | undefined> {
     const user = await this.prismaService.user.findUnique({where: {id: uid}});
     return user?.email;

@@ -24,4 +24,12 @@ export class AccountService {
       dob: "",
     });
   }
+
+  async getUserData(uid: number): Promise<User> {
+    const user = await this.accountPostgresService.getUserFromId(uid);
+    if (user === null) {
+      throw new BadRequestException('No user found');
+    }
+    return await this.accountPostgresService.getUserFromId(uid) as User;
+  } 
 }
