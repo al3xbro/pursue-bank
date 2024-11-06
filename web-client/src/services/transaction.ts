@@ -7,10 +7,13 @@ async function createTransaction(toEmail: string, amt: string) {
     },
     body: JSON.stringify({
       transactionType: 'TRANSFER_INTERNAL',
-      email: toEmail,
+      transforEmail: toEmail,
       amount: Number(amt),
     }),
   });
+  if (!res.ok) {
+    throw new Error('Error processing transaction');
+  }
   const json = await res.json();
   return json;
 }
@@ -37,4 +40,70 @@ async function getTransactions() {
   return json
 }
 
-export { createTransaction, getBalance, getTransactions };
+async function getFirstName() {
+  const res = await fetch('http://localhost:3000/api/internal/user/firstname', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    },
+  });
+  const json = await res.json();
+  return json
+}
+
+async function getLastName() {
+  const res = await fetch('http://localhost:3000/api/internal/user/lastname', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    },
+  });
+  const json = await res.json();
+  return json
+}
+
+async function getEmail() {
+  const res = await fetch('http://localhost:3000/api/internal/user/email', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    },
+  });
+  const json = await res.json();
+  return json
+}
+
+async function getAddress() {
+  const res = await fetch('http://localhost:3000/api/internal/user/address', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    },
+  });
+  const json = await res.json();
+  return json
+}
+
+async function getPhone() {
+  const res = await fetch('http://localhost:3000/api/internal/user/phone', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    },
+  });
+  const json = await res.json();
+  return json
+}
+
+async function getDOB() {
+  const res = await fetch('http://localhost:3000/api/internal/user/DOB', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    },
+  });
+  const json = await res.json();
+  return json
+}
+
+export { createTransaction, getBalance, getTransactions, getFirstName, getLastName, getEmail, getAddress, getPhone, getDOB };

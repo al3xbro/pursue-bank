@@ -1,42 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { getFirstName, getLastName, getEmail, getAddress, getPhone, getDOB } from '../services/transaction';
 
-export default function Login() {
+
+export default function Account() {
+    const navigate = useNavigate(); // Initialize navigate
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [firstName, setFirst] = useState('');
-    const [lastName, setLast] = useState('');
     const [address, setAddress] = useState('');
     const [phone, setPhone] = useState('');
     const [DOB, setDOB] = useState('');
+    const [isEditing, setIsEditing] = useState(false);
+    const [error, setError] = useState('');
 
-    const [error, setError] = useState(''); // For displaying error messages
-    const navigate = useNavigate(); // Initialize navigate
+    useEffect(() => {
+        getFirstName().then((res) => setFirstName(res.firstName ?? 'Unavailable'))
+        getLastName().then((res) => setLastName(res.lastName ?? 'Unavailable'))
+        getEmail().then((res) => setEmail(res.email ?? 'Unavailable'))
+        getAddress().then((res) => setAddress(res.address ?? 'Unavailable'))
+        getPhone().then((res) => setPhone(res.phone ?? 'Unavailable'))
+        getDOB().then((res) => setDOB(res.DOB ?? 'Unavailable'))
+      }, [])
 
-    // Function declaration for login handler
-    async function handleSignup() {
-        if (!email || !password || !firstName || !lastName || !address || !phone || !DOB) {
-            setError("All fields are required.");
-            return;
+    const handleLogOut = () => {
+        localStorage.removeItem('accessToken');
+        navigate('/login');
+    };
+
+    const handleEdit = () => {
+        if(isEditing){
+            handleSave();
         }
-        // Prepare login payload
-        const signupData = { email, password, firstName, lastName, address, phone, DOB };
+        setIsEditing(!isEditing);
+    };
+
+    async function handleSave () {
+        const editData = { email, password, firstName, lastName, address, phone, DOB };
 
         try {
             // Send POST request to your login endpoint (replace 'https://your-api/login' with your actual API)
             const response = await fetch('http://localhost:3000/api/internal/user', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(signupData),
+                body: JSON.stringify(editData),
             });
 
             const data = await response.json();
 
             if (response.ok) {
-                navigate('/login');
+                setIsEditing(!isEditing);
             } else {
                 // Handle login error (e.g., incorrect password)
-                setError(data.message || 'Signup failed, please try again');
+                setError(data.message || 'Edit failed, please try again');
             }
         } catch (error) {
             console.error('Error:', error);
@@ -44,18 +61,49 @@ export default function Login() {
         }
     }
 
+    const handleCancel = () => {
+        getFirstName().then((res) => setFirstName(res.firstName ?? 'Unavailable'))
+        getLastName().then((res) => setLastName(res.lastName ?? 'Unavailable'))
+        getEmail().then((res) => setEmail(res.email ?? 'Unavailable'))
+        getAddress().then((res) => setAddress(res.address ?? 'Unavailable'))
+        getPhone().then((res) => setPhone(res.phone ?? 'Unavailable'))
+        getDOB().then((res) => setDOB(res.DOB ?? 'Unavailable'))
+        
+        setIsEditing(!isEditing);
+    };
     return (
-        <div className="flex flex-col items-center min-h-[calc(100vh-88px)] justify-center bg-gray-100">
+        <div className="flex flex-col items-center h-[calc(100vh-88px)] justify-center bg-gray-100">
             <div className="mb-8">
-                <h1 className="text-6xl font-bold text-indigo-600">Pursue Bank</h1>
+                <h2 className="text-3xl font-bold mt-8 text-black">Account Information</h2>
             </div>
-
-            <div className="bg-white p-8 rounded-lg shadow-lg w-80">
-                <h2 className="text-2xl font-bold text-center mb-4">Sign up</h2>
-
-                {error && <div className="mb-4 text-red-600 text-center">{error}</div>}
-
+            <div className="flex flex-col items-left h-full w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 bg-gray-100">
+                <div className="flex w-full justify-end">
+                    <button onClick={handleEdit} className="px-2 py-1 shadow bg-gray-300 text-black rounded-md">{isEditing ? "Save" : "Edit"}</button>
+                </div>
+                {!isEditing ?
                 <div className="mb-4">
+                    <div className='font-semibold text-xl'>First Name: {firstName}</div>
+                    <br></br>
+                    <div className='font-semibold text-xl'>Last Name: {lastName}</div>
+                    <br></br>
+                    <div className='font-semibold text-xl'>Email: {email}</div>
+                    <br></br>
+                    <div className='font-semibold text-xl'>Address: {address}</div>
+                    <br></br>
+                    <div className='font-semibold text-xl'>Phone Number: {phone}</div>
+                    <br></br>
+                    <div className='font-semibold text-xl'>Date of Birth: {DOB}</div>
+                    <br></br>
+                    <div className="flex justify-center mt-4">
+                        <button onClick={handleLogOut} className="px-4 py-2 shadow bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+                            Log Out
+                        </button>
+                    </div>
+                </div>
+                : 
+                <div className="mb-4">
+                    {error && <div className="mb-4 text-red-600 text-center">{error}</div>}
+                    <div className="mb-4">
                     <label htmlFor="email" className="block text-sm font-semibold text-gray-700">Email</label>
                     <input
                         id="email"
@@ -63,7 +111,7 @@ export default function Login() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                        placeholder="Enter your email"
+                        placeholder={email}
                         pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
                         title="Please enter a valid email address"
                     />
@@ -77,7 +125,7 @@ export default function Login() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                        placeholder="Enter your password"
+                        placeholder="Enter your new password"
                     />
                 </div>
 
@@ -87,9 +135,9 @@ export default function Login() {
                         id="firstName"
                         type="text"
                         value={firstName}
-                        onChange={(e) => setFirst(e.target.value)}
+                        onChange={(e) => setFirstName(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                        placeholder="Enter your First Name"
+                        placeholder={firstName}
                     />
                 </div>
 
@@ -99,9 +147,9 @@ export default function Login() {
                         id="lastName"
                         type="text"
                         value={lastName}
-                        onChange={(e) => setLast(e.target.value)}
+                        onChange={(e) => setLastName(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                        placeholder="Enter your Last Name"
+                        placeholder={lastName}
                     />
                 </div>
                 
@@ -113,7 +161,7 @@ export default function Login() {
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                        placeholder="Enter your address"
+                        placeholder={address}
                     />
                 </div>
 
@@ -125,7 +173,7 @@ export default function Login() {
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                        placeholder="Enter your phone number"
+                        placeholder={phone}
                         pattern="^\d{10}$"
                         title="Please Enter a valid phone number"
                     />
@@ -139,17 +187,18 @@ export default function Login() {
                         value={DOB}
                         onChange={(e) => setDOB(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                        placeholder="Enter your date of birth"
+                        placeholder={DOB}
                     />
                 </div>
-
-                <button
-                    onClick={handleSignup}
-                    className="w-full mt-4 bg-gray-200 text-gray-700 p-2 rounded-md hover:bg-gray-300 transition"
-                >
-                    Signup
-                </button>
+                    <div className="flex justify-center mt-4">
+                        <button onClick={handleCancel} className="px-4 py-2 shadow bg-gray-300 text-black rounded-md ">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+                }
             </div>
+
         </div>
-    );
+    )
 }
