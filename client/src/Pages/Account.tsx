@@ -95,15 +95,18 @@ export default function Account() {
                 </div>
                 : 
                 <div className="mb-4">
+                    {error && <div className="mb-4 text-red-600 text-center">{error}</div>}
                     <div className="mb-4">
                     <label htmlFor="email" className="block text-sm font-semibold text-gray-700">Email</label>
                     <input
                         id="email"
-                        type="text"
+                        type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
                         placeholder={email}
+                        pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                        title="Please enter a valid email address"
                     />
                 </div>
 
@@ -123,7 +126,7 @@ export default function Account() {
                     <label htmlFor="firstName" className="block text-sm font-semibold text-gray-700">First Name</label>
                     <input
                         id="firstName"
-                        type="firstName"
+                        type="text"
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
@@ -135,7 +138,7 @@ export default function Account() {
                     <label htmlFor="lastName" className="block text-sm font-semibold text-gray-700">Last Name</label>
                     <input
                         id="lastName"
-                        type="lastName"
+                        type="text"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
@@ -147,7 +150,7 @@ export default function Account() {
                     <label htmlFor="address" className="block text-sm font-semibold text-gray-700">Address</label>
                     <input
                         id="address"
-                        type="address"
+                        type="text"
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
@@ -159,11 +162,13 @@ export default function Account() {
                     <label htmlFor="phone" className="block text-sm font-semibold text-gray-700">Phone Number</label>
                     <input
                         id="phone"
-                        type="phone"
+                        type="tel"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
                         placeholder={phone}
+                        pattern="^\d{10}$"
+                        title="Please Enter a valid phone number"
                     />
                 </div>
 
@@ -171,7 +176,7 @@ export default function Account() {
                     <label htmlFor="DOB" className="block text-sm font-semibold text-gray-700">Date of Birth</label>
                     <input
                         id="DOB"
-                        type="DOB"
+                        type="date"
                         value={DOB}
                         onChange={(e) => setDOB(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"

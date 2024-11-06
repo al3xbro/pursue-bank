@@ -15,6 +15,10 @@ export default function Login() {
 
     // Function declaration for login handler
     async function handleSignup() {
+        if (!email || !password || !firstName || !lastName || !address || !phone || !DOB) {
+            setError("All fields are required.");
+            return;
+        }
         // Prepare login payload
         const signupData = { email, password, firstName, lastName, address, phone, DOB };
 
@@ -55,11 +59,13 @@ export default function Login() {
                     <label htmlFor="email" className="block text-sm font-semibold text-gray-700">Email</label>
                     <input
                         id="email"
-                        type="text"
+                        type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
                         placeholder="Enter your email"
+                        pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                        title="Please enter a valid email address"
                     />
                 </div>
 
@@ -79,7 +85,7 @@ export default function Login() {
                     <label htmlFor="firstName" className="block text-sm font-semibold text-gray-700">First Name</label>
                     <input
                         id="firstName"
-                        type="firstName"
+                        type="text"
                         value={firstName}
                         onChange={(e) => setFirst(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
@@ -91,7 +97,7 @@ export default function Login() {
                     <label htmlFor="lastName" className="block text-sm font-semibold text-gray-700">Last Name</label>
                     <input
                         id="lastName"
-                        type="lastName"
+                        type="text"
                         value={lastName}
                         onChange={(e) => setLast(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
@@ -103,7 +109,7 @@ export default function Login() {
                     <label htmlFor="address" className="block text-sm font-semibold text-gray-700">Address</label>
                     <input
                         id="address"
-                        type="address"
+                        type="text"
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
@@ -115,11 +121,13 @@ export default function Login() {
                     <label htmlFor="phone" className="block text-sm font-semibold text-gray-700">Phone Number</label>
                     <input
                         id="phone"
-                        type="phone"
+                        type="tel"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
                         placeholder="Enter your phone number"
+                        pattern="^\d{10}$"
+                        title="Please Enter a valid phone number"
                     />
                 </div>
 
@@ -127,7 +135,7 @@ export default function Login() {
                     <label htmlFor="DOB" className="block text-sm font-semibold text-gray-700">Date of Birth</label>
                     <input
                         id="DOB"
-                        type="DOB"
+                        type="date"
                         value={DOB}
                         onChange={(e) => setDOB(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
