@@ -1,16 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, Transaction } from '@prisma/client';
-import { PrismaService } from '../../prisma/prisma.service';
+import { Prisma, Transaction } from 'generated/user-client';
+import { PrismaUserService } from '../../prisma/prisma.user.service';
 
 
 @Injectable()
 export class TransactionPostgresService {
   constructor(
-    private readonly prismaService: PrismaService,
+    private readonly prismaUserService: PrismaUserService,
   ) { }
 
-  async getTransactionsByAccountId(userId: number): Promise<Transaction[]> {
-    return await this.prismaService.transaction.findMany({
+  async getAllTransactions(): Promise<Transaction[]> {
+    return await this.prismaUserService.transaction.findMany();
+  }
+
+  async getTransactionsByAccountId(userId: number): Promise<Transaction[] | null> {
+    if (this.prismaUserService.user.findUnique({
+      where: {
+        id: userId
+      }
+    }) === null) {
+      return null;
+    }
+    
+    return await this.prismaUserService.transaction.findMany({
       where: {
         OR: [
           { account_id: userId },
@@ -20,11 +32,5 @@ export class TransactionPostgresService {
         ]
       }
     })
-  }
-
-  async createTransaction(data: Omit<Prisma.TransactionCreateInput, 'created_at'>): Promise<Transaction> {
-    return await this.prismaService.transaction.create({
-      data,
-    });
   }
 }
