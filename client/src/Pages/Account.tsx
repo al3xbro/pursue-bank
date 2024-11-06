@@ -62,6 +62,13 @@ export default function Account() {
     }
 
     const handleCancel = () => {
+        getFirstName().then((res) => setFirstName(res.firstName ?? 'Unavailable'))
+        getLastName().then((res) => setLastName(res.lastName ?? 'Unavailable'))
+        getEmail().then((res) => setEmail(res.email ?? 'Unavailable'))
+        getAddress().then((res) => setAddress(res.address ?? 'Unavailable'))
+        getPhone().then((res) => setPhone(res.phone ?? 'Unavailable'))
+        getDOB().then((res) => setDOB(res.DOB ?? 'Unavailable'))
+        
         setIsEditing(!isEditing);
     };
     return (
