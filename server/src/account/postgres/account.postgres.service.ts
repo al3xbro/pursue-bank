@@ -16,4 +16,17 @@ export class AccountPostgresService {
   async emailAlreadyInUse(email: string): Promise<Boolean> {
     return !! await this.prismaService.user.findFirst({where: {email : email}})
   }
+
+  async getUserFromEmail(email: string): Promise<User | null> {
+    return await this.prismaService.user.findUnique({where: {email : email}});
+  }
+
+  async getUserFromId(uid: number): Promise<User | null> {
+    return await this.prismaService.user.findUnique({where: {id: uid}});
+  }
+
+  async getEmailFromUserId(uid: number): Promise<string | undefined> {
+    const user = await this.prismaService.user.findUnique({where: {id: uid}});
+    return user?.email;
+  }
 }
