@@ -5,7 +5,6 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private authService: AuthService) { }
 
-  // should use DTOs for parameter and return value I guess
   @HttpCode(HttpStatus.OK)
   @Post('login')
   signIn(@Body() signInData: { email: string; password: string }) {
