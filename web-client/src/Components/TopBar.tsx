@@ -8,6 +8,7 @@ export default function TopBar() {
   const navigate = useNavigate(); // Initialize navigate
 
   const handleAccountClick = () => {
+    {() => navigate('/account')}
     console.log('Account icon clicked'); // Need to implement when icon is clicked
   };
 
@@ -15,7 +16,7 @@ export default function TopBar() {
   const isLoginPage = location.pathname === '/login' || location.pathname === '/signup';
 
   return (
-    <div className="bg-indigo-600 text-white p-6 flex items-center shadow-md">
+    <div className="bg-indigo-600 text-white p-6 flex shadow-md w-full">
       <h1 className="text-xl font-bold">PB</h1>
       <nav className="ml-auto">
         <ul className="flex gap-4">
@@ -25,7 +26,8 @@ export default function TopBar() {
           <li className='m-auto'>
             <a href="/about" className="hover:text-indigo-300" onClick={() => navigate('/about')}>About</a>
           </li>
-          {!isLoginPage && <AccountIcon onClick={handleAccountClick} />}
+          {!isLoginPage && <AccountIcon onClick={() => navigate('/account')
+} />}
         </ul>
       </nav>
       {/* Account Icon hidden on login page */}
