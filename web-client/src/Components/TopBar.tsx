@@ -8,6 +8,7 @@ export default function TopBar() {
   const navigate = useNavigate(); // Initialize navigate
 
   const handleAccountClick = () => {
+    navigate('/account')
     console.log('Account icon clicked'); // Need to implement when icon is clicked
   };
 
