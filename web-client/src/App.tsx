@@ -10,14 +10,14 @@ import FindATMs from './Pages/FindATMs';
 import TransferInt from './Pages/TransferInt';
 import TransferExt from './Pages/TransferExt';
 import Account from './Pages/Account';
-import CheckDepo from './Pages/checkDepo'
+import CheckDepo from './Pages/CheckDepo'
 
 function App() {
   return (
     
     <Router>
-      <TopBar></TopBar>
       {/*TopBar to be displayed on every page*/}
+      <TopBar />
 
 
 
@@ -30,7 +30,7 @@ function App() {
         <Route path='/account' element={<Account />} />
         <Route path='/transferInt' element={<TransferInt />} />
         <Route path='/transferExt' element={<TransferExt />} />
-        <Route path='/checkDepo' element={<CheckDepo />} />
+        <Route path='/deposit' element={<CheckDepo />} />
       </Routes>
     </Router>
   );
