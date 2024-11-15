@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
-import { userInfo } from 'os';
 
 @Injectable()
 export class AccountPostgresService {
@@ -28,5 +27,16 @@ export class AccountPostgresService {
   async getEmailFromUserId(uid: number): Promise<string | undefined> {
     const user = await this.prismaService.user.findUnique({where: {id: uid}});
     return user?.email;
+  }
+
+  async updateAccount(uid: number, data: Prisma.UserUpdateInput): Promise<User | null> {
+    return this.getUserFromId(uid) === null 
+      ? null    // returns null if no user with provided id exists
+      : await this.prismaService.user.update({
+        where: {
+          id: uid,
+        },
+        data,
+      })
   }
 }

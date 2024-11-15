@@ -10,19 +10,45 @@ export class AccountService {
   async createAccount(data: {
     email: string,
     password: string,
-    first_name: string,
-    last_name: string,
+    firstName: string,
+    lastName: string,
+    address: string,
+    phone: string,
+    dob: string,
   }): Promise<User> {
     if (await this.accountPostgresService.emailAlreadyInUse(data.email)) {
       throw new BadRequestException('Email already has a linked account. Forgot your password?');
     }
 
     return await this.accountPostgresService.createAccount({
-      ...data,
-      address: "",
-      phone: "",
-      dob: "",
+      email: data.email,
+      password: data.password,
+      first_name: data.firstName,
+      last_name: data.lastName,
+      address: data.address,
+      phone: data.phone,
+      dob: data.dob,
     });
+  }
+
+  async updateAccount(uid: number, data: {
+    email?: string,
+    password?: string,
+    firstName?: string,
+    lastName?: string,
+    address?: string,
+    phone?: string,
+    dob?: string,
+  }): Promise<User> {
+    return await this.accountPostgresService.updateAccount(uid, {
+      email: data.email,
+      password: data.password,
+      first_name: data.firstName,
+      last_name: data.lastName,
+      address: data.address,
+      phone: data.phone,
+      dob: data.dob,
+    }) as User;
   }
 
   async getUserData(uid: number): Promise<User> {

@@ -18,6 +18,12 @@ export class TransactionController {
   }
 
   @UseGuards(AuthGuard)
+  @Get(':id')
+  async getUserTransactions(@Param('id') id: number): Promise<Transaction[]> {
+    return await this.transactionService.getTransactionsByAccountId(id);
+  }
+
+  @UseGuards(AuthGuard)
   @Get('balance/:id')
   async getUserBalance(@Param('id') id: number): Promise<{ balance: number }> {
     return { balance: await this.transactionService.getBalanceByAccountId(id) }
