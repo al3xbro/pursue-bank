@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import _ from 'lodash';
 import LargeButton from '../atoms/LargeButton';
-import { createTransaction, getBalance, getTransactions } from '../services/transaction';
+import { getBalance, getTransactions } from '../services/transaction';
 import TransactionBar from '../molecules/TransactionBar';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,13 +18,13 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center bg-gray-100 p-4 sm:p-8">
       <div className="flex flex-col sm:flex-row gap-6 sm:gap-20 w-full sm:w-3/5 min-w-96 h-auto sm:h-[calc(100vh-88px)] my-8 sm:my-32">
-        
+
         <div className="flex flex-col w-full max-h-fit sm:w-[60%] gap-6 sm:gap-8 bg-indigo-600 p-4 sm:p-6 rounded-lg">
           <div className="flex flex-col justify-between h-[200px] bg-gray-100 w-full rounded-lg p-4 sm:p-8 shadow-md">
             <div className="font-semibold text-lg sm:text-xl">Balance</div>
             <div className="font-semibold text-2xl sm:text-[40pt]">{balance ?? 'unable to fetch'}</div>
           </div>
-          
+
           <div className="flex flex-col justify-between bg-gray-100 w-full rounded-lg p-4 sm:p-8 shadow-md">
             <div className="font-semibold text-lg sm:text-xl">Recent Transactions:</div>
             <div className="font-semibold text-sm sm:text-[40pt]">

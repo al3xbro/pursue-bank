@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface AccountIconProps {
   onClick: () => void; // Prop for handling click events
 }

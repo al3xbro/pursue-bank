@@ -25,6 +25,7 @@
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/schedule": "^4.1.1",
+    "@nestjs/serve-static": "^4.0.2",
     "@prisma/client": "^5.20.0",
     "lodash": "^4.17.21",
     "reflect-metadata": "^0.2.0",
