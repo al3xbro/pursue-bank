@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import { getFirstName, getLastName, getEmail, getAddress, getPhone, getDOB } from '../services/transaction';
+import { getUser } from '../services/transaction';
 
 
 export default function Account() {
@@ -15,14 +15,29 @@ export default function Account() {
     const [isEditing, setIsEditing] = useState(false);
     const [error, setError] = useState('');
 
+
     useEffect(() => {
-        getFirstName().then((res) => setFirstName(res.firstName ?? 'Unavailable'))
-        getLastName().then((res) => setLastName(res.lastName ?? 'Unavailable'))
-        getEmail().then((res) => setEmail(res.email ?? 'Unavailable'))
-        getAddress().then((res) => setAddress(res.address ?? 'Unavailable'))
-        getPhone().then((res) => setPhone(res.phone ?? 'Unavailable'))
-        getDOB().then((res) => setDOB(res.DOB ?? 'Unavailable'))
-      }, [])
+        getUser()
+        .then((res) => {
+            console.log('Fetched User Data:', res); // Debugging
+
+            // Directly use the response
+            const fetchedUser = res ?? {}; // Ensure it's an object even if undefined or null
+
+            // Update individual fields
+            setFirstName(fetchedUser.first_name ?? 'Unavailable');
+            setLastName(fetchedUser.last_name ?? 'Unavailable');
+            setEmail(fetchedUser.email ?? 'Unavailable');
+            setPassword(fetchedUser.password ?? 'Unavailable');
+            setAddress(fetchedUser.address ?? 'Unavailable');
+            setPhone(fetchedUser.phone ?? 'Unavailable');
+            setDOB(fetchedUser.dob ?? 'Unavailable');
+        })
+        .catch((err) => {
+            console.error('Error fetching user:', err);
+            setError('Failed to fetch user data.');
+        });
+    }, [])
 
     const handleLogOut = () => {
         localStorage.removeItem('accessToken');
@@ -31,18 +46,48 @@ export default function Account() {
 
     const handleEdit = () => {
         if(isEditing){
-            handleSave();
+            if (validateForm()) {
+                handleSave();
+                setIsEditing(false); 
+            }
         }
-        setIsEditing(!isEditing);
+        else{
+            setIsEditing(!isEditing);
+        }
     };
+    function validateForm() {
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const phoneRegex = /^\d{10}$/;
+        let valid = true;
+    
+        if (!emailRegex.test(email)) {
+            setError("Please enter a valid email address.");
+            valid = false;
+        } 
+        else if (phone && !phoneRegex.test(phone)) {
+            setError("Please enter a valid 10-digit phone number.");
+            valid = false;
+        }
+        else if (password.length < 5) {
+            setError("Password must be at least 5 characters long");
+            valid = false;
+        }
+        else {
+            setError("");
+        }
+        return valid;
+    }
 
     async function handleSave () {
+        if(!validateForm()){
+            return;
+        }
         const editData = { email, password, firstName, lastName, address, phone, DOB };
 
         try {
             // Send POST request to your login endpoint (replace 'https://your-api/login' with your actual API)
             const response = await fetch('http://localhost:3000/api/internal/user', {
-                method: 'POST',
+                method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editData),
             });
@@ -62,12 +107,26 @@ export default function Account() {
     }
 
     const handleCancel = () => {
-        getFirstName().then((res) => setFirstName(res.firstName ?? 'Unavailable'))
-        getLastName().then((res) => setLastName(res.lastName ?? 'Unavailable'))
-        getEmail().then((res) => setEmail(res.email ?? 'Unavailable'))
-        getAddress().then((res) => setAddress(res.address ?? 'Unavailable'))
-        getPhone().then((res) => setPhone(res.phone ?? 'Unavailable'))
-        getDOB().then((res) => setDOB(res.DOB ?? 'Unavailable'))
+        getUser()
+        .then((res) => {
+            console.log('Fetched User Data:', res); // Debugging
+
+            // Directly use the response
+            const fetchedUser = res ?? {}; // Ensure it's an object even if undefined or null
+
+            // Update individual fields
+            setFirstName(fetchedUser.first_name ?? 'Unavailable');
+            setLastName(fetchedUser.last_name ?? 'Unavailable');
+            setEmail(fetchedUser.email ?? 'Unavailable');
+            setPassword(fetchedUser.password ?? 'Unavailable');
+            setAddress(fetchedUser.address ?? 'Unavailable');
+            setPhone(fetchedUser.phone ?? 'Unavailable');
+            setDOB(fetchedUser.dob ?? 'Unavailable');
+        })
+        .catch((err) => {
+            console.error('Error fetching user:', err);
+            setError('Failed to fetch user data.');
+        });
         
         setIsEditing(!isEditing);
     };
