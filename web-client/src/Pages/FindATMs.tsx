@@ -101,13 +101,13 @@ export default function FindATMs() {
   return (
     <div className="flex flex-col h-[calc(100vh-88px)]">
       {/* Top Search Bar */}
-      <div className="w-1/4 p-4 bg-white">
+      <div className="p-4 bg-white">
         <input
           type="text"
           placeholder="Enter a U.S. city, state (e.g., San Jose, California)"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
-          className="w-2/3 p-2 border rounded-md focus:ring focus:ring-indigo-300"
+          className="w-1/8 p-2 border rounded-md focus:ring focus:ring-indigo-300"
         />
         <button
           onClick={handleSearch}

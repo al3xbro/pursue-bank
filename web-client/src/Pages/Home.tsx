@@ -16,8 +16,8 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center bg-gray-100 p-4 sm:p-8">
-      <div className="flex flex-col sm:flex-row gap-6 sm:gap-20 w-full sm:w-3/5 min-w-96 h-auto sm:h-[calc(100vh-88px)] my-8 sm:my-32">
+    <div className="flex w-full flex-col items-center justify-center bg-gray-100 p-4 sm:p-8 overflow-hidden">
+      <div className="flex flex-col sm:flex-row gap-6 sm:gap-20 w-full sm:w-3/5 max-w-full h-auto my-8 sm:my-32">
         
         <div className="flex flex-col w-full max-h-fit sm:w-[60%] gap-6 sm:gap-8 bg-white shadow-md border-2 border-indigo-500 p-4 sm:p-6 rounded-lg">
           <div className="flex flex-col justify-between h-[200px] bg-white w-full rounded-lg p-4 sm:p-8">
@@ -27,7 +27,7 @@ export default function Home() {
           
           <div className="flex flex-col justify-between bg-white w-full rounded-lg p-4 sm:p-8">
             <div className="font-semibold text-lg sm:text-xl">Recent Transactions:</div>
-            <div className="font-semibold text-sm sm:text-[40pt]">
+            <div className="font-semibold text-sm sm:text-[40pt] space-y-2">
               {transactions.map((transaction) => (
                 <TransactionBar key={transaction.id} amount={transaction.amount} transactionType={transaction.transactionType} />
               )) ?? 'unable to fetch'}
@@ -55,7 +55,7 @@ export default function Home() {
               </LargeButton>
             </div>
             <div className="flex flex-col items-center w-full p-4">
-              <button onClick={() => navigate('/deposit')} className="bg-gray-300 mx-auto w-full sm:w-1/2 text-center p-2 rounded-md">
+              <button onClick={() => navigate('/checkDepo')} className="bg-gray-300 mx-auto w-full sm:w-1/2 text-center p-2 rounded-md">
                 <div className="text-lg sm:text-xl">Deposit Check</div>
               </button>
             </div>
