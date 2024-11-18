@@ -58,26 +58,26 @@ export default function Login() {
         {error && <div className="mb-4 text-red-600 text-center">{error}</div>}
 
         <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-semibold text-gray-700">Email</label>
+          {/* <label htmlFor="email" className="block text-sm font-semibold text-gray-700">Email</label> */}
           <input
             id="email"
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-            placeholder="Enter your email"
+            placeholder="Email"
           />
         </div>
 
         <div className="mb-6">
-          <label htmlFor="password" className="block text-sm font-semibold text-gray-700">Password</label>
+          {/* <label htmlFor="password" className="block text-sm font-semibold text-gray-700">Password</label> */}
           <input
             id="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-            placeholder="Enter your password"
+            placeholder="Password"
           />
         </div>
 
