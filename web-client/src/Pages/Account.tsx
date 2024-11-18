@@ -88,7 +88,8 @@ export default function Account() {
             // Send POST request to your login endpoint (replace 'https://your-api/login' with your actual API)
             const response = await fetch('http://localhost:3000/api/internal/user', {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+                    'Content-Type': 'application/json' },
                 body: JSON.stringify(editData),
             });
 
