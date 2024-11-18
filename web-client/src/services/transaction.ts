@@ -40,8 +40,8 @@ async function getTransactions() {
   return json
 }
 
-async function getFirstName() {
-  const res = await fetch('http://localhost:3000/api/internal/user/firstname', {
+async function getUser() {
+  const res = await fetch('http://localhost:3000/api/internal/user', {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -51,59 +51,5 @@ async function getFirstName() {
   return json
 }
 
-async function getLastName() {
-  const res = await fetch('http://localhost:3000/api/internal/user/lastname', {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-    },
-  });
-  const json = await res.json();
-  return json
-}
 
-async function getEmail() {
-  const res = await fetch('http://localhost:3000/api/internal/user/email', {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-    },
-  });
-  const json = await res.json();
-  return json
-}
-
-async function getAddress() {
-  const res = await fetch('http://localhost:3000/api/internal/user/address', {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-    },
-  });
-  const json = await res.json();
-  return json
-}
-
-async function getPhone() {
-  const res = await fetch('http://localhost:3000/api/internal/user/phone', {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-    },
-  });
-  const json = await res.json();
-  return json
-}
-
-async function getDOB() {
-  const res = await fetch('http://localhost:3000/api/internal/user/DOB', {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-    },
-  });
-  const json = await res.json();
-  return json
-}
-
-export { createTransaction, getBalance, getTransactions, getFirstName, getLastName, getEmail, getAddress, getPhone, getDOB };
+export { createTransaction, getBalance, getTransactions, getUser };
