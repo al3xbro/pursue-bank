@@ -1,11 +1,10 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface AccountIconProps {
   onClick: () => void; // Prop for handling click events
 }
 
-export default function AccountIcon({ onClick }: AccountIconProps) {
+export default function AccountIcon({ }: AccountIconProps) {
   const navigate = useNavigate(); // Initialize navigate
   return (
     <div

@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { getBalance } from '../services/transactions';
 import { useQuery } from '@tanstack/react-query';
 

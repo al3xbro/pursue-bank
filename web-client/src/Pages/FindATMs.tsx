@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { GoogleMap, LoadScript, Marker, Circle, InfoWindow, useLoadScript } from '@react-google-maps/api';
+import { useState } from 'react';
+import { GoogleMap, Marker, Circle, InfoWindow, useLoadScript } from '@react-google-maps/api';
 
 type AtmLocation = {
   lat: number;
