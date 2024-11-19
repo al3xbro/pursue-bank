@@ -99,7 +99,7 @@ export default function FindATMs() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-88px)]">
+    <div className="flex flex-col min-h-[calc(100vh-88px)]">
       {/* Top Search Bar */}
       <div className="p-4 bg-white">
         <input

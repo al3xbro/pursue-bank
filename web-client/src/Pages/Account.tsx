@@ -11,7 +11,7 @@ export default function Account() {
     const [password, setPassword] = useState('');
     const [address, setAddress] = useState('');
     const [phone, setPhone] = useState('');
-    const [DOB, setDOB] = useState('');
+    const [dob, setDOB] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const [error, setError] = useState('');
 
@@ -82,10 +82,9 @@ export default function Account() {
         if(!validateForm()){
             return;
         }
-        const editData = { email, password, firstName, lastName, address, phone, DOB };
+        const editData = { email, password, firstName, lastName, address, phone, dob };
 
         try {
-            // Send POST request to your login endpoint (replace 'https://your-api/login' with your actual API)
             const response = await fetch('http://localhost:3000/api/internal/user', {
                 method: 'PUT',
                 headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -131,8 +130,16 @@ export default function Account() {
         
         setIsEditing(!isEditing);
     };
+
+    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const dateVal =e.target.value; 
+        console.log("typeof(dateVal)", typeof(dateVal))
+        console.log("dateVal", dateVal); 
+        setDOB(dateVal); 
+
+    } 
     return (
-        <div className="flex flex-col items-center h-[calc(100vh-88px)] justify-center bg-gray-100">
+        <div className="flex flex-col items-center min-h-[calc(100vh-88px)] justify-center bg-gray-100">
             <div className="mb-8">
                 <h2 className="text-3xl font-bold mt-8 text-black">Account Information</h2>
             </div>
@@ -152,7 +159,7 @@ export default function Account() {
                     <br></br>
                     <div className='font-semibold text-xl'>Phone Number: {phone}</div>
                     <br></br>
-                    <div className='font-semibold text-xl'>Date of Birth: {DOB}</div>
+                    <div className='font-semibold text-xl'>Date of Birth: {dob}</div>
                     <br></br>
                     <div className="flex justify-center mt-4">
                         <button onClick={handleLogOut} className="px-4 py-2 shadow bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
@@ -244,10 +251,10 @@ export default function Account() {
                     <input
                         id="DOB"
                         type="date"
-                        value={DOB}
-                        onChange={(e) => setDOB(e.target.value)}
+                        value={dob}
+                        onChange={(e) => handleDateChange(e)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                        placeholder={DOB}
+                        placeholder={dob}
                     />
                 </div>
                     <div className="flex justify-center mt-4">

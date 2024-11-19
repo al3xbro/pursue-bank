@@ -8,22 +8,24 @@ export default function Login() {
     const [lastName, setLast] = useState('');
     const [address, setAddress] = useState('');
     const [phone, setPhone] = useState('');
-    const [DOB, setDOB] = useState('');
+    const [dob, setDOB] = useState('');
 
     const [error, setError] = useState(''); // For displaying error messages
     const navigate = useNavigate(); // Initialize navigate
 
     // Function declaration for login handler
     async function handleSignup() {
-        if (!email || !password || !firstName || !lastName || !address || !phone || !DOB) {
+        if (!email || !password || !firstName || !lastName || !address || !phone || !dob) {
             setError("All fields are required.");
             return;
         }
         // Prepare login payload
-        const signupData = { email, password, firstName, lastName, address, phone, DOB };
+        const signupData = { email, password, firstName, lastName, address, phone, dob };
 
         try {
-            // Send POST request to your login endpoint (replace 'https://your-api/login' with your actual API)
+            if(!validateForm()){
+                return;
+            }
             const response = await fetch('http://localhost:3000/api/internal/user', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -42,6 +44,28 @@ export default function Login() {
             console.error('Error:', error);
             setError('Something went wrong, please try again later.');
         }
+    }
+    function validateForm() {
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const phoneRegex = /^\d{10}$/;
+        let valid = true;
+    
+        if (!emailRegex.test(email)) {
+            setError("Please enter a valid email address.");
+            valid = false;
+        } 
+        else if (phone && !phoneRegex.test(phone)) {
+            setError("Please enter a valid 10-digit phone number.");
+            valid = false;
+        }
+        else if (password.length < 5) {
+            setError("Password must be at least 5 characters long");
+            valid = false;
+        }
+        else {
+            setError("");
+        }
+        return valid;
     }
 
     return (
@@ -136,7 +160,7 @@ export default function Login() {
                     <input
                         id="DOB"
                         type="date"
-                        value={DOB}
+                        value={dob}
                         onChange={(e) => setDOB(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
                         placeholder="Enter your date of birth"
@@ -145,9 +169,15 @@ export default function Login() {
 
                 <button
                     onClick={handleSignup}
-                    className="w-full mt-4 bg-gray-200 text-gray-700 p-2 rounded-md hover:bg-gray-300 transition"
+                    className="w-full mt-4 bg-indigo-500 text-white p-2 rounded-md hover:bg-gray-300 transition"
                 >
                     Signup
+                </button>
+                <button
+                    onClick={() => navigate('/login')}
+                    className="w-full mt-4 bg-gray-200 text-gray-700 p-2 rounded-md hover:bg-gray-300 transition"
+                >
+                    Cancel
                 </button>
             </div>
         </div>
