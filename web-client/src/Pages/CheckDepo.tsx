@@ -39,8 +39,7 @@ export default function CheckDepo() {
   }
 
   return (
-    <div>
-      <div className={`absolute inset-0 flex items-center justify-center transition ${isPopupOpen ? 'blur-sm' : ''}`}>
+      <div className="absolute inset-0 flex items-center justify-center transition">
         <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg border-2 border-indigo-500">
           <h1 className="text-3xl font-bold mb-6 text-center">Check Deposit</h1>
 
@@ -115,6 +114,5 @@ export default function CheckDepo() {
           </div>
         </div>
       </div>
-    </div>
   );
 }
