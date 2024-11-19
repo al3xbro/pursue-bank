@@ -1,57 +1,42 @@
-import React, { useState } from 'react'
+import React, { useRef, useCallback, forwardRef, useImperativeHandle } from 'react';
 import Webcam from 'react-webcam';
 import { Dispatch, SetStateAction } from 'react';
 
-interface WebcamComponentType {
-  setShowCamera: Dispatch<SetStateAction<boolean>>
-  setImageUrl: Dispatch<SetStateAction<string | null>>
+interface WebcamComponentProps {
+  setShowCamera: Dispatch<SetStateAction<boolean>>;
+  setImageUrl: Dispatch<SetStateAction<string | null>>;
 }
 
 const videoConstraints = {
-  facingMode: "user"
+  facingMode: 'user',
 };
 
-function WebcamComponent({ setShowCamera, setImageUrl } : WebcamComponentType) {
-  const webcamRef = React.useRef<Webcam>(null);
+const WebcamComponent = forwardRef(({ setShowCamera, setImageUrl }: WebcamComponentProps, ref) => {
+  const webcamRef = useRef<Webcam>(null);
 
-  const capture = React.useCallback(
-    () => {
-      if (webcamRef.current) {
-        const imageSrc =  webcamRef.current.getScreenshot();
-        setImageUrl(imageSrc)
-        setShowCamera(false)
-      }
-    },
-    [webcamRef]
-  
-  );
+  const capture = useCallback(() => {
+    if (webcamRef.current) {
+      const imageSrc = webcamRef.current.getScreenshot();
+      setImageUrl(imageSrc);
+      setShowCamera(false);
+    }
+  }, [setShowCamera, setImageUrl]);
+
+  useImperativeHandle(ref, () => ({
+    capture,
+  }));
+
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      gap: '2rem'
-    }}>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '4px',
-      }}>
+    <div className="flex flex-col items-center gap-4">
       <Webcam
         audio={false}
-        height={500}
         ref={webcamRef}
         screenshotFormat="image/jpeg"
-        width={500}
+        className="rounded-lg border-2 border-indigo-500"
         videoConstraints={videoConstraints}
       />
-
-      {/* <button onClick={capture}>Capture photo */}
-      </div>
     </div>
-  )
-}
+  );
+});
 
-export default WebcamComponent
+export default WebcamComponent;

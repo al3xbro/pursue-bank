@@ -52,7 +52,7 @@ export default function Home() {
               </LargeButton>
             </div>
             <div className="flex flex-col items-center w-full p-4">
-              <button onClick={() => navigate('/checkDepo')} className="bg-yellow-500 mx-auto w-full sm:w-1/2 text-center p-2 shadow-md rounded-md">
+              <button onClick={() => navigate('/deposit')} className="bg-yellow-500 mx-auto w-full sm:w-1/2 text-center p-2 shadow-md rounded-md">
                 <div className="text-lg sm:text-xl">Deposit Check</div>
               </button>
             </div>
