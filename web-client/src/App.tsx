@@ -10,7 +10,8 @@ import FindATMs from './Pages/FindATMs';
 import TransferInt from './Pages/TransferInt';
 import TransferExt from './Pages/TransferExt';
 import Account from './Pages/Account';
-import CheckDepo from './Pages/CheckDepo'
+import CheckDepo from './Pages/CheckDepo';
+import AdminHome from './Pages/AdminHome';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path='/transferInt' element={<TransferInt />} />
         <Route path='/transferExt' element={<TransferExt />} />
         <Route path='/deposit' element={<CheckDepo />} />
+        <Route path='/AdminHome' element={<AdminHome/>} />
       </Routes>
     </Router>
   );
