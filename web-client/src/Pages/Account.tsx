@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { getUser } from '../services/transaction';
+import { getUser } from '../services/transaction';
 
 
 export default function Account() {
@@ -16,7 +17,29 @@ export default function Account() {
     const [error, setError] = useState('');
 
 
+
     useEffect(() => {
+        getUser()
+        .then((res) => {
+            console.log('Fetched User Data:', res); // Debugging
+
+            // Directly use the response
+            const fetchedUser = res ?? {}; // Ensure it's an object even if undefined or null
+
+            // Update individual fields
+            setFirstName(fetchedUser.first_name ?? 'Unavailable');
+            setLastName(fetchedUser.last_name ?? 'Unavailable');
+            setEmail(fetchedUser.email ?? 'Unavailable');
+            setPassword(fetchedUser.password ?? 'Unavailable');
+            setAddress(fetchedUser.address ?? 'Unavailable');
+            setPhone(fetchedUser.phone ?? 'Unavailable');
+            setDOB(fetchedUser.dob ?? 'Unavailable');
+        })
+        .catch((err) => {
+            console.error('Error fetching user:', err);
+            setError('Failed to fetch user data.');
+        });
+    }, [])
         getUser()
         .then((res) => {
             console.log('Fetched User Data:', res); // Debugging
@@ -50,11 +73,40 @@ export default function Account() {
                 handleSave();
                 setIsEditing(false); 
             }
+            if (validateForm()) {
+                handleSave();
+                setIsEditing(false); 
+            }
+        }
+        else{
+            setIsEditing(!isEditing);
         }
         else{
             setIsEditing(!isEditing);
         }
     };
+    function validateForm() {
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const phoneRegex = /^\d{10}$/;
+        let valid = true;
+    
+        if (!emailRegex.test(email)) {
+            setError("Please enter a valid email address.");
+            valid = false;
+        } 
+        else if (phone && !phoneRegex.test(phone)) {
+            setError("Please enter a valid 10-digit phone number.");
+            valid = false;
+        }
+        else if (password.length < 5) {
+            setError("Password must be at least 5 characters long");
+            valid = false;
+        }
+        else {
+            setError("");
+        }
+        return valid;
+    }
     function validateForm() {
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         const phoneRegex = /^\d{10}$/;
@@ -107,6 +159,26 @@ export default function Account() {
     }
 
     const handleCancel = () => {
+        getUser()
+        .then((res) => {
+            console.log('Fetched User Data:', res); // Debugging
+
+            // Directly use the response
+            const fetchedUser = res ?? {}; // Ensure it's an object even if undefined or null
+
+            // Update individual fields
+            setFirstName(fetchedUser.first_name ?? 'Unavailable');
+            setLastName(fetchedUser.last_name ?? 'Unavailable');
+            setEmail(fetchedUser.email ?? 'Unavailable');
+            setPassword(fetchedUser.password ?? 'Unavailable');
+            setAddress(fetchedUser.address ?? 'Unavailable');
+            setPhone(fetchedUser.phone ?? 'Unavailable');
+            setDOB(fetchedUser.dob ?? 'Unavailable');
+        })
+        .catch((err) => {
+            console.error('Error fetching user:', err);
+            setError('Failed to fetch user data.');
+        });
         getUser()
         .then((res) => {
             console.log('Fetched User Data:', res); // Debugging

@@ -85,30 +85,30 @@ export default function Transfer() {
 
           {/* Amount Input */}
           <div className="mb-4">
-            <label htmlFor="amount" className="block text-lg font-medium text-gray-700 mb-2">
+            {/* <label htmlFor="amount" className="block text-lg font-medium text-gray-700 mb-2">
               Amount
-            </label>
+            </label> */}
             <input
               type="number"
               id="amount"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              placeholder="Enter the amount"
+              placeholder="Amount"
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
 
           {/* Bank Account Input */}
           <div className="mb-4">
-            <label htmlFor="bank-account" className="block text-lg font-medium text-gray-700 mb-2">
+            {/* <label htmlFor="bank-account" className="block text-lg font-medium text-gray-700 mb-2">
               Transfer To:
-            </label>
+            </label> */}
             <input
               type="text"
               id="bank-account"
               value={bankAccount}
               onChange={(e) => setBankAccount(e.target.value)}
-              placeholder="Enter account email"
+              placeholder="Target Account email"
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>

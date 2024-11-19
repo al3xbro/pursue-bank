@@ -85,6 +85,19 @@ export default function Home() {
           </div>
         </div>
 
+        <div className="flex flex-col w-full sm:w-[40%] gap-6 sm:gap-8">
+          <div className="font-semibold text-lg sm:text-xl">Transfer Money</div>
+          <LargeButton onClick={() => navigate('/transferInt')}>
+            <div className="text-lg sm:text-xl">Internal</div>
+          </LargeButton>
+          <LargeButton onClick={() => navigate('/transferExt')}>
+            <div className="text-lg sm:text-xl">External</div>
+          </LargeButton>
+          <button onClick={() => navigate('/findATMs')} className="bg-yellow-500 mx-auto w-full sm:w-1/2 text-center p-2 rounded-md">
+            <div className="text-lg sm:text-xl">Find ATMs</div>
+          </button>
+        </div>
+
       </div>
     </div>
   );

@@ -6,7 +6,11 @@ export default function TopBar() {
   const location = useLocation(); // Get the current location
   const navigate = useNavigate(); // Initialize navigate
 
-  // Determine if the current path is the login or signup page
+  const handleAccountClick = () => {
+    console.log('Account icon clicked'); // Need to implement when icon is clicked
+  };
+
+  // Determine if the current path is the login page
   const isLoginPage = location.pathname === '/login' || location.pathname === '/signup';
 
   return (
@@ -14,35 +18,14 @@ export default function TopBar() {
       <h1 className="text-xl font-bold">PB</h1>
       <nav className="ml-auto">
         <ul className="flex gap-4">
-          {!isLoginPage && (
-            <>
-              <li className="m-auto">
-                <a
-                  href="/"
-                  className="hover:text-indigo-300"
-                  onClick={(e) => {
-                    e.preventDefault(); // Prevent default anchor behavior
-                    navigate('/');
-                  }}
-                >
-                  Home
-                </a>
-              </li>
-              <li className="m-auto">
-                <a
-                  href="/about"
-                  className="hover:text-indigo-300"
-                  onClick={(e) => {
-                    e.preventDefault(); // Prevent default anchor behavior
-                    navigate('/about');
-                  }}
-                >
-                  About
-                </a>
-              </li>
-            </>
-          )}
-          {!isLoginPage && <AccountIcon onClick={() => navigate('/account')} />}
+          <li className='m-auto'>
+            <a href="/" className="hover:text-indigo-300" onClick={() => navigate('/')}>Home</a>
+          </li>
+          <li className='m-auto'>
+            <a href="/about" className="hover:text-indigo-300" onClick={() => navigate('/about')}>About</a>
+          </li>
+          {!isLoginPage && <AccountIcon onClick={() => navigate('/account')
+} />}
         </ul>
       </nav>
     </div>

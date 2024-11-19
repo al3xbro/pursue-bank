@@ -68,6 +68,10 @@ export default function Login() {
         return valid;
     }
 
+    async function handleReturn() {
+        navigate('/login');
+    }
+
     return (
         <div className="flex flex-col items-center min-h-[calc(100vh-88px)] justify-center bg-gray-100">
             <div className="mb-8">
@@ -80,7 +84,7 @@ export default function Login() {
                 {error && <div className="mb-4 text-red-600 text-center">{error}</div>}
 
                 <div className="mb-4">
-                    <label htmlFor="email" className="block text-sm font-semibold text-gray-700">Email</label>
+                    {/* <label htmlFor="email" className="block text-sm font-semibold text-gray-700">Email</label> */}
                     <input
                         id="email"
                         type="email"
@@ -89,60 +93,60 @@ export default function Login() {
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
                         placeholder="Enter your email"
                         pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-                        title="Please enter a valid email address"
+                        title="Valid Email Address"
                     />
                 </div>
 
                 <div className="mb-4">
-                    <label htmlFor="password" className="block text-sm font-semibold text-gray-700">Password</label>
+                    {/* <label htmlFor="password" className="block text-sm font-semibold text-gray-700">Password</label> */}
                     <input
                         id="password"
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                        placeholder="Enter your password"
+                        placeholder="Password"
                     />
                 </div>
 
                 <div className="mb-4">
-                    <label htmlFor="firstName" className="block text-sm font-semibold text-gray-700">First Name</label>
+                    {/* <label htmlFor="firstName" className="block text-sm font-semibold text-gray-700">First Name</label> */}
                     <input
                         id="firstName"
                         type="text"
                         value={firstName}
                         onChange={(e) => setFirst(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                        placeholder="Enter your First Name"
+                        placeholder="First Name"
                     />
                 </div>
 
                 <div className="mb-4">
-                    <label htmlFor="lastName" className="block text-sm font-semibold text-gray-700">Last Name</label>
+                    {/* <label htmlFor="lastName" className="block text-sm font-semibold text-gray-700">Last Name</label> */}
                     <input
                         id="lastName"
                         type="text"
                         value={lastName}
                         onChange={(e) => setLast(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                        placeholder="Enter your Last Name"
+                        placeholder="Last Name"
                     />
                 </div>
                 
                 <div className="mb-4">
-                    <label htmlFor="address" className="block text-sm font-semibold text-gray-700">Address</label>
+                    {/* <label htmlFor="address" className="block text-sm font-semibold text-gray-700">Address</label> */}
                     <input
                         id="address"
                         type="text"
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                        placeholder="Enter your address"
+                        placeholder="Address"
                     />
                 </div>
 
                 <div className="mb-4">
-                    <label htmlFor="phone" className="block text-sm font-semibold text-gray-700">Phone Number</label>
+                    {/* <label htmlFor="phone" className="block text-sm font-semibold text-gray-700">Phone Number</label> */}
                     <input
                         id="phone"
                         type="tel"
@@ -151,19 +155,18 @@ export default function Login() {
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
                         placeholder="Enter your phone number"
                         pattern="^\d{10}$"
-                        title="Please Enter a valid phone number"
+                        title="Valid phone number"
                     />
                 </div>
 
                 <div className="mb-4">
-                    <label htmlFor="DOB" className="block text-sm font-semibold text-gray-700">Date of Birth</label>
+                    {/* <label htmlFor="DOB" className="block text-sm font-semibold text-gray-700">Date of Birth</label> */}
                     <input
                         id="DOB"
                         type="date"
                         value={dob}
                         onChange={(e) => setDOB(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                        placeholder="Enter your date of birth"
                     />
                 </div>
 
