@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, Recurring_Transaction, Transaction } from '@prisma/client';
+import { Prisma, Recurring_Transaction, RecurringTransactionStatus, Transaction } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
@@ -9,9 +9,8 @@ export class AutopayPostgresService {
   async getAutopaysByAccountId(userId: number): Promise<Recurring_Transaction[]> {
     return await this.prismaService.recurring_Transaction.findMany({
       where: {
-        OR: [
-          { account_id: userId }
-        ]
+        account_id: userId,
+        status: RecurringTransactionStatus.ACTIVE
       }
     })
   }
@@ -22,7 +21,7 @@ export class AutopayPostgresService {
     });
   }
 
-  async editRecurringTransaction(rtransaction_id: number, data: Omit<Prisma.Recurring_TransactionCreateInput, 'status' | 'created_at'>): Promise<Recurring_Transaction> {
+  async editRecurringTransaction(rtransaction_id: number, data: Prisma.Recurring_TransactionUpdateInput): Promise<Recurring_Transaction> {
     return await this.prismaService.recurring_Transaction.update({
         where: {
             id: rtransaction_id,
@@ -36,6 +35,7 @@ export class AutopayPostgresService {
     return await this.prismaService.recurring_Transaction.findMany({
       where: {
         day_of_month: dayOfMonth,
+        status: RecurringTransactionStatus.ACTIVE
       }
     })
   }

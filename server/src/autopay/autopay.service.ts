@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import * as _ from 'lodash';
 import { AutopayPostgresService } from './postgres/autopay.postgres.service';
-import { $Enums, Transaction, TransactionType, Recurring_Transaction } from '@prisma/client';
+import { $Enums, Transaction, TransactionType, Recurring_Transaction, RecurringTransactionStatus } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/library';
 import { AccountPostgresService } from 'src/account/postgres/account.postgres.service';
 import { TransactionService } from 'src/transaction/transaction.service';
@@ -79,19 +79,29 @@ export class AutopayService {
   // users may change the payment date or amount, or switch between ACTIVE and DISABLED
   async editAutopay(accountId: number, data: {
     id: number,
-    amount: number,
-    day_of_month: number,
+    amount?: number,
+    day_of_month?: number,
+    status?: string,
   }): Promise<Recurring_Transaction | null> {
     const uid = await this.autopayPostgresService.getUserIdFromRecurringTransactionId(data.id);
     if (uid === undefined) {
       throw new BadRequestException("No recurring transaction with provided id exists");
     }
+    if (data.status !== undefined && data.status !== 'ACTIVE' && data.status !== 'DISABLED') {
+      throw new BadRequestException("Status must be either ACTIVE or DISABLED")
+    }
     if (uid as number !== accountId) {
       throw new UnauthorizedException();
     }
+    const status1 = data.status === undefined 
+      ? undefined
+      : data.status === 'ACTIVE'
+        ? RecurringTransactionStatus.ACTIVE
+        : RecurringTransactionStatus.DISABLED;
     return await this.autopayPostgresService.editRecurringTransaction(data.id, {
       amount: data.amount, 
       day_of_month: data.day_of_month,
+      status: status1,
     });
   }
 

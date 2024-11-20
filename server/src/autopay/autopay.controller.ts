@@ -37,14 +37,16 @@ export class AutopayController {
   @Put('')
   async editAutopay(@Headers('Authorization') authToken: string, @Body() data: {
     id: number,
-    amount: number,
-    dayOfMonth: number
+    amount?: number,
+    dayOfMonth?: number,
+    status?: string,
   }): Promise<Recurring_Transaction | null> {
     const accountId = this.jwtService.decode(authToken.split(' ')[1])['sub'];
     return this.autopayService.editAutopay(accountId, {
       id: data.id,
       amount: data.amount,
       day_of_month: data.dayOfMonth,
+      status: data.status,
     });
   }
 
