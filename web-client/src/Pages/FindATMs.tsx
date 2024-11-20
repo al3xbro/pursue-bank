@@ -18,11 +18,12 @@ export default function FindATMs() {
   const [mapCenter, setMapCenter] = useState(defaultLocation);
   const [atmLocations, setAtmLocations] = useState<AtmLocation[]>([]);
   const [selectedAtm, setSelectedAtm] = useState<AtmLocation | null>(null); // State to hold selected ATM
+  const [error, setError] = useState('');
 
   // Load the Google Maps script
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: 'AIzaSyA6XertY-5bqa5hVgTRzkSmd0rIKmZywBg',
-    libraries: ['places'], // Load the 'places' library for nearby search
+    libraries: ['places'], 
   });
 
   // Function to fetch coordinates based on city using Ninja Geocoding API
@@ -51,8 +52,10 @@ export default function FindATMs() {
 
         // Perform nearby search for Chase ATMs after updating map center
         performNearbySearch({ lat: newLat, lng: newLng });
+        setError('');
       } else {
-        console.error('No valid city found. Please check the input format (City, State).');
+        setError('Please enter a valid city.');
+        console.error('No valid city found.');
         setMapCenter(defaultLocation);
         setAtmLocations([]); // Reset ATM locations
       }
@@ -115,6 +118,7 @@ export default function FindATMs() {
         >
           Search
         </button>
+        {error && <div className="mb-4 text-red-600 text-center">{error}</div>}
       </div>
 
       {/* Main Content Area */}

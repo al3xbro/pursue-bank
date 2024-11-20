@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import { createTransaction } from '../services/transaction';
+import { externalTransaction, externalRecurring } from '../services/transaction';
 import Popup from 'reactjs-popup';
 
 export default function Transfer() {
@@ -21,7 +21,12 @@ export default function Transfer() {
     if (!amount || !bankAccount) {
       setError('Please fill in all fields');
       return;
-    } else if(isRecurringTransaction) {
+    } 
+    else if(!targetBank) {
+      setError('Please select a bank');
+      return;
+    }
+    else if(isRecurringTransaction) {
       if (!transactionName || !recurringPeriod) {
         setError('Please fill in all recurring fields');
         return;
@@ -39,16 +44,31 @@ export default function Transfer() {
   };
 
   const handleFinalConfirm = async () => {
-    try {
-      // Call the createTransaction function with the amount and bank account
-      const response = await createTransaction(bankAccount, amount);
-      setTransactionId(response.transactionId); // Set the transaction ID from response
-      setIsPopupOpen(false);
-      setShowReceipt(true);
-    } catch (error) {
-      console.error('Transaction Error:', error);
-      setError('Transaction failed. Please try again.');
-      setIsPopupOpen(false);
+    if(!isRecurringTransaction) {
+      try {
+          // Call the createTransaction function with the amount and bank account
+          const response = await externalTransaction(bankAccount, amount, targetBank);
+          setTransactionId(response.id); // Set the transaction ID from response
+          setIsPopupOpen(false);
+          setShowReceipt(true);
+        } catch (error) {
+          console.error('Transaction Error:', error);
+          setError('Transaction failed. Please try again.');
+          setIsPopupOpen(false);
+        }
+    }
+    else{
+      try {
+        // Call the createTransaction function with the amount and bank account
+        const response = await externalRecurring(bankAccount, amount, recurringPeriod, targetBank);
+        setTransactionId(response.id); // Set the transaction ID from response
+        setIsPopupOpen(false);
+        setShowReceipt(true);
+      } catch (error) {
+        console.error('Transaction Error:', error);
+        setError('Transaction failed. Please try again.');
+        setIsPopupOpen(false);
+      }
     }
   };
 
@@ -114,6 +134,7 @@ export default function Transfer() {
           </div>
 
           <select className="border border-gray-300 p-2 mb-4 text-gray-700" value={targetBank} onChange={e => setTargetBank(e.target.value)}>
+            <option value="" disabled>Select Bank</option>
             <option value="chase">Chase</option>
             <option value="bofa">Bank of America</option>
             <option value="wellsfargo">Wells Fargo</option>
@@ -206,7 +227,7 @@ export default function Transfer() {
               <h2 className="text-2xl font-bold mb-4">Transfer Information</h2>
               <p className="mb-4">Amount: ${amount}</p>
               <p className="mb-4">Transfer to: {bankAccount}</p>
-              <p className="mb-4">Transfer ID: </p>
+              <p className="mb-4">Transfer ID: {transactionId}</p>
 
 
               <div className="flex justify-around mt-6">

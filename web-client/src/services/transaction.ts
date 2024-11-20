@@ -1,4 +1,4 @@
-async function createTransaction(toEmail: string, amt: string) {
+async function internalTransaction(toEmail: string, amt: string) {
   const res = await fetch('http://localhost:3000/api/internal/transaction', {
     method: 'POST',
     headers: {
@@ -9,6 +9,89 @@ async function createTransaction(toEmail: string, amt: string) {
       transactionType: 'TRANSFER_INTERNAL',
       transferEmail: toEmail,
       amount: Number(amt),
+    }),
+  });
+  if (!res.ok) {
+    throw new Error('Error processing transaction');
+  }
+  const json = await res.json();
+  return json;
+}
+
+async function depositTransaction(amt: string) {
+  const res = await fetch('http://localhost:3000/api/internal/transaction', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    },
+    body: JSON.stringify({
+      transactionType: 'DEPOSIT',
+      amount: Number(amt),
+    }),
+  });
+  if (!res.ok) {
+    throw new Error('Error processing transaction');
+  }
+  const json = await res.json();
+  return json;
+}
+
+async function internalRecurring(toEmail: string, amt: string, day: string) {
+  const res = await fetch('http://localhost:3000/api/internal/autopay', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    },
+    body: JSON.stringify({
+      transactionType: 'TRANSFER_INTERNAL',
+      transferEmail: toEmail,
+      amount: Number(amt),
+      dayOfMonth: Number(day),
+    }),
+  });
+  if (!res.ok) {
+    throw new Error('Error processing transaction');
+  }
+  const json = await res.json();
+  return json;
+}
+
+async function externalTransaction(toEmail: string, amt: string, bank: string) {
+  const res = await fetch('http://localhost:3000/api/internal/transaction', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    },
+    body: JSON.stringify({
+      transactionType: 'TRANSFER_EXTERNAL',
+      transferEmail: toEmail,
+      amount: Number(amt),
+      destination: bank,
+    }),
+  });
+  if (!res.ok) {
+    throw new Error('Error processing transaction');
+  }
+  const json = await res.json();
+  return json;
+}
+
+async function externalRecurring(toEmail: string, amt: string, day: string, bank: string) {
+  const res = await fetch('http://localhost:3000/api/internal/autopay', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    },
+    body: JSON.stringify({
+      transactionType: 'TRANSFER_EXTERNAL',
+      transferEmail: toEmail,
+      amount: Number(amt),
+      dayOfMonth: Number(day),
+      destination: bank,
     }),
   });
   if (!res.ok) {
@@ -52,4 +135,4 @@ async function getUser() {
 }
 
 
-export { createTransaction, getBalance, getTransactions, getUser };
+export { internalTransaction, internalRecurring, depositTransaction, externalTransaction, externalRecurring, getBalance, getTransactions, getUser };

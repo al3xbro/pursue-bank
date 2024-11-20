@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
 import LargeButton from '../atoms/LargeButton';
-import { createTransaction, getBalance, getTransactions, getUser } from '../services/transaction';
+import {getBalance, getTransactions, getUser } from '../services/transaction';
 import TransactionBar from '../molecules/TransactionBar';
 import { useNavigate } from 'react-router-dom';
 
@@ -60,20 +60,27 @@ export default function Home() {
           
         </div>
 
-        <div className="flex flex-col w-full max-h-fit sm:w-[40%] gap-6 sm:gap-8">
-          <div className="flex flex-col justify-between w-full bg-white shadow-md rounded-lg p-4 sm:p-8">
+        <div className="flex flex-col w-full max-h-fit sm:w-[40%] gap-6 overflow-y-auto sm:gap-8">
+          <div className="flex flex-col max-h-[400px] overflow-y-auto justify-between w-full bg-white shadow-md rounded-lg p-4 sm:p-8">
               <div className="font-semibold text-lg sm:text-xl">Recent Transactions:</div>
               <div className="font-semibold text-sm sm:text-[40pt]">
-                {transactions.map((transaction) => (
-                  <TransactionBar key={transaction.id} amount={transaction.amount} transactionType={transaction.transactionType} />
-                )) ?? 'unable to fetch'}
+                {transactions
+                  .slice() // Create a copy of the array to avoid mutating the original
+                  .reverse() // Reverse the order of the array
+                  .map((transaction) => (
+                    <TransactionBar
+                      key={transaction.id}
+                      amount={transaction.amount}
+                      transactionType={transaction.transaction_type}
+                    />
+                  )) ?? 'unable to fetch'}
               </div>
-              <button
+              {/* <button
                 onClick={() => navigate('/transactions')}
                 className="w-1/4 mt-4 bg-gray-200 text-gray-700 p-2 ml-auto rounded-md hover:bg-gray-300 transition"
               >
                 See more
-              </button>
+              </button> */}
             </div>
           
           
