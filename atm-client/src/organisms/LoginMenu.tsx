@@ -12,7 +12,7 @@ export default function LoginMenu() {
   async function handleLogin() {
     try {
       localStorage.setItem('accessToken', await login(email, password))
-      navigate('/');
+      navigate('/atm');
     } catch (error: any) {
       setError(error.message);
     }
