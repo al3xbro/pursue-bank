@@ -11,8 +11,15 @@ export class TransactionService {
     private accountPostgresService: AccountPostgresService
   ) { }
 
+  // Changes the meaning of the 'amount' property so that negative means the user loses and positive means they gain.
+  makeAmountRelativeToUser(uid: number, tx: Transaction): Transaction {
+    const sign = uid === tx.transfer_id ? 1 : -1;
+    return {...tx, amount: tx.amount.mul(sign)}
+  }
+
   async getTransactionsByAccountId(id: number): Promise<Transaction[]> {
-    return await this.transactionPostgresService.getTransactionsByAccountId(id);
+    let txs = await this.transactionPostgresService.getTransactionsByAccountId(id);
+    return txs.map((tx) => this.makeAmountRelativeToUser(id, tx));
   }
 
   async getBalanceByAccountId(id: number): Promise<number> {
@@ -49,9 +56,11 @@ export class TransactionService {
       throw new BadRequestException('Invalid transaction type');
     }
 
+    let tx: Transaction;
+
     switch (data.transactionType) {
       case "WITHDRAW":
-        return await this.transactionPostgresService.createTransaction({
+        tx = await this.transactionPostgresService.createTransaction({
           amount: data.amount,
           transaction_type: data.transactionType as TransactionType,
           user: {
@@ -59,6 +68,7 @@ export class TransactionService {
           },
           recurring_transaction: undefined,
         });
+        break;
       case "TRANSFER_INTERNAL":
         const transferUser = await this.accountPostgresService.getUserFromEmail(data.transferEmail as string);
         if (transferUser == null) {
@@ -67,7 +77,7 @@ export class TransactionService {
         if (transferUser.id === data.accountId) {
           throw new BadRequestException('Sender and receiver can\'t be the same user')
         }
-        return await this.transactionPostgresService.createTransaction({
+        tx = await this.transactionPostgresService.createTransaction({
           amount: data.amount,
           transfer_id: transferUser.id,
           transaction_type: data.transactionType as TransactionType,
@@ -78,8 +88,9 @@ export class TransactionService {
             ? { connect: { id: data.recurringTransactionId } } 
             : undefined,          
         });
+        break;
       case "TRANSFER_EXTERNAL":
-        return await this.transactionPostgresService.createTransaction({
+        tx = await this.transactionPostgresService.createTransaction({
           amount: data.amount,
           transaction_type: data.transactionType as TransactionType,
           transfer_id: data.externalId as number,
@@ -92,8 +103,9 @@ export class TransactionService {
           ? { connect: { id: data.recurringTransactionId } } 
           : undefined,  
         });
+        break;
       default:  // DEPOSIT or INTEREST
-        return await this.transactionPostgresService.createTransaction({
+        tx = await this.transactionPostgresService.createTransaction({
           amount: -data.amount,
           transaction_type: data.transactionType as TransactionType,
           user: {
@@ -102,6 +114,8 @@ export class TransactionService {
           recurring_transaction: undefined,
         });
     }
+
+    return this.makeAmountRelativeToUser(data.accountId, tx);
   }
 }
 
