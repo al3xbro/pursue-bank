@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import WebcamComponent from '../Components/WebCamComponent';
 import { useNavigate } from 'react-router-dom';
+import { createTransaction } from '../services/transaction';
 
 export default function CheckDepo() {
   const [image, setImage] = useState<string | null>(null);
@@ -25,6 +26,7 @@ export default function CheckDepo() {
     }
     setError('');
     console.log('Depositing', amount);
+    
   };
 
   const handlePhotoClick = () => {
