@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
 import { AccountPostgresService } from './postgres/account.postgres.service';
-import { Prisma, User } from '@prisma/client';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AccountService {
