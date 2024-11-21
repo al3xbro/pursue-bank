@@ -17,10 +17,16 @@ export default function Transfer() {
   const navigate = useNavigate();
 
   const handleConfirm = () => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!amount || !bankAccount) {
       setError('Please fill in all fields');
       return;
-    } else if (isRecurringTransaction) {
+    } 
+    else if(!emailRegex.test(bankAccount)){
+      setError("Please enter a valid email address.");
+      return;
+    }
+    else if (isRecurringTransaction) {
       if (!transactionName || !recurringPeriod) {
         setError('Please fill in all recurring fields');
         return;
@@ -47,7 +53,7 @@ export default function Transfer() {
         setShowReceipt(true);
       } catch (error) {
         console.error('Transaction Error:', error);
-        setError('Transaction failed. Please try again.');
+        setError('Transaction failed. Please make sure you have entered a valid email address.');
         setIsPopupOpen(false);
       }
     }
@@ -60,7 +66,7 @@ export default function Transfer() {
         setShowReceipt(true);
       } catch (error) {
         console.error('Transaction Error:', error);
-        setError('Transaction failed. Please try again.');
+        setError('Transaction failed. Please make sure you have entered a valid email address.');
         setIsPopupOpen(false);
       }
     }

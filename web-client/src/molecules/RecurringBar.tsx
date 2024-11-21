@@ -11,7 +11,7 @@ interface RecurringBarProps {
 export default function RecurringBar({ amount, transactionType, dayOfMonth, destination, onDelete }: RecurringBarProps) {
     const [showMenu, setShowMenu] = useState(false);
     return (
-        <div className="flex justify-between bg-white w-full p-8 sm:p-2 border-2 border-black">
+        <div className="flex justify-between bg-white w-full p-8 border-2 border-black">
           <div className="font-semibold text-lg">
             {transactionType === 'TRANSFER_INTERNAL'
               ? 'Internal Transfer'

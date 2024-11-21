@@ -124,11 +124,11 @@ export default function Transfer() {
               Transfer To:
             </label> */}
             <input
-              type="text"
-              id="bank-account"
+              type="number"
+              id="accountID"
               value={bankAccount}
               onChange={(e) => setBankAccount(e.target.value)}
-              placeholder="Target Account email"
+              placeholder="Target Account ID"
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
