@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { GoogleMap, Marker, Circle, InfoWindow, useLoadScript } from '@react-google-maps/api';
+import React, { useState } from 'react';
+import { GoogleMap, LoadScript, Marker, Circle, InfoWindow, useLoadScript } from '@react-google-maps/api';
 
 type AtmLocation = {
   lat: number;
@@ -23,7 +23,7 @@ export default function FindATMs() {
   // Load the Google Maps script
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: 'AIzaSyA6XertY-5bqa5hVgTRzkSmd0rIKmZywBg',
-    libraries: ['places'], 
+    libraries: ['places'], // Load the 'places' library for nearby search
   });
 
   // Function to fetch coordinates based on city using Ninja Geocoding API
@@ -52,12 +52,11 @@ export default function FindATMs() {
 
         // Perform nearby search for Chase ATMs after updating map center
         performNearbySearch({ lat: newLat, lng: newLng });
-        setError('');
       } else {
-        setError('Please enter a valid city.');
-        console.error('No valid city found.');
-        setMapCenter(defaultLocation);
-        setAtmLocations([]); // Reset ATM locations
+        setError('Please enter a valid city');
+        console.error('No valid city found');
+        //setMapCenter(defaultLocation);
+        //setAtmLocations([]); // Reset ATM locations
       }
     } catch (error) {
       console.error('Error fetching coordinates:', error);
@@ -98,19 +97,20 @@ export default function FindATMs() {
   // Handle search to update map center based on user input
   const handleSearch = () => {
     console.log('Searching for ATMs near:', location);
+    setError('');
     fetchCoordinates(location); // Fetch coordinates when searching
   };
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-88px)]">
+    <div className="flex flex-col h-[calc(100vh-88px)]">
       {/* Top Search Bar */}
-      <div className="p-4 bg-white">
+      <div className="w-1/4 p-4 bg-white">
         <input
           type="text"
           placeholder="Enter a U.S. city, state (e.g., San Jose, California)"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
-          className="w-1/8 p-2 border rounded-md focus:ring focus:ring-indigo-300"
+          className="w-2/3 p-2 border rounded-md focus:ring focus:ring-indigo-300"
         />
         <button
           onClick={handleSearch}
@@ -118,8 +118,8 @@ export default function FindATMs() {
         >
           Search
         </button>
-        {error && <div className="mb-4 text-red-600 text-center">{error}</div>}
       </div>
+      {error && <div className="mb-4 text-red-600 text-center">{error}</div>}
 
       {/* Main Content Area */}
       <div className="flex-grow bg-white p-4">
