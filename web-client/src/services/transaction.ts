@@ -138,6 +138,7 @@ async function deleteRecurring(trans_id: number) {
   const res = await fetch('http://localhost:3000/api/internal/autopay', {
     method: 'PUT',
     headers: {
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
     },
     body: JSON.stringify({
