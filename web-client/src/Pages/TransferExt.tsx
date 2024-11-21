@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { externalTransaction, externalRecurring } from '../services/transaction';
 import Popup from 'reactjs-popup';
@@ -14,7 +14,7 @@ export default function Transfer() {
   const [transactionName, setTransactionName] = useState('');
   const [recurringPeriod, setRecurringPeriod] = useState('');
   const [targetBank, setTargetBank] = useState('');
-  
+
   const navigate = useNavigate();
 
   const handleConfirm = () => {
@@ -31,16 +31,16 @@ export default function Transfer() {
         setError('Please fill in all recurring fields');
         return;
       }
-      
+
       if (Number(recurringPeriod) > 31) {
         setError('Please select a valid date');
         return;
-      }  
+      }
     }
-      setIsPopupOpen(true);
-      setError('');
-      console.log('Transferring', amount, 'to', bankAccount);
-    
+    setIsPopupOpen(true);
+    setError('');
+    console.log('Transferring', amount, 'to', bankAccount);
+
   };
 
   const handleFinalConfirm = async () => {
@@ -145,11 +145,11 @@ export default function Transfer() {
           </select>
 
           <div className='mb-4'>
-            <label><input type = "checkbox" checked={isRecurringTransaction} onChange={() => setRecurringTransaction(!isRecurringTransaction)}/> Recurring Transaction</label>
+            <label><input type="checkbox" checked={isRecurringTransaction} onChange={() => setRecurringTransaction(!isRecurringTransaction)} /> Recurring Transaction</label>
           </div>
 
-          { isRecurringTransaction ? 
-          <div>
+          {isRecurringTransaction ?
+            <div>
               <div className='mb-4'>
                 <label htmlFor="recurring-transaction" className="block text-lg font-medium text-gray-700 mb-2">
                   Recurring Transaction Name:
@@ -163,21 +163,21 @@ export default function Transfer() {
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
-            <div className='mb-4'>
-              <label htmlFor="recurring-transaction-period" className="block text-lg font-medium text-gray-700 mb-2">
-                Recurring Transaction Date (Monthly):
-              </label>
-              <input
-                type="number"
-                id="transaction-period"
-                value={recurringPeriod}
-                onChange={(e) => setRecurringPeriod(e.target.value)}
-                placeholder="Enter Day of the Month to Recure"
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-              />
+              <div className='mb-4'>
+                <label htmlFor="recurring-transaction-period" className="block text-lg font-medium text-gray-700 mb-2">
+                  Recurring Transaction Date (Monthly):
+                </label>
+                <input
+                  type="number"
+                  id="transaction-period"
+                  value={recurringPeriod}
+                  onChange={(e) => setRecurringPeriod(e.target.value)}
+                  placeholder="Enter Day of the Month to Recure"
+                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                />
+              </div>
             </div>
-            </div>
-          : null }
+            : null}
 
           {/* Buttons */}
           <div className="flex justify-between mt-6">

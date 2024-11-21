@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { internalTransaction, internalRecurring } from '../services/transaction';
 import Popup from 'reactjs-popup';
@@ -9,32 +9,32 @@ export default function Transfer() {
   const [error, setError] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [showReceipt, setShowReceipt] = useState(false);
-  const [transactionId, setTransactionId] = useState('');
+  const [transactionID, setTransactionId] = useState('');
   const [isRecurringTransaction, setRecurringTransaction] = useState(false);
   const [transactionName, setTransactionName] = useState('');
   const [recurringPeriod, setRecurringPeriod] = useState('');
-  
+
   const navigate = useNavigate();
 
   const handleConfirm = () => {
     if (!amount || !bankAccount) {
       setError('Please fill in all fields');
       return;
-    } else if(isRecurringTransaction) {
+    } else if (isRecurringTransaction) {
       if (!transactionName || !recurringPeriod) {
         setError('Please fill in all recurring fields');
         return;
       }
-      
+
       if (Number(recurringPeriod) > 31) {
         setError('Please select a valid date');
         return;
-      }  
+      }
     }
-      setIsPopupOpen(true);
-      setError('');
-      console.log('Transferring', amount, 'to', bankAccount);
-    
+    setIsPopupOpen(true);
+    setError('');
+    console.log('Transferring', amount, 'to', bankAccount);
+
   };
 
   const handleFinalConfirm = async () => {
@@ -127,10 +127,10 @@ export default function Transfer() {
             />
           </div>
 
-          <label className="mb-4"><input type = "checkbox" checked={isRecurringTransaction} onChange={() => setRecurringTransaction(!isRecurringTransaction)}/> Recurring Transaction</label>
-          
-          { isRecurringTransaction ? 
-          <div>
+          <label className="mb-4"><input type="checkbox" checked={isRecurringTransaction} onChange={() => setRecurringTransaction(!isRecurringTransaction)} /> Recurring Transaction</label>
+
+          {isRecurringTransaction ?
+            <div>
               <div className='mb-4'>
                 <label htmlFor="recurring-transaction" className="block text-lg font-medium text-gray-700 mb-2">
                   Recurring Transaction Name:
@@ -144,21 +144,21 @@ export default function Transfer() {
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
-            <div className='mb-4'>
-              <label htmlFor="recurring-transaction-period" className="block text-lg font-medium text-gray-700 mb-2">
-                Recurring Transaction Date (Monthly):
-              </label>
-              <input
-                type="number"
-                id="transaction-period"
-                value={recurringPeriod}
-                onChange={(e) => setRecurringPeriod(e.target.value)}
-                placeholder="Enter Day of the Month to Recure"
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-              />
+              <div className='mb-4'>
+                <label htmlFor="recurring-transaction-period" className="block text-lg font-medium text-gray-700 mb-2">
+                  Recurring Transaction Date (Monthly):
+                </label>
+                <input
+                  type="number"
+                  id="transaction-period"
+                  value={recurringPeriod}
+                  onChange={(e) => setRecurringPeriod(e.target.value)}
+                  placeholder="Enter Day of the Month to Recure"
+                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                />
+              </div>
             </div>
-            </div>
-          : null }
+            : null}
 
           {/* Buttons */}
           <div className="flex justify-between mt-6">
@@ -208,7 +208,7 @@ export default function Transfer() {
               <h2 className="text-2xl font-bold mb-4">Transfer Information</h2>
               <p className="mb-4">Amount: ${amount}</p>
               <p className="mb-4">Transfer to: {bankAccount}</p>
-              <p className="mb-4">Transfer ID: {transactionId}</p>
+              <p className="mb-4">Transfer ID: {transactionID}</p>
 
 
               <div className="flex justify-around mt-6">

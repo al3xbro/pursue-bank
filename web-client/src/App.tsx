@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './index.css';
 import Home from './Pages/Home';
@@ -19,12 +18,9 @@ function App() {
     <Router>
       {/*TopBar to be displayed on every page*/}
       <TopBar />
-
-
-
       <Routes>
-        <Route path="/" element={<Home />} />         
-        <Route path="/login" element={<Login />} />   
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/transactions' element={<Transactions />} />
         <Route path='/findATMs' element={<FindATMs />} />

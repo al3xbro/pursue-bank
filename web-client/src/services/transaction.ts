@@ -123,6 +123,32 @@ async function getTransactions() {
   return json
 }
 
+async function getRecurring() {
+  const res = await fetch('http://localhost:3000/api/internal/autopay', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    },
+  });
+  const json = await res.json();
+  return json
+}
+
+async function deleteRecurring(trans_id: number) {
+  const res = await fetch('http://localhost:3000/api/internal/autopay', {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    },
+    body: JSON.stringify({
+      status: 'DISABLED',
+      id: trans_id
+    }),
+  });
+  const json = await res.json();
+  return json
+}
+
 async function getUser() {
   const res = await fetch('http://localhost:3000/api/internal/user', {
     method: 'GET',
@@ -135,4 +161,4 @@ async function getUser() {
 }
 
 
-export { internalTransaction, internalRecurring, depositTransaction, externalTransaction, externalRecurring, getBalance, getTransactions, getUser };
+export { internalTransaction, internalRecurring, depositTransaction, externalTransaction, externalRecurring, getBalance, getTransactions, getRecurring, deleteRecurring, getUser };
