@@ -36,11 +36,11 @@ export class AutopayService {
       throw new BadRequestException('Invalid recurring transaction type');
     }
 
-    if (!_.inRange(data.dayOfMonth,1,32)) {
+    if (!_.inRange(data.dayOfMonth, 1, 32)) {
       throw new BadRequestException('Invalid date')
     }
 
-    if (_.inRange(data.dayOfMonth,29,32)) {
+    if (_.inRange(data.dayOfMonth, 29, 32)) {
       // send warning message to user that lets them know any transactions on day 29-31 
       // on months without those days default to the last day of that month
     }
@@ -59,7 +59,7 @@ export class AutopayService {
         transfer_id: transferUser.id,
         transaction_type: data.transactionType as TransactionType,
         day_of_month: data.dayOfMonth,
-        transaction_list: undefined,       
+        transaction_list: undefined,
       });
     } else {  // TRANSFER_EXTERNAL
       return await this.autopayPostgresService.createRecurringTransaction({
@@ -93,13 +93,13 @@ export class AutopayService {
     if (uid as number !== accountId) {
       throw new UnauthorizedException();
     }
-    const status1 = data.status === undefined 
+    const status1 = data.status === undefined
       ? undefined
       : data.status === 'ACTIVE'
         ? RecurringTransactionStatus.ACTIVE
         : RecurringTransactionStatus.DISABLED;
     return await this.autopayPostgresService.editRecurringTransaction(data.id, {
-      amount: data.amount, 
+      amount: data.amount,
       day_of_month: data.day_of_month,
       status: status1,
     });
@@ -119,7 +119,7 @@ export class AutopayService {
 
     let matchingRecurringTransactions = await this.autopayPostgresService.getRecurringTransactionsByDayOfMonth(currentDayOfMonth);
     if (isLastDayOfMonth) {
-      for (let day = currentDayOfMonth+1; day <= 31; day++) {   // Add all days after last day of month
+      for (let day = currentDayOfMonth + 1; day <= 31; day++) {   // Add all days after last day of month
         let moreMatchingRecurringTransactions = await this.autopayPostgresService.getRecurringTransactionsByDayOfMonth(day);
         matchingRecurringTransactions = [...matchingRecurringTransactions, ...moreMatchingRecurringTransactions];
       }
@@ -132,13 +132,13 @@ export class AutopayService {
         amount: (recurringTransaction.amount as Decimal).toNumber(),
         transactionType: recurringTransaction.transaction_type as TransactionType,
         transferEmail: await this.accountPostgresService.getEmailFromUserId(recurringTransaction.transfer_id as number),
-        externalId: recurringTransaction.transaction_type === "TRANSFER_EXTERNAL" 
-          ? recurringTransaction.transfer_id as number 
+        externalId: recurringTransaction.transaction_type === "TRANSFER_EXTERNAL"
+          ? recurringTransaction.transfer_id as number
           : undefined,
-        origin: recurringTransaction.transaction_type === "TRANSFER_EXTERNAL" 
+        origin: recurringTransaction.transaction_type === "TRANSFER_EXTERNAL"
           ? recurringTransaction.origin as string
           : undefined,
-        destination: recurringTransaction.transaction_type === "TRANSFER_EXTERNAL" 
+        destination: recurringTransaction.transaction_type === "TRANSFER_EXTERNAL"
           ? recurringTransaction.destination as string
           : undefined,
         recurringTransactionId: recurringTransaction.id,

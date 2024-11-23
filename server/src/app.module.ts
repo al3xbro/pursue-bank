@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Controller, Get, Module, Res } from '@nestjs/common';
 import { AccountModule } from './account/account.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { AutopayModule } from './autopay/autopay.module';
@@ -15,12 +15,13 @@ import { join } from 'path';
     AuthModule,
     ScheduleModule.forRoot(),
     ServeStaticModule.forRoot({
-      serveRoot: '/',
       rootPath: join(__dirname, '..', '..', 'web-client', 'dist'),
+      exclude: ['/api*', '/atm*'],
     }),
     ServeStaticModule.forRoot({
-      serveRoot: '/atm',
+      serveRoot: 'atm',
       rootPath: join(__dirname, '..', '..', 'atm-client', 'dist'),
+      renderPath: 'atm',
     }),
   ],
   controllers: [],
