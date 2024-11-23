@@ -12,6 +12,10 @@ export default function Transfer() {
   const [_, setTransactionId] = useState('');
   const navigate = useNavigate();
 
+  if (localStorage.getItem('accessToken') === null) {
+    navigate('/login');
+  }
+
   const handleConfirm = () => {
     if (!amount || !bankAccount) {
       setError('Please fill in both fields');

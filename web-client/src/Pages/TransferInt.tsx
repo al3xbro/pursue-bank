@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { internalTransaction, internalRecurring } from '../services/transaction';
 import Popup from 'reactjs-popup';
@@ -16,13 +16,19 @@ export default function Transfer() {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (localStorage.getItem('accessToken') === null) {
+      navigate('/login');
+    }
+  }, [navigate])
+
   const handleConfirm = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!amount || !bankAccount) {
       setError('Please fill in all fields');
       return;
-    } 
-    else if(!emailRegex.test(bankAccount)){
+    }
+    else if (!emailRegex.test(bankAccount)) {
       setError("Please enter a valid email address.");
       return;
     }
@@ -44,7 +50,7 @@ export default function Transfer() {
   };
 
   const handleFinalConfirm = async () => {
-    if(!isRecurringTransaction){
+    if (!isRecurringTransaction) {
       try {
         // Call the createTransaction function with the amount and bank account
         const response = await internalTransaction(bankAccount, amount);

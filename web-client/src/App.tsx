@@ -14,7 +14,6 @@ import AdminHome from './Pages/AdminHome';
 
 function App() {
   return (
-    
     <Router>
       {/*TopBar to be displayed on every page*/}
       <TopBar />
@@ -28,7 +27,7 @@ function App() {
         <Route path='/transferInt' element={<TransferInt />} />
         <Route path='/transferExt' element={<TransferExt />} />
         <Route path='/deposit' element={<CheckDepo />} />
-        <Route path='/AdminHome' element={<AdminHome/>} />
+        <Route path='/AdminHome' element={<AdminHome />} />
       </Routes>
     </Router>
   );
