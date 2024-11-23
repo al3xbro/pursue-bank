@@ -15,13 +15,14 @@ import { join } from 'path';
     AuthModule,
     ScheduleModule.forRoot(),
     ServeStaticModule.forRoot({
+      serveRoot: '/',
       rootPath: join(__dirname, '..', '..', 'web-client', 'dist'),
-      exclude: ['/api*', '/atm*'],
+      exclude: ['/api*'],
     }),
     ServeStaticModule.forRoot({
-      serveRoot: 'atm',
+      serveRoot: '/atm',
       rootPath: join(__dirname, '..', '..', 'atm-client', 'dist'),
-      renderPath: 'atm',
+      exclude: ['/api*'],
     }),
   ],
   controllers: [],
