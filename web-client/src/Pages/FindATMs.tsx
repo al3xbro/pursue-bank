@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { GoogleMap, Marker, Circle, InfoWindow, useLoadScript } from '@react-google-maps/api';
+import React, { useState } from 'react';
+import { GoogleMap, LoadScript, Marker, Circle, InfoWindow, useLoadScript } from '@react-google-maps/api';
 
 type AtmLocation = {
   lat: number;
@@ -18,6 +18,7 @@ export default function FindATMs() {
   const [mapCenter, setMapCenter] = useState(defaultLocation);
   const [atmLocations, setAtmLocations] = useState<AtmLocation[]>([]);
   const [selectedAtm, setSelectedAtm] = useState<AtmLocation | null>(null); // State to hold selected ATM
+  const [error, setError] = useState('');
 
   // Load the Google Maps script
   const { isLoaded } = useLoadScript({
@@ -52,9 +53,10 @@ export default function FindATMs() {
         // Perform nearby search for Chase ATMs after updating map center
         performNearbySearch({ lat: newLat, lng: newLng });
       } else {
-        console.error('No valid city found. Please check the input format (City, State).');
-        setMapCenter(defaultLocation);
-        setAtmLocations([]); // Reset ATM locations
+        setError('Please enter a valid city');
+        console.error('No valid city found');
+        //setMapCenter(defaultLocation);
+        //setAtmLocations([]); // Reset ATM locations
       }
     } catch (error) {
       console.error('Error fetching coordinates:', error);
@@ -95,6 +97,7 @@ export default function FindATMs() {
   // Handle search to update map center based on user input
   const handleSearch = () => {
     console.log('Searching for ATMs near:', location);
+    setError('');
     fetchCoordinates(location); // Fetch coordinates when searching
   };
 
@@ -116,6 +119,7 @@ export default function FindATMs() {
           Search
         </button>
       </div>
+      {error && <div className="mb-4 text-red-600 text-center">{error}</div>}
 
       {/* Main Content Area */}
       <div className="flex-grow bg-white p-4">

@@ -7,7 +7,7 @@ interface LargeButtonProps {
 
 export default function LargeButton({ children, onClick }: LargeButtonProps) {
   return (
-    <button className="bg-gray-300 rounded-lg h-20 shadow-md" onClick={onClick}>
+    <button className="flex-1 bg-gray-300 rounded-lg h-20 shadow-md" onClick={onClick}>
       {children}
     </button>
   )

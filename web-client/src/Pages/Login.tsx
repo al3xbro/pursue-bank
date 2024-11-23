@@ -45,39 +45,37 @@ export default function Login() {
 
 
   return (
-    <div className="flex flex-col items-center h-[calc(100vh-88px)] justify-center bg-gray-100">
-      {/* Bank Name Section */}
+    <div className="flex flex-col items-center min-h-[calc(100vh-88px)] justify-center bg-gray-100">
       <div className="mb-8">
         <h1 className="text-6xl font-bold text-indigo-600">Pursue Bank</h1>
       </div>
 
-      {/* Login Form */}
       <div className="bg-white p-8 rounded-lg shadow-lg w-80">
         <h2 className="text-2xl font-bold text-center mb-6">Welcome</h2>
 
         {error && <div className="mb-4 text-red-600 text-center">{error}</div>}
 
         <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-semibold text-gray-700">Email</label>
+          {/* <label htmlFor="email" className="block text-sm font-semibold text-gray-700">Email</label> */}
           <input
             id="email"
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-            placeholder="Enter your email"
+            placeholder="Email"
           />
         </div>
 
         <div className="mb-6">
-          <label htmlFor="password" className="block text-sm font-semibold text-gray-700">Password</label>
+          {/* <label htmlFor="password" className="block text-sm font-semibold text-gray-700">Password</label> */}
           <input
             id="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-            placeholder="Enter your password"
+            placeholder="Password"
           />
         </div>
 

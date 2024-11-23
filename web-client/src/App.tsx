@@ -9,10 +9,12 @@ import FindATMs from './Pages/FindATMs';
 import TransferInt from './Pages/TransferInt';
 import TransferExt from './Pages/TransferExt';
 import Account from './Pages/Account';
-
+import CheckDepo from './Pages/CheckDepo';
+import AdminHome from './Pages/AdminHome';
 
 function App() {
   return (
+    
     <Router>
       {/*TopBar to be displayed on every page*/}
       <TopBar />
@@ -22,9 +24,11 @@ function App() {
         <Route path='/signup' element={<Signup />} />
         <Route path='/transactions' element={<Transactions />} />
         <Route path='/findATMs' element={<FindATMs />} />
+        <Route path='/account' element={<Account />} />
         <Route path='/transferInt' element={<TransferInt />} />
         <Route path='/transferExt' element={<TransferExt />} />
-        <Route path='/account' element={<Account />} />
+        <Route path='/deposit' element={<CheckDepo />} />
+        <Route path='/AdminHome' element={<AdminHome/>} />
       </Routes>
     </Router>
   );

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import { createTransaction } from '../services/transaction';
+import { internalTransaction, internalRecurring } from '../services/transaction';
 import Popup from 'reactjs-popup';
 
 export default function Transfer() {
@@ -9,7 +9,7 @@ export default function Transfer() {
   const [error, setError] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [showReceipt, setShowReceipt] = useState(false);
-  const [_, setTransactionId] = useState('');
+  const [transactionID, setTransactionId] = useState('');
   const [isRecurringTransaction, setRecurringTransaction] = useState(false);
   const [transactionName, setTransactionName] = useState('');
   const [recurringPeriod, setRecurringPeriod] = useState('');
@@ -17,10 +17,16 @@ export default function Transfer() {
   const navigate = useNavigate();
 
   const handleConfirm = () => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!amount || !bankAccount) {
       setError('Please fill in all fields');
       return;
-    } else if (isRecurringTransaction) {
+    } 
+    else if(!emailRegex.test(bankAccount)){
+      setError("Please enter a valid email address.");
+      return;
+    }
+    else if (isRecurringTransaction) {
       if (!transactionName || !recurringPeriod) {
         setError('Please fill in all recurring fields');
         return;
@@ -38,16 +44,31 @@ export default function Transfer() {
   };
 
   const handleFinalConfirm = async () => {
-    try {
-      // Call the createTransaction function with the amount and bank account
-      const response = await createTransaction(bankAccount, amount);
-      setTransactionId(response.transactionId); // Set the transaction ID from response
-      setIsPopupOpen(false);
-      setShowReceipt(true);
-    } catch (error) {
-      console.error('Transaction Error:', error);
-      setError('Transaction failed. Please try again.');
-      setIsPopupOpen(false);
+    if(!isRecurringTransaction){
+      try {
+        // Call the createTransaction function with the amount and bank account
+        const response = await internalTransaction(bankAccount, amount);
+        setTransactionId(response.id); // Set the transaction ID from response
+        setIsPopupOpen(false);
+        setShowReceipt(true);
+      } catch (error) {
+        console.error('Transaction Error:', error);
+        setError('Transaction failed. Please make sure you have entered a valid email address.');
+        setIsPopupOpen(false);
+      }
+    }
+    else {
+      try {
+        // Call the createTransaction function with the amount and bank account
+        const response = await internalRecurring(bankAccount, amount, recurringPeriod);
+        setTransactionId(response.id); // Set the transaction ID from response
+        setIsPopupOpen(false);
+        setShowReceipt(true);
+      } catch (error) {
+        console.error('Transaction Error:', error);
+        setError('Transaction failed. Please make sure you have entered a valid email address.');
+        setIsPopupOpen(false);
+      }
     }
   };
 
@@ -84,30 +105,30 @@ export default function Transfer() {
 
           {/* Amount Input */}
           <div className="mb-4">
-            <label htmlFor="amount" className="block text-lg font-medium text-gray-700 mb-2">
+            {/* <label htmlFor="amount" className="block text-lg font-medium text-gray-700 mb-2">
               Amount
-            </label>
+            </label> */}
             <input
               type="number"
               id="amount"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              placeholder="Enter the amount"
+              placeholder="Amount"
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
 
           {/* Bank Account Input */}
           <div className="mb-4">
-            <label htmlFor="bank-account" className="block text-lg font-medium text-gray-700 mb-2">
+            {/* <label htmlFor="bank-account" className="block text-lg font-medium text-gray-700 mb-2">
               Transfer To:
-            </label>
+            </label> */}
             <input
               type="text"
               id="bank-account"
               value={bankAccount}
               onChange={(e) => setBankAccount(e.target.value)}
-              placeholder="Enter account email"
+              placeholder="Target Account email"
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
@@ -193,7 +214,7 @@ export default function Transfer() {
               <h2 className="text-2xl font-bold mb-4">Transfer Information</h2>
               <p className="mb-4">Amount: ${amount}</p>
               <p className="mb-4">Transfer to: {bankAccount}</p>
-              <p className="mb-4">Transfer ID: </p>
+              <p className="mb-4">Transfer ID: {transactionID}</p>
 
 
               <div className="flex justify-around mt-6">
