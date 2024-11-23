@@ -32,7 +32,7 @@ export default function Login() {
         localStorage.setItem('accountId', accountId)
 
         // Navigate to home page after successful login
-        navigate('/');
+        navigate('/AdminHome');
       } else {
         // Handle login error (e.g., incorrect password)
         setError(data.message || 'Login failed, please try again');
