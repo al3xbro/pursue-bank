@@ -123,13 +123,14 @@ export class TransactionService {
     recipientId: number,
     origin: string,
   }): Promise<Transaction> {
+    const dummyUserId = 0;
     return await this.transactionPostgresService.createTransaction({
       amount: data.amount,
       transaction_type: TransactionType.TRANSFER_EXTERNAL,
       origin: data.origin,
       destination: 'Pursue Bank',
       user: {
-        connect: { id: data.recipientId },  // usually would link to initiating user, but for now just linking to recipient
+        connect: { id: dummyUserId },  // usually would link to initiating user, but in this case linking to a dummy
       },
       recurring_transaction: undefined,
       transfer_id: data.recipientId,
