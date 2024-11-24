@@ -117,5 +117,24 @@ export class TransactionService {
 
     return this.makeAmountRelativeToUser(data.accountId, tx);
   }
+
+  async createTransactionFromExternal(data: {
+    amount: number,
+    recipientId: number,
+    origin: string,
+  }): Promise<Transaction> {
+    const dummyUserId = 0;
+    return await this.transactionPostgresService.createTransaction({
+      amount: data.amount,
+      transaction_type: TransactionType.TRANSFER_EXTERNAL,
+      origin: data.origin,
+      destination: 'Pursue Bank',
+      user: {
+        connect: { id: dummyUserId },  // usually would link to initiating user, but in this case linking to a dummy
+      },
+      recurring_transaction: undefined,
+      transfer_id: data.recipientId,
+    });
+  }
 }
 
