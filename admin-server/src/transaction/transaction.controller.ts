@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, Post, UseGuards, Param } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Post, UseGuards, Param, ParseIntPipe } from '@nestjs/common';
 import { Transaction } from 'generated/user-client';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { TransactionService } from './transaction.service';
@@ -19,13 +19,13 @@ export class TransactionController {
 
   @UseGuards(AuthGuard)
   @Get(':id')
-  async getUserTransactions(@Param('id') id: number): Promise<Transaction[]> {
+  async getUserTransactions(@Param('id', ParseIntPipe) id: number): Promise<Transaction[]> {
     return await this.transactionService.getTransactionsByAccountId(id);
   }
 
   @UseGuards(AuthGuard)
   @Get('balance/:id')
-  async getUserBalance(@Param('id') id: number): Promise<{ balance: number }> {
+  async getUserBalance(@Param('id', ParseIntPipe) id: number): Promise<{ balance: number }> {
     return { balance: await this.transactionService.getBalanceByAccountId(id) }
   }
 

@@ -9,10 +9,10 @@ export default function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
+        <BrowserRouter basename='/atm'>
           <Routes>
-            <Route path='/atm' element={<TransactionPage />} />
-            <Route path='/atm/login' element={<LoginPage />} />
+            <Route path='/' element={<TransactionPage />} />
+            <Route path='/login' element={<LoginPage />} />
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>

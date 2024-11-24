@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import _ from 'lodash';
 import LargeButton from '../atoms/LargeButton';
-import {getBalance, getRecurring, getTransactions, deleteRecurring, getUser } from '../services/transaction';
+import { getBalance, getRecurring, getTransactions, deleteRecurring, getUser } from '../services/transaction';
 import TransactionBar from '../molecules/TransactionBar';
 import RecurringBar from '../molecules/RecurringBar';
 import { useNavigate } from 'react-router-dom';
@@ -15,32 +15,38 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState('transactions');
 
   useEffect(() => {
+    if (localStorage.getItem('accessToken') === null) {
+      navigate('/login');
+    }
+  }, [navigate])
+
+  useEffect(() => {
     getBalance().then((res) => setBalance(res.balance));
     getTransactions().then((res) => setTransactions(res));
     getRecurring().then((res) => setRecurring(res));
     getUser()
-        .then((res) => {
-            console.log('Fetched User Data:', res); 
+      .then((res) => {
+        console.log('Fetched User Data:', res);
 
-            const fetchedUser = res ?? {}; 
+        const fetchedUser = res ?? {};
 
-            setFirstName(fetchedUser.first_name ?? 'Unavailable');
-          })
-          .catch((err) => {
-              console.error('Error fetching user:', err);
-          });
+        setFirstName(fetchedUser.first_name ?? 'Unavailable');
+      })
+      .catch((err) => {
+        console.error('Error fetching user:', err);
+      });
   }, []);
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
   };
   const handleDelete = (id: number) => {
-    try{
+    try {
       deleteRecurring(id);
     } catch (error) {
       console.error('Error:', error);
     }
-    
-      
+
+
     setRecurring((prev) => prev.filter((transaction) => transaction.id !== id));
   };
 
@@ -55,7 +61,7 @@ export default function Home() {
             <div className="font-semibold text-lg sm:text-xl">Balance</div>
             <div className="font-semibold text-2xl sm:text-[40pt]">${balance !== undefined ? balance.toFixed(2) : 'unable to fetch'}</div>
           </div>
-          
+
           <div className="flex flex-col bg-white shadow-md rounded-lg overflow-hidden">
             <div className="flex flex-col items-center w-full sm:p-8">
               <div className="font-semibold text-3xl sm:text-3xl">Transfer Money</div>
@@ -74,34 +80,32 @@ export default function Home() {
               </button>
             </div>
           </div>
-          
+
         </div>
 
         <div className="flex flex-col w-full max-h-fit sm:w-[40%] gap-6 overflow-y-auto sm:gap-8">
           <div className="flex flex-col max-h-[400px] overflow-y-auto justify-between w-full bg-white shadow-md rounded-lg p-4 sm:p-8">
             <div className="flex mb-4 border-b">
               <button
-                className={`px-4 py-2 ${
-                  activeTab === 'transactions'
-                    ? 'text-indigo-600 text-left border-b-2 border-indigo-600'
-                    : 'text-gray-600 text-left'
-                }`}
+                className={`px-4 py-2 ${activeTab === 'transactions'
+                  ? 'text-indigo-600 text-left border-b-2 border-indigo-600'
+                  : 'text-gray-600 text-left'
+                  }`}
                 onClick={() => handleTabClick('transactions')}
               >
                 Recent Transactions
               </button>
               <button
-                className={`px-4 py-2 ${
-                  activeTab === 'recurring'
-                    ? 'text-indigo-600 text-left border-b-2 border-indigo-600'
-                    : 'text-gray-600 text-left'
-                }`}
+                className={`px-4 py-2 ${activeTab === 'recurring'
+                  ? 'text-indigo-600 text-left border-b-2 border-indigo-600'
+                  : 'text-gray-600 text-left'
+                  }`}
                 onClick={() => handleTabClick('recurring')}
               >
                 Recurring Transactions
               </button>
             </div>
-            {activeTab==='transactions' &&
+            {activeTab === 'transactions' &&
               <div className="font-semibold text-sm sm:text-[40pt]">
                 {transactions
                   .slice() // Create a copy of the array to avoid mutating the original
@@ -112,10 +116,10 @@ export default function Home() {
                       amount={transaction.amount}
                       transactionType={transaction.transaction_type}
                     />
-                )) ?? 'unable to fetch'}
+                  )) ?? 'unable to fetch'}
               </div>
             }
-            {activeTab==='recurring' &&
+            {activeTab === 'recurring' &&
               <div className="font-semibold text-sm sm:text-[40pt]">
                 {recurring
                   .slice() // Create a copy of the array to avoid mutating the original
@@ -129,13 +133,13 @@ export default function Home() {
                       destination={recurring.transfer_id}
                       onDelete={() => handleDelete(recurring.id)}
                     />
-                )) ?? 'unable to fetch'}
+                  )) ?? 'unable to fetch'}
               </div>
             }
-            
-            </div>
-          
-          
+
+          </div>
+
+
           <div className="flex w-full gap-4">
             <button onClick={() => navigate('/findATMs')} className="bg-white mx-auto w-full sm:w-1/2 text-center p-2 shadow-md rounded-md">
               <div className="text-lg sm:text-xl">Find ATMs</div>
@@ -143,7 +147,7 @@ export default function Home() {
           </div>
         </div>
 
-        
+
 
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards, Headers, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Headers, Param, ParseIntPipe } from '@nestjs/common';
 import { AccountService } from './account.service';
 import { User } from 'generated/user-client';
 import { AuthGuard } from 'src/auth/auth.guard';
@@ -13,7 +13,7 @@ export class AccountController {
 
   @UseGuards(AuthGuard)
   @Get(':id')
-  async getUserData(@Param('id') id: number): Promise<User> {
+  async getUserData(@Param('id', ParseIntPipe) id: number): Promise<User> {
     return this.accountService.getUserData(id);
   }
 

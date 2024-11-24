@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GoogleMap, LoadScript, Marker, Circle, InfoWindow, useLoadScript } from '@react-google-maps/api';
+import { useNavigate } from 'react-router-dom';
 
 type AtmLocation = {
   lat: number;
@@ -19,6 +20,13 @@ export default function FindATMs() {
   const [atmLocations, setAtmLocations] = useState<AtmLocation[]>([]);
   const [selectedAtm, setSelectedAtm] = useState<AtmLocation | null>(null); // State to hold selected ATM
   const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem('accessToken') === null) {
+      navigate('/login');
+    }
+  }, [navigate])
 
   // Load the Google Maps script
   const { isLoaded } = useLoadScript({

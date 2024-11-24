@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Headers, Post, UseGuards } from '@nestjs/common';
 import { Transaction } from '@prisma/client';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 import { TransactionService } from './transaction.service';
 import { JwtService } from '@nestjs/jwt';
 

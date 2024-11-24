@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Headers, Post, Put, UseGuards } from '@nestjs/common';
 import { Recurring_Transaction, Transaction } from '@prisma/client';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 import { AutopayService } from './autopay.service';
 import { JwtService } from '@nestjs/jwt';
 
