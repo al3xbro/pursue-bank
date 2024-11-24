@@ -14,19 +14,20 @@ export class TransactionPostgresService {
   }
 
   async getTransactionsByAccountId(userId: number): Promise<Transaction[] | null> {
-    if (this.prismaUserService.user.findUnique({
+    if ((await this.prismaUserService.user.findUnique({
       where: {
-        id: userId
+        id: userId as number
       }
-    }) === null) {
+    })) === null) {
       return null;
     }
     
     return await this.prismaUserService.transaction.findMany({
       where: {
         OR: [
-          { account_id: userId },
-          { transfer_id: userId,
+          { account_id: userId as number },
+          { 
+            transfer_id: userId as number,
             transaction_type: {not: "TRANSFER_EXTERNAL"},   // because then transfer_id is someone outside Pursue Bank
           }
         ]

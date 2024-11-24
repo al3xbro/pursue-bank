@@ -3,8 +3,8 @@ import * as _ from 'lodash';
 import { AutopayPostgresService } from './postgres/autopay.postgres.service';
 import { $Enums, Transaction, TransactionType, Recurring_Transaction, RecurringTransactionStatus } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/library';
-import { AccountPostgresService } from 'src/account/postgres/account.postgres.service';
-import { TransactionService } from 'src/transaction/transaction.service';
+import { AccountPostgresService } from '../account/postgres/account.postgres.service';
+import { TransactionService } from '../transaction/transaction.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()

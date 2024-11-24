@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import * as _ from 'lodash';
 import { TransactionPostgresService } from './postgres/transaction.postgres.service';
 import { $Enums, Transaction, TransactionType } from '@prisma/client';
-import { AccountPostgresService } from 'src/account/postgres/account.postgres.service';
+import { AccountPostgresService } from '../account/postgres/account.postgres.service';
 
 @Injectable()
 export class TransactionService {
