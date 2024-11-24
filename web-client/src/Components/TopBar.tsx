@@ -7,7 +7,9 @@ export default function TopBar() {
   const navigate = useNavigate(); // Initialize navigate
 
   // Determine if the current path is the login page
-  const isLoginPage = location.pathname === '/login' || location.pathname === '/signup' || location.pathname === '/transferInt' || location.pathname === '/transferExt' || location.pathname === '/deposit';
+  const isLoginPage = location.pathname === '/login' || location.pathname === '/signup' || 
+      location.pathname === '/transferInt' || location.pathname === '/transferExt' || location.pathname === '/deposit'
+        || location.pathname === '/adminHome' || location.pathname === '/adminLogin';
 
   return (
     <div className="bg-indigo-600 text-white p-6 flex shadow-md w-full">

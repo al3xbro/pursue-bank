@@ -13,8 +13,7 @@ export default function Login() {
     const loginData = { email, password };
 
     try {
-      // Send POST request to your login endpoint (replace 'https://your-api/login' with your actual API)
-      const response = await fetch('http://localhost:3000/api/internal/auth/login', {
+      const response = await fetch('http://localhost:3000/api/admin/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(loginData),
@@ -32,7 +31,7 @@ export default function Login() {
         localStorage.setItem('accountId', accountId)
 
         // Navigate to home page after successful login
-        navigate('/AdminHome');
+        navigate('/adminHome');
       } else {
         // Handle login error (e.g., incorrect password)
         setError(data.message || 'Login failed, please try again');
@@ -89,7 +88,7 @@ export default function Login() {
           Login
         </button>
       </div>
-      <p className='p-4 text-gray-900' onClick={() => navigate('/Login')}>User Login</p>
+      <p className='p-4 text-gray-900' onClick={() => navigate('/login')}>User Login</p>
     </div>
   );
 }

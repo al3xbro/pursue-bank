@@ -10,11 +10,10 @@ export default function TransactionBar({ accountID, email, onClick }: AccountBar
     return (
         <div 
             onClick={onClick} 
-            className="flex justify-between bg-white w-full p-8 border-2 border-black cursor-pointer"
         >
-          <div className='flex justify-between bg-white w-full p-8 border-2 border-black'>
+            <div className="flex justify-between bg-white w-full p-8 border-2 border-black hover:bg-gray-200 transition-colors duration-200 cursor-pointer">
             <div className='font-semibold text-lg'>{email}</div>
-            <div className='font-semibold text-lg'>${accountID}</div>
+            <div className='font-semibold text-lg'>Account ID: {accountID}</div>
           </div>
       </div>
     )

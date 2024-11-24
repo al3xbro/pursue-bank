@@ -13,7 +13,6 @@ export default function Login() {
     const loginData = { email, password };
 
     try {
-      // Send POST request to your login endpoint (replace 'https://your-api/login' with your actual API)
       const response = await fetch('http://localhost:3000/api/internal/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -93,7 +92,7 @@ export default function Login() {
           Signup
         </button>
       </div>
-      <p className='p-4 text-gray-1100' onClick={() => navigate('/AdminLogin')}>Admin Login</p>
+      <p className='p-4 text-gray-1100' onClick={() => navigate('/adminLogin')}>Admin Login</p>
     </div>
   );
 }

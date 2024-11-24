@@ -28,8 +28,8 @@ function App() {
         <Route path='/transferInt' element={<TransferInt />} />
         <Route path='/transferExt' element={<TransferExt />} />
         <Route path='/deposit' element={<CheckDepo />} />
-        <Route path='/AdminHome' element={<AdminHome/>} />
-        <Route path='/AdminLogin' element={<AdminLogin/>} />
+        <Route path='/adminHome' element={<AdminHome/>} />
+        <Route path='/adminLogin' element={<AdminLogin/>} />
 
       </Routes>
     </Router>
