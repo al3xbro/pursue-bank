@@ -6,8 +6,6 @@ COPY . /app
 WORKDIR /app/server
 FROM base AS prod-deps
 RUN npm install --omit=dev --frozen-lockfile
-RUN npx prisma generate --schema=prisma/admin-schema.prisma
-RUN npx prisma generate --schema=prisma/user-schema.prisma
 
 FROM base AS build
 
@@ -22,10 +20,9 @@ RUN npx prisma generate --schema=prisma/user-schema.prisma
 RUN npm run build
 
 FROM base
+
 COPY --from=prod-deps /app/server/node_modules /app/server/node_modules
-COPY --from=prod-deps /app/server/generated /app/server/generated
-COPY --from=build /app/server/dist /app/server/dist
 COPY --from=build /app/client/dist /app/client/dist
-EXPOSE 3000
+EXPOSE 4000
 
 CMD [ "npm", "run", "start:prod" ]
