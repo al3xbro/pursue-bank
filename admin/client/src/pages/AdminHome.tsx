@@ -31,19 +31,19 @@ export default function Home() {
       setTransactions(res);
     });
     getUser(id)
-    .then((res) => {
-      const fetchedUser = res ?? {};
+      .then((res) => {
+        const fetchedUser = res ?? {};
 
-      setFirstName(fetchedUser.first_name ?? 'Unavailable');
-      setEmail(fetchedUser.email ?? 'Unavailable');
-      setLastName(fetchedUser.last_name ?? 'Unavailable');
-      setAddress(fetchedUser.address ?? 'Unavailable');
-      setPhone(fetchedUser.phone ?? 'Unavailable');
-      setDOB(fetchedUser.dob ?? 'Unavailable');
-    })
-    .catch((err) => {
-      console.error('Error fetching user:', err);
-    });
+        setFirstName(fetchedUser.first_name ?? 'Unavailable');
+        setEmail(fetchedUser.email ?? 'Unavailable');
+        setLastName(fetchedUser.last_name ?? 'Unavailable');
+        setAddress(fetchedUser.address ?? 'Unavailable');
+        setPhone(fetchedUser.phone ?? 'Unavailable');
+        setDOB(fetchedUser.dob ?? 'Unavailable');
+      })
+      .catch((err) => {
+        console.error('Error fetching user:', err);
+      });
   };
 
   const handleBackClick = () => {
@@ -107,7 +107,7 @@ export default function Home() {
                   <div className="font-semibold text-3xl sm:text-3xl">Account Address: {address}</div>
                   <div className="font-semibold text-3xl sm:text-3xl">Account Phone Number: {phone}</div>
                   <div className="font-semibold text-3xl sm:text-3xl">Account Date of Birth: {dob}</div>
-                  <div className="font-semibold text-3xl sm:text-3xl">Transfer History:</div>
+                  <div className="font-semibold text-3xl sm:text-3xl">{`Transfer History: ${transactions.length ? '' : 'None'}`}</div>
                 </div>
                 <div className="flex w-full justify-center p-4 space-x-4 overflow-y-auto max-h-[400px]">
                   <div className="font-semibold text-sm sm:text-[40pt]">
