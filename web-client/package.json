@@ -1,9 +1,0 @@
-{
-  "dependencies": {
-    "@tanstack/react-query": "^5.61.3",
-    "reactjs-popup": "^2.0.6"
-  },
-  "devDependencies": {
-    "vite": "^5.4.11"
-  }
-}
