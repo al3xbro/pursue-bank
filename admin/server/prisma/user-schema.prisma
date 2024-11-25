@@ -1,8 +1,9 @@
 // Prisma schema file for User and Admin databases
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../generated/user-client"
+  provider      = "prisma-client-js"
+  output        = "../generated/user-client"
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
 }
 
 datasource db {
@@ -58,7 +59,7 @@ model Recurring_Transaction {
   destination String?
   description String?
   status      RecurringTransactionStatus @default(ACTIVE)
-  created_at  DateTime?             @default(now())
+  created_at  DateTime?                  @default(now())
 }
 
 enum UserStatus {
