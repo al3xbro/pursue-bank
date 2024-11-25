@@ -32,6 +32,10 @@ export default function Transfer() {
       setError('Please select a bank');
       return;
     }
+    else if (Number(transactionId)<0){
+      setError('Please enter a valid account ID');
+      return;
+    }
     else if (isRecurringTransaction) {
       if (!transactionName || !recurringPeriod) {
         setError('Please fill in all recurring fields');
