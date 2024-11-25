@@ -55,7 +55,7 @@ export default function Login() {
             valid = false;
         } 
         else if (phone && !phoneRegex.test(phone)) {
-            setError("Please enter a valid 10-digit phone number.");
+            setError("Please enter a valid 10-digit phone number with no spaces, parenthesis, or hyphens.");
             valid = false;
         }
         else if (password.length < 5) {
