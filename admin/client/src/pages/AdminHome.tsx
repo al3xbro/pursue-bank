@@ -2,13 +2,19 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AccountBar from '../molecules/AccountBar';
 import TransactionBar from '../molecules/TransactionBar';
-import { adminGetTransactions, getAdminUsers } from '../services/transaction';
+import { adminGetTransactions, getAdminUsers, getUser } from '../services/transaction';
 
 export default function Home() {
   const [accounts, setAccounts] = useState<any[]>([]);
   const [accountID, setAccountID] = useState<number>(-1);
   const [accountClicked, setAccountClicked] = useState<boolean>(false);
   const [transactions, setTransactions] = useState<any[]>([]);
+  const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [address, setAddress] = useState('');
+  const [phone, setPhone] = useState('');
+  const [dob, setDOB] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,6 +29,20 @@ export default function Home() {
     adminGetTransactions(id).then((res) => {
       console.log("API Response:", res); // Check the response structure
       setTransactions(res);
+    });
+    getUser(id)
+    .then((res) => {
+      const fetchedUser = res ?? {};
+
+      setFirstName(fetchedUser.first_name ?? 'Unavailable');
+      setEmail(fetchedUser.email ?? 'Unavailable');
+      setLastName(fetchedUser.last_name ?? 'Unavailable');
+      setAddress(fetchedUser.address ?? 'Unavailable');
+      setPhone(fetchedUser.phone ?? 'Unavailable');
+      setDOB(fetchedUser.dob ?? 'Unavailable');
+    })
+    .catch((err) => {
+      console.error('Error fetching user:', err);
     });
   };
 
@@ -80,8 +100,14 @@ export default function Home() {
             :
             <div>
               <div className="flex flex-col bg-white shadow-md rounded-lg overflow-hidden">
-                <div className="flex flex-col items-center w-full sm:p-8">
-                  <div className="font-semibold text-3xl sm:text-3xl">Account {accountID}</div>
+                <div className="flex flex-col items-left w-full sm:p-8">
+                  <div className="font-semibold text-3xl sm:text-3xl">Account ID: {accountID}</div>
+                  <div className="font-semibold text-3xl sm:text-3xl">Account Email: {email}</div>
+                  <div className="font-semibold text-3xl sm:text-3xl">Account Name: {firstName} {lastName}</div>
+                  <div className="font-semibold text-3xl sm:text-3xl">Account Address: {address}</div>
+                  <div className="font-semibold text-3xl sm:text-3xl">Account Phone Number: {phone}</div>
+                  <div className="font-semibold text-3xl sm:text-3xl">Account Date of Birth: {dob}</div>
+                  <div className="font-semibold text-3xl sm:text-3xl">Transfer History:</div>
                 </div>
                 <div className="flex w-full justify-center p-4 space-x-4 overflow-y-auto max-h-[400px]">
                   <div className="font-semibold text-sm sm:text-[40pt]">
