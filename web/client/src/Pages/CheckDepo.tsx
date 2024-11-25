@@ -36,7 +36,7 @@ export default function CheckDepo() {
     } else if (!isPhotoTaken) {
       setError('Please take a picture of the check');
       return;
-    } else if (amount < 0) {
+    } else if (Number(amount) < 0) {
       setError('You cannot transfer a negative amount');
       return;
     }

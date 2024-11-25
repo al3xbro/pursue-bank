@@ -162,4 +162,4 @@ async function getUser() {
 }
 
 
-export { internalTransaction, internalRecurring, depositTransaction, externalTransaction, externalRecurring, getBalance, getTransactions, adminGetTransactions, getRecurring, deleteRecurring, getUser, getAdminUsers };
+export { internalTransaction, internalRecurring, depositTransaction, externalTransaction, externalRecurring, getBalance, getTransactions, getRecurring, deleteRecurring, getUser };
