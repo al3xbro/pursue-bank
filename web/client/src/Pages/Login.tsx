@@ -98,7 +98,6 @@ export default function Login() {
           Signup
         </button>
       </div>
-      <p className='p-4 text-gray-1100' onClick={() => navigate('/login')}>Admin Login</p>
     </div>
   );
 }
