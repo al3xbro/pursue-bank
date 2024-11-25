@@ -1,5 +1,5 @@
 import { Body, Controller, Headers, Post, UseGuards } from '@nestjs/common';
-import { Transaction } from '@prisma/client';
+import { Transaction } from 'generated/client';
 import { AuthGuard } from '../auth/auth.guard';
 import { TransactionService } from './transaction.service';
 

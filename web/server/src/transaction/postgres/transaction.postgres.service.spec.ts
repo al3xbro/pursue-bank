@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TransactionPostgresService } from './transaction.postgres.service';
 import { PrismaService } from '../../prisma/prisma.service';
-import { Transaction, TransactionType } from '@prisma/client';
-import { Prisma } from '@prisma/client';
+import { Transaction, TransactionType } from 'generated/client';
+import { Prisma } from 'generated/client';
 
 describe('TransactionPostgresService', () => {
   let transactionPostgresService: TransactionPostgresService;

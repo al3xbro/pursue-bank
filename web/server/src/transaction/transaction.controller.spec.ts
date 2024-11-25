@@ -3,7 +3,7 @@ import { TransactionController } from './transaction.controller';
 import { TransactionService } from './transaction.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '../auth/auth.guard';
-import { Transaction, TransactionType } from '@prisma/client';
+import { Transaction, TransactionType } from 'generated/client';
 import { Decimal } from '@prisma/client/runtime/library';
 
 describe('TransactionController', () => {
@@ -47,11 +47,11 @@ describe('TransactionController', () => {
       const mockAuthToken = 'Bearer mockToken';
       const mockUserId = 1;
       const mockTransactions: Transaction[] = [
-        { 
-          id: 1, 
-          amount: new Decimal(100), 
-          account_id: mockUserId, 
-          transaction_type: TransactionType.DEPOSIT, 
+        {
+          id: 1,
+          amount: new Decimal(100),
+          account_id: mockUserId,
+          transaction_type: TransactionType.DEPOSIT,
           created_at: new Date(),
           transfer_id: null,
           recurring_id: null,

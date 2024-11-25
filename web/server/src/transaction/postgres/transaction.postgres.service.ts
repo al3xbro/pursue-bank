@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, Transaction } from '@prisma/client';
+import { Prisma, Transaction } from 'generated/client';
 import { PrismaService } from '../../prisma/prisma.service';
 
 
@@ -14,8 +14,9 @@ export class TransactionPostgresService {
       where: {
         OR: [
           { account_id: userId },
-          { transfer_id: userId,
-            transaction_type: {not: "TRANSFER_EXTERNAL"},   // because then transfer_id is someone outside Pursue Bank
+          {
+            transfer_id: userId,
+            transaction_type: { not: "TRANSFER_EXTERNAL" },   // because then transfer_id is someone outside Pursue Bank
           }
         ]
       }

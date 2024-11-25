@@ -4,7 +4,7 @@ import { AutopayPostgresService } from './postgres/autopay.postgres.service';
 import { AccountPostgresService } from '../account/postgres/account.postgres.service';
 import { TransactionService } from '../transaction/transaction.service';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
-import { Recurring_Transaction, RecurringTransactionStatus } from '@prisma/client';
+import { Recurring_Transaction, RecurringTransactionStatus } from 'generated/client';
 import { Decimal } from '@prisma/client/runtime/library';
 import * as _ from 'lodash';
 
@@ -64,15 +64,15 @@ describe('AutopayService', () => {
     it('should call autopayPostgresService.getAutopaysByAccountId with correct parameters', async () => {
       const mockId = 1;
       const expectedResult = [{
-         id: 1, 
-         transaction_type: 'TRANSFER_INTERNAL',
-         day_of_month: 15,
-         amount: 100,
-         account_id: 1,
-         transfer_id: 2,
-         status: 'ACTIVE',
-         created_at: '2024-11-23T11:27:57.8682'
-        }];
+        id: 1,
+        transaction_type: 'TRANSFER_INTERNAL',
+        day_of_month: 15,
+        amount: 100,
+        account_id: 1,
+        transfer_id: 2,
+        status: 'ACTIVE',
+        created_at: '2024-11-23T11:27:57.8682'
+      }];
       mockAutopayPostgresService.getAutopaysByAccountId.mockResolvedValue(expectedResult);
 
       const result = await autopayService.getAutopaysById(mockId);
@@ -123,7 +123,7 @@ describe('AutopayService', () => {
         dob: '2000-01-01',
       };
       const expectedResult = {
-        id: 1, 
+        id: 1,
         transaction_type: 'TRANSFER_INTERNAL',
         day_of_month: 15,
         amount: 100,
@@ -131,7 +131,7 @@ describe('AutopayService', () => {
         transfer_id: 2,
         status: 'ACTIVE',
         created_at: '2024-11-23T11:27:57.8682'
-       }
+      }
 
       mockAccountPostgresService.getUserFromEmail.mockResolvedValue(mockTransferUser);
       mockAutopayPostgresService.createRecurringTransaction.mockResolvedValue(expectedResult);
@@ -168,7 +168,7 @@ describe('AutopayService', () => {
       const mockData = { id: 1, amount: 200 };
       const mockAccountId = 1;
       const expectedResult = {
-        id: 1, 
+        id: 1,
         transaction_type: 'TRANSFER_INTERNAL',
         day_of_month: 15,
         amount: new Decimal(200),
@@ -176,7 +176,7 @@ describe('AutopayService', () => {
         transfer_id: 2,
         status: 'ACTIVE',
         created_at: '2024-11-23T11:27:57.8682'
-       };
+      };
 
       mockAutopayPostgresService.getUserIdFromRecurringTransactionId.mockResolvedValue(mockAccountId);
       mockAutopayPostgresService.editRecurringTransaction.mockResolvedValue(expectedResult);
@@ -194,7 +194,7 @@ describe('AutopayService', () => {
     it('should create transactions for matching recurring transactions', async () => {
       const mockRecurringTransactions = [
         {
-          id: 1, 
+          id: 1,
           transaction_type: 'TRANSFER_INTERNAL',
           day_of_month: 15,
           amount: new Decimal(100),
@@ -202,7 +202,7 @@ describe('AutopayService', () => {
           transfer_id: 2,
           status: 'ACTIVE',
           created_at: '2024-11-23T11:27:57.8682'
-         },
+        },
       ];
       mockAutopayPostgresService.getRecurringTransactionsByDayOfMonth.mockResolvedValue(
         mockRecurringTransactions,

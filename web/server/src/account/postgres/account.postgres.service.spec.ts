@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AccountPostgresService } from './account.postgres.service';
 import { PrismaService } from '../../prisma/prisma.service';
-import { RecurringTransactionStatus, User } from '@prisma/client';
+import { RecurringTransactionStatus, User } from 'generated/client';
 
 describe('AccountPostgresService', () => {
   let accountPostgresService: AccountPostgresService;
@@ -73,8 +73,8 @@ describe('AccountPostgresService', () => {
 
   describe('getUserFromEmail', () => {
     it('should return user data if email exists', async () => {
-      const mockUser = { 
-        id: 1, 
+      const mockUser = {
+        id: 1,
         email: 'test@gmail.com',
         password: 'password1234',
         first_name: 'Test',
@@ -102,8 +102,8 @@ describe('AccountPostgresService', () => {
 
   describe('getUserFromId', () => {
     it('should return user data if user exists', async () => {
-      const mockUser = { 
-        id: 1, 
+      const mockUser = {
+        id: 1,
         email: 'test@gmail.com',
         password: 'password1234',
         first_name: 'Test',
@@ -131,8 +131,8 @@ describe('AccountPostgresService', () => {
 
   describe('getEmailFromUserId', () => {
     it('should return email if user exists', async () => {
-      const mockUser = { 
-        id: 1, 
+      const mockUser = {
+        id: 1,
         email: 'test@gmail.com',
         password: 'password1234',
         first_name: 'Test',
@@ -162,8 +162,8 @@ describe('AccountPostgresService', () => {
     it('should update and return user if user exists', async () => {
       const mockUid = 1;
       const mockData = { first_name: 'UpdatedName' };
-      const mockUser = { 
-        id: 1, 
+      const mockUser = {
+        id: 1,
         email: 'test@gmail.com',
         password: 'password1234',
         first_name: 'Test',
@@ -175,7 +175,7 @@ describe('AccountPostgresService', () => {
       };
 
       jest.spyOn(accountPostgresService, 'getUserFromId').mockResolvedValue(mockUser);
-      mockPrismaService.user.update.mockResolvedValue({...mockUser, first_name: 'UpdatedName'});
+      mockPrismaService.user.update.mockResolvedValue({ ...mockUser, first_name: 'UpdatedName' });
 
       const result = await accountPostgresService.updateAccount(mockUid, mockData);
       expect(accountPostgresService.getUserFromId).toHaveBeenCalledWith(mockUid);
@@ -183,7 +183,7 @@ describe('AccountPostgresService', () => {
         where: { id: mockUid },
         data: mockData,
       });
-      expect(result).toEqual({...mockUser, first_name: 'UpdatedName'});
+      expect(result).toEqual({ ...mockUser, first_name: 'UpdatedName' });
     });
 
     it('should return null if user does not exist', async () => {

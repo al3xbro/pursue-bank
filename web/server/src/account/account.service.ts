@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { AccountPostgresService } from './postgres/account.postgres.service';
-import { User } from '@prisma/client';
+import { User } from 'generated/client';
 
 @Injectable()
 export class AccountService {
@@ -56,5 +56,5 @@ export class AccountService {
       throw new BadRequestException('No user found');
     }
     return await this.accountPostgresService.getUserFromId(uid) as User;
-  } 
+  }
 }

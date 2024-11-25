@@ -1,9 +1,8 @@
 // Prisma schema file for User and Admin databases
 
 generator client {
-  provider      = "prisma-client-js"
-  output        = "../generated/user-client"
-  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
+  provider = "prisma-client-js"
+  output   = "../generated/user-client"
 }
 
 datasource db {
