@@ -14,9 +14,14 @@ export default function TopBar() {
       <nav className="ml-auto">
         <ul className="flex gap-4">
           {!isLoginPage && (
-            <li className="m-auto">
-              <a href="/" className="hover:text-indigo-300" onClick={() => navigate('/')}>Home</a>
-            </li>
+            <>
+              <li className="m-auto">
+                <a href="/" className="hover:text-indigo-300">Home</a>
+              </li>
+              <li className="m-auto">
+                <a href="/atm" className="hover:text-indigo-300">ATM</a>
+              </li>
+            </>
           )}
           {!isLoginPage && <AccountIcon onClick={() => navigate('/account')
           } />}
