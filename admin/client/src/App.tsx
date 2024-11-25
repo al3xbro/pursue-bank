@@ -10,8 +10,8 @@ function App() {
       {/*TopBar to be displayed on every page*/}
       <TopBar />
       <Routes>
-        <Route path='/adminHome' element={<AdminHome />} />
-        <Route path='/adminLogin' element={<AdminLogin />} />
+        <Route path='/' element={<AdminHome />} />
+        <Route path='/login' element={<AdminLogin />} />
       </Routes>
     </Router>
   );

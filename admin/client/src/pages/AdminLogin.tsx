@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 export default function Login() {
@@ -7,13 +7,19 @@ export default function Login() {
   const [error, setError] = useState(''); // For displaying error messages
   const navigate = useNavigate(); // Initialize navigate
 
+  useEffect(() => {
+    if (localStorage.getItem('adminToken')) {
+      navigate('/');
+    }
+  }, [navigate])
+
   // Function declaration for login handler
   async function handleLogin() {
     // Prepare login payload
     const loginData = { email, password };
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/admin/auth/login`, {
+      const response = await fetch(`${import.meta.env.VITE_ADMIN_SERVER_URL}/api/admin/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(loginData),
@@ -21,17 +27,19 @@ export default function Login() {
 
       const data = await response.json();
 
-      if (response.ok) {
-        // Assuming the API returns the accessToken in the response
-        const { accessToken, accountId } = data;
-        console.log('Login successful, Access Token:', accessToken);
+      console.log(data)
 
-        // Store the accessToken in localStorage or sessionStorage (or any storage mechanism)
-        localStorage.setItem('accessToken', accessToken);
+      if (response.ok) {
+        // Assuming the API returns the adminToken in the response
+        const { adminToken, accountId } = data;
+        console.log('Login successful, Access Token:', adminToken);
+
+        // Store the adminToken in localStorage or sessionStorage (or any storage mechanism)
+        localStorage.setItem('adminToken', adminToken);
         localStorage.setItem('accountId', accountId)
 
         // Navigate to home page after successful login
-        navigate('/adminHome');
+        navigate('/');
       } else {
         // Handle login error (e.g., incorrect password)
         setError(data.message || 'Login failed, please try again');
@@ -88,7 +96,6 @@ export default function Login() {
           Login
         </button>
       </div>
-      <p className='p-4 text-gray-900' onClick={() => navigate('/login')}>User Login</p>
     </div>
   );
 }

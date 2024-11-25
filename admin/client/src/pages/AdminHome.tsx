@@ -11,6 +11,12 @@ export default function Home() {
   const [transactions, setTransactions] = useState<any[]>([]);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!localStorage.getItem('adminToken')) {
+      navigate('/login');
+    }
+  }, [navigate])
+
   const handleAccountClick = (id: number) => {
     setAccountID(id);
     setAccountClicked(true);
@@ -23,19 +29,14 @@ export default function Home() {
   const handleBackClick = () => {
     setAccountClicked(false);
   };
-  useEffect(() => {
-    if (localStorage.getItem('accessToken') === null) {
-      navigate('/adminLogin');
-    }
-  }, [navigate])
 
   useEffect(() => {
     getAdminUsers().then((res) => setAccounts(res));
   }, []);
 
   const handleLogOut = () => {
-    localStorage.removeItem('accessToken');
-    navigate('/adminLogin');
+    localStorage.removeItem('adminToken');
+    navigate('/login');
   };
 
   return (

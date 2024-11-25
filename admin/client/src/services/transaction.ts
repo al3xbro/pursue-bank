@@ -1,5 +1,5 @@
 async function internalTransaction(toEmail: string, amt: string) {
-  const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/internal/transaction`, {
+  const res = await fetch(`${import.meta.env.VITE_USER_SERVER_URL}/api/internal/transaction`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -19,7 +19,7 @@ async function internalTransaction(toEmail: string, amt: string) {
 }
 
 async function depositTransaction(amt: string) {
-  const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/internal/transaction`, {
+  const res = await fetch(`${import.meta.env.VITE_USER_SERVER_URL}/api/internal/transaction`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ async function depositTransaction(amt: string) {
 }
 
 async function internalRecurring(toEmail: string, amt: string, day: string) {
-  const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/internal/autopay`, {
+  const res = await fetch(`${import.meta.env.VITE_USER_SERVER_URL}/api/internal/autopay`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ async function internalRecurring(toEmail: string, amt: string, day: string) {
 }
 
 async function externalTransaction(toEmail: string, amt: string, bank: string) {
-  const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/internal/transaction`, {
+  const res = await fetch(`${import.meta.env.VITE_USER_SERVER_URL}/api/internal/transaction`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ async function externalTransaction(toEmail: string, amt: string, bank: string) {
 }
 
 async function externalRecurring(toEmail: string, amt: string, day: string, bank: string) {
-  const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/internal/autopay`, {
+  const res = await fetch(`${import.meta.env.VITE_USER_SERVER_URL}/api/internal/autopay`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ async function externalRecurring(toEmail: string, amt: string, day: string, bank
 }
 
 async function getBalance() {
-  const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/internal/transaction/balance`, {
+  const res = await fetch(`${import.meta.env.VITE_USER_SERVER_URL}/api/internal/transaction/balance`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -113,7 +113,7 @@ async function getBalance() {
 }
 
 async function getTransactions() {
-  const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/internal/transaction`, {
+  const res = await fetch(`${import.meta.env.VITE_USER_SERVER_URL}/api/internal/transaction`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -124,10 +124,10 @@ async function getTransactions() {
 }
 
 async function adminGetTransactions(id: number) {
-  const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/admin/transaction/${id}`, {
+  const res = await fetch(`${import.meta.env.VITE_ADMIN_SERVER_URL}/api/admin/transaction/${id}`, {
     method: 'GET',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      Authorization: `Bearer ${localStorage.getItem('adminToken')}`,
     },
   });
   const json = await res.json();
@@ -135,7 +135,7 @@ async function adminGetTransactions(id: number) {
 }
 
 async function getRecurring() {
-  const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/internal/autopay`, {
+  const res = await fetch(`${import.meta.env.VITE_USER_SERVER_URL}/api/internal/autopay`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -146,7 +146,7 @@ async function getRecurring() {
 }
 
 async function deleteRecurring(trans_id: number) {
-  const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/internal/autopay`, {
+  const res = await fetch(`${import.meta.env.VITE_USER_SERVER_URL}/api/internal/autopay`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -162,7 +162,7 @@ async function deleteRecurring(trans_id: number) {
 }
 
 async function getUser() {
-  const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/internal/user`, {
+  const res = await fetch(`${import.meta.env.VITE_USER_SERVER_URL}/api/internal/user`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -173,13 +173,14 @@ async function getUser() {
 }
 
 async function getAdminUsers() {
-  const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/admin/user`, {
+  const res = await fetch(`${import.meta.env.VITE_ADMIN_SERVER_URL}/api/admin/user`, {
     method: 'GET',
     headers: {
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      Authorization: `Bearer ${localStorage.getItem('adminToken')}`,
     },
   });
   const json = await res.json();
+  console.log(json)
   return json
 }
 

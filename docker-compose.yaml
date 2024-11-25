@@ -1,0 +1,22 @@
+services:
+  user:
+    build: ./web
+    container_name: user
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+  admin:
+    build: ./admin
+    container_name: admin
+    ports:
+      - "4000:4000"
+    depends_on:
+      - user
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
