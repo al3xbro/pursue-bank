@@ -32,7 +32,11 @@ export default function Transfer() {
       setError('Please select a bank');
       return;
     }
-    else if (Number(transactionId)<0){
+    else if (amount < 0) {
+      setError('You cannot transfer a negative amount');
+      return;
+    }
+    else if (Number(transactionId) < 0) {
       setError('Please enter a valid account ID');
       return;
     }

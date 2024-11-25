@@ -32,6 +32,10 @@ export default function Transfer() {
       setError("Please enter a valid email address.");
       return;
     }
+    else if (amount < 0) {
+      setError('You cannot transfer a negative amount');
+      return;
+    }
     else if (isRecurringTransaction) {
       if (!transactionName || !recurringPeriod) {
         setError('Please fill in all recurring fields');
