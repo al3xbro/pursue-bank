@@ -3,8 +3,8 @@ import { TransactionService } from './transaction.service';
 import { TransactionPostgresService } from './postgres/transaction.postgres.service';
 import { AccountPostgresService } from '../account/postgres/account.postgres.service';
 import { BadRequestException } from '@nestjs/common';
-import { Transaction, TransactionType } from '@prisma/client';
-import { Prisma } from '@prisma/client';
+import { Transaction, TransactionType } from 'generated/client';
+import { Prisma } from 'generated/client';
 import { Decimal } from '@prisma/client/runtime/library';
 
 describe('TransactionService', () => {

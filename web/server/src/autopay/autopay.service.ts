@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import * as _ from 'lodash';
 import { AutopayPostgresService } from './postgres/autopay.postgres.service';
-import { $Enums, Transaction, TransactionType, Recurring_Transaction, RecurringTransactionStatus } from '@prisma/client';
+import { $Enums, Transaction, TransactionType, Recurring_Transaction, RecurringTransactionStatus } from 'generated/client';
 import { Decimal } from '@prisma/client/runtime/library';
 import { AccountPostgresService } from '../account/postgres/account.postgres.service';
 import { TransactionService } from '../transaction/transaction.service';

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, Recurring_Transaction, RecurringTransactionStatus, Transaction } from '@prisma/client';
+import { Prisma, Recurring_Transaction, RecurringTransactionStatus, Transaction } from 'generated/client';
 import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
@@ -23,10 +23,10 @@ export class AutopayPostgresService {
 
   async editRecurringTransaction(rtransaction_id: number, data: Prisma.Recurring_TransactionUpdateInput): Promise<Recurring_Transaction> {
     return await this.prismaService.recurring_Transaction.update({
-        where: {
-            id: rtransaction_id,
-        },
-        data,
+      where: {
+        id: rtransaction_id,
+      },
+      data,
     });
   }
 
@@ -40,7 +40,7 @@ export class AutopayPostgresService {
     })
   }
 
-  async getUserIdFromRecurringTransactionId(id: number): Promise<number | undefined>  {
+  async getUserIdFromRecurringTransactionId(id: number): Promise<number | undefined> {
     return ((await this.prismaService.recurring_Transaction.findUnique({
       where: {
         id: id,

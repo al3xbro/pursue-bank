@@ -58,7 +58,7 @@ model Recurring_Transaction {
   destination String?
   description String?
   status      RecurringTransactionStatus @default(ACTIVE)
-  created_at  DateTime?             @default(now())
+  created_at  DateTime?                  @default(now())
 }
 
 enum UserStatus {

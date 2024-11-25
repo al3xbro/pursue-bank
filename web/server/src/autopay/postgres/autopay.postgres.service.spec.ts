@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AutopayPostgresService } from './autopay.postgres.service';
 import { PrismaService } from '../../prisma/prisma.service';
-import { Prisma, Recurring_Transaction, RecurringTransactionStatus, TransactionType } from '@prisma/client';
+import { Prisma, Recurring_Transaction, RecurringTransactionStatus, TransactionType } from 'generated/client';
 import { Decimal } from '@prisma/client/runtime/library';
 
 describe('AutopayPostgresService', () => {

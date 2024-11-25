@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, UseGuards, Headers, Put } from '@nestjs/common';
 import { AccountService } from './account.service';
-import { User } from '@prisma/client';
+import { User } from 'generated/client';
 import { AuthGuard } from '../auth/auth.guard';
 import { JwtService } from '@nestjs/jwt';
 
@@ -9,7 +9,7 @@ export class AccountController {
   constructor(
     private accountService: AccountService,
     private jwtService: JwtService
-  ) {}
+  ) { }
 
   @Post()
   async createAccount(@Body() data: {
@@ -45,5 +45,5 @@ export class AccountController {
     const id = this.jwtService.decode(authToken.split(' ')[1])['sub'];
     return this.accountService.getUserData(id);
   }
-  
+
 }

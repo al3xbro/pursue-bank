@@ -21,6 +21,7 @@ RUN npm run build
 FROM base
 
 COPY --from=prod-deps /app/server/node_modules /app/server/node_modules
+COPY --from=build /app/server/generated /app/server/generated
 COPY --from=build /app/server/dist /app/server/dist
 COPY --from=build /app/client/dist /app/client/dist
 EXPOSE 3000

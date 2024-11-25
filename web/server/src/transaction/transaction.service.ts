@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import * as _ from 'lodash';
 import { TransactionPostgresService } from './postgres/transaction.postgres.service';
-import { $Enums, Transaction, TransactionType } from '@prisma/client';
+import { $Enums, Transaction, TransactionType } from 'generated/client';
 import { AccountPostgresService } from '../account/postgres/account.postgres.service';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class TransactionService {
   // Changes the meaning of the 'amount' property so that negative means the user loses and positive means they gain.
   makeAmountRelativeToUser(uid: number, tx: Transaction): Transaction {
     const sign = uid === tx.transfer_id ? 1 : -1;
-    return {...tx, amount: tx.amount.mul(sign)}
+    return { ...tx, amount: tx.amount.mul(sign) }
   }
 
   async getTransactionsByAccountId(id: number): Promise<Transaction[]> {
@@ -84,9 +84,9 @@ export class TransactionService {
           user: {
             connect: { id: data.accountId }
           },
-          recurring_transaction: data.recurringTransactionId 
-            ? { connect: { id: data.recurringTransactionId } } 
-            : undefined,          
+          recurring_transaction: data.recurringTransactionId
+            ? { connect: { id: data.recurringTransactionId } }
+            : undefined,
         });
         break;
       case "TRANSFER_EXTERNAL":
@@ -99,9 +99,9 @@ export class TransactionService {
           },
           origin: data.origin as string,
           destination: data.destination as string,
-          recurring_transaction: data.recurringTransactionId 
-          ? { connect: { id: data.recurringTransactionId } } 
-          : undefined,  
+          recurring_transaction: data.recurringTransactionId
+            ? { connect: { id: data.recurringTransactionId } }
+            : undefined,
         });
         break;
       default:  // DEPOSIT or INTEREST
