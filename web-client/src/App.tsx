@@ -11,6 +11,7 @@ import TransferExt from './Pages/TransferExt';
 import Account from './Pages/Account';
 import CheckDepo from './Pages/CheckDepo';
 import AdminHome from './Pages/AdminHome';
+import AdminLogin from './Pages/AdminLogin';
 
 function App() {
   return (
@@ -27,7 +28,9 @@ function App() {
         <Route path='/transferInt' element={<TransferInt />} />
         <Route path='/transferExt' element={<TransferExt />} />
         <Route path='/deposit' element={<CheckDepo />} />
-        <Route path='/AdminHome' element={<AdminHome />} />
+        <Route path='/adminHome' element={<AdminHome/>} />
+        <Route path='/adminLogin' element={<AdminLogin/>} />
+
       </Routes>
     </Router>
   );

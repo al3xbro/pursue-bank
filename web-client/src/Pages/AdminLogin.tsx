@@ -13,7 +13,7 @@ export default function Login() {
     const loginData = { email, password };
 
     try {
-      const response = await fetch('http://localhost:3000/api/internal/auth/login', {
+      const response = await fetch('http://localhost:3000/api/admin/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(loginData),
@@ -31,7 +31,7 @@ export default function Login() {
         localStorage.setItem('accountId', accountId)
 
         // Navigate to home page after successful login
-        navigate('/');
+        navigate('/adminHome');
       } else {
         // Handle login error (e.g., incorrect password)
         setError(data.message || 'Login failed, please try again');
@@ -50,7 +50,10 @@ export default function Login() {
       </div>
 
       <div className="bg-white p-8 rounded-lg shadow-lg w-80">
-        <h2 className="text-2xl font-bold text-center mb-6">Welcome</h2>
+        <div className="text-center mb-6">
+          <h2 className='text-2xl font-bold'>Welcome</h2>
+          <h4 className="text-m text-indigo-600">Admin Login</h4>
+        </div>
 
         {error && <div className="mb-4 text-red-600 text-center">{error}</div>}
 
@@ -84,15 +87,8 @@ export default function Login() {
         >
           Login
         </button>
-
-        <button
-          onClick={() => navigate('/signup')}
-          className="w-full mt-4 bg-gray-200 text-gray-700 p-2 rounded-md hover:bg-gray-300 transition"
-        >
-          Signup
-        </button>
       </div>
-      <p className='p-4 text-gray-1100' onClick={() => navigate('/adminLogin')}>Admin Login</p>
+      <p className='p-4 text-gray-900' onClick={() => navigate('/login')}>User Login</p>
     </div>
   );
 }

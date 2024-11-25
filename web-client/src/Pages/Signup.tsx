@@ -55,7 +55,7 @@ export default function Login() {
             valid = false;
         } 
         else if (phone && !phoneRegex.test(phone)) {
-            setError("Please enter a valid 10-digit phone number.");
+            setError("Please enter a valid 10-digit phone number with no spaces, parenthesis, or hyphens.");
             valid = false;
         }
         else if (password.length < 5) {
@@ -84,7 +84,7 @@ export default function Login() {
                 {error && <div className="mb-4 text-red-600 text-center">{error}</div>}
 
                 <div className="mb-4">
-                    {/* <label htmlFor="email" className="block text-sm font-semibold text-gray-700">Email</label> */}
+                    <label htmlFor="email" className="block text-sm font-semibold text-gray-700">Email</label>
                     <input
                         id="email"
                         type="email"
@@ -98,55 +98,55 @@ export default function Login() {
                 </div>
 
                 <div className="mb-4">
-                    {/* <label htmlFor="password" className="block text-sm font-semibold text-gray-700">Password</label> */}
+                    <label htmlFor="password" className="block text-sm font-semibold text-gray-700">Password</label>
                     <input
                         id="password"
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                        placeholder="Password"
+                        placeholder="Enter your password"
                     />
                 </div>
 
                 <div className="mb-4">
-                    {/* <label htmlFor="firstName" className="block text-sm font-semibold text-gray-700">First Name</label> */}
+                    <label htmlFor="firstName" className="block text-sm font-semibold text-gray-700">First Name</label>
                     <input
                         id="firstName"
                         type="text"
                         value={firstName}
                         onChange={(e) => setFirst(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                        placeholder="First Name"
+                        placeholder="Enter your first name"
                     />
                 </div>
 
                 <div className="mb-4">
-                    {/* <label htmlFor="lastName" className="block text-sm font-semibold text-gray-700">Last Name</label> */}
+                    <label htmlFor="lastName" className="block text-sm font-semibold text-gray-700">Last Name</label>
                     <input
                         id="lastName"
                         type="text"
                         value={lastName}
                         onChange={(e) => setLast(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                        placeholder="Last Name"
+                        placeholder="Enter your last name"
                     />
                 </div>
                 
                 <div className="mb-4">
-                    {/* <label htmlFor="address" className="block text-sm font-semibold text-gray-700">Address</label> */}
+                    <label htmlFor="address" className="block text-sm font-semibold text-gray-700">Address</label>
                     <input
                         id="address"
                         type="text"
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
                         className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                        placeholder="Address"
+                        placeholder="Enter your address"
                     />
                 </div>
 
                 <div className="mb-4">
-                    {/* <label htmlFor="phone" className="block text-sm font-semibold text-gray-700">Phone Number</label> */}
+                    <label htmlFor="phone" className="block text-sm font-semibold text-gray-700">Phone Number</label>
                     <input
                         id="phone"
                         type="tel"
@@ -160,7 +160,7 @@ export default function Login() {
                 </div>
 
                 <div className="mb-4">
-                    {/* <label htmlFor="DOB" className="block text-sm font-semibold text-gray-700">Date of Birth</label> */}
+                    <label htmlFor="DOB" className="block text-sm font-semibold text-gray-700">Date of birth</label>
                     <input
                         id="DOB"
                         type="date"
