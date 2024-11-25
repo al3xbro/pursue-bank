@@ -11,6 +11,12 @@ export class TransactionService {
     private accountPostgresService: AccountPostgresService
   ) { }
 
+  // Changes the meaning of the 'amount' property so that negative means the user loses and positive means they gain.
+  makeAmountRelativeToUser(uid: number, tx: Transaction): Transaction {
+    const sign = uid === tx.transfer_id ? 1 : -1;
+    return {...tx, amount: tx.amount.mul(sign)}
+  }
+
   async getAllTransactions(): Promise<Transaction[]> {
     return await this.transactionPostgresService.getAllTransactions();
   }
@@ -20,7 +26,7 @@ export class TransactionService {
     if (transactions === null) {
       throw new BadRequestException('User can\'t be found');
     } 
-    return transactions;
+    return transactions.map((tx) => this.makeAmountRelativeToUser(id, tx));
   }
 
   async getBalanceByAccountId(id: number): Promise<number> {
