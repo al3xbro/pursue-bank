@@ -19,8 +19,6 @@ export default function TopBar() {
               <a href="/" className="hover:text-indigo-300" onClick={() => navigate('/')}>Home</a>
             </li>
           )}
-          {!isLoginPage && <AccountIcon onClick={() => navigate('/account')
-          } />}
         </ul>
       </nav>
     </div>
