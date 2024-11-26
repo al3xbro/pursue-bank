@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards, Headers, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Headers, Put, Delete } from '@nestjs/common';
 import { AccountService } from './account.service';
 import { User } from 'generated/client';
 import { AuthGuard } from '../auth/auth.guard';
@@ -40,10 +40,16 @@ export class AccountController {
   }
 
   @UseGuards(AuthGuard)
+  @Delete()
+  async deleteAccount(@Headers('Authorization') authToken: string): Promise<boolean> {
+    const id = this.jwtService.decode(authToken.split(' ')[1])['sub'];
+    return this.accountService.deleteAccount(id);
+  }
+
+  @UseGuards(AuthGuard)
   @Get()
   async getUserData(@Headers('Authorization') authToken: string): Promise<User> {
     const id = this.jwtService.decode(authToken.split(' ')[1])['sub'];
     return this.accountService.getUserData(id);
   }
-
 }

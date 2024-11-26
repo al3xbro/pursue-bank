@@ -34,6 +34,9 @@ export default function TransactionField() {
             required: {
               value: true,
               message: 'Please enter an amount.'
+            }, pattern: {
+              value: /^\d+(\.\d{2})?$/,
+              message: 'Please enter a positive amount with either 0 or 2 decimal places.'
             }
           })}
         />

@@ -24,15 +24,20 @@ export default function Transfer() {
 
   const handleConfirm = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const amountRegex = /^\d+(\.\d{2})?$/;
     if (!amount || !bankAccount) {
       setError('Please fill in all fields');
+      return;
+    }
+    else if(!amountRegex.test(amount)) {
+      setError('Please enter a valid amount of money with either 0 or 2 decimal places');
       return;
     }
     else if (!emailRegex.test(bankAccount)) {
       setError("Please enter a valid email address.");
       return;
     }
-    else if (amount < 0) {
+    else if (Number(amount) < 0) {
       setError('You cannot transfer a negative amount');
       return;
     }

@@ -161,5 +161,20 @@ async function getUser() {
   return json
 }
 
+async function deleteUser() {
+  const balance = await getBalance();
+  if (balance.balance == 0) {
+    const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/internal/user`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    });
+    const json = await res.json();
+    return json
+  } else {
+    throw new Error();
+  }
+}
 
-export { internalTransaction, internalRecurring, depositTransaction, externalTransaction, externalRecurring, getBalance, getTransactions, getRecurring, deleteRecurring, getUser };
+export { internalTransaction, internalRecurring, depositTransaction, externalTransaction, externalRecurring, getBalance, getTransactions, getRecurring, deleteRecurring, getUser, deleteUser };

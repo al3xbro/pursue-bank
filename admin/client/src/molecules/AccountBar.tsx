@@ -11,7 +11,7 @@ export default function TransactionBar({ accountID, email, onClick }: AccountBar
     <div
       onClick={onClick}
     >
-      <div className="flex justify-between bg-white w-full p-8 w-96 border-2 border-black hover:bg-gray-200 transition-colors duration-200 cursor-pointer">
+      <div className="flex justify-between bg-white p-8 w-96 border-2 border-black hover:bg-gray-200 transition-colors duration-200 cursor-pointer">
         <div className='font-semibold text-lg w-40 text-ellipsis whitespace-nowrap overflow-hidden'>{email}</div>
         <div className='font-semibold text-lg'>Account ID: {accountID}</div>
       </div>
