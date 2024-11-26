@@ -9,7 +9,7 @@ export default function TransactionBar({ amount, transactionType }: TransactionB
     <div>
       { transactionType=="TRANSFER_INTERNAL" ? 
         <div className='flex justify-between bg-white w-full p-8 border-2 border-black'>
-          <div className='font-semibold text-lg'>Internal Tranfer</div>
+          <div className='font-semibold text-lg'>Internal Transfer</div>
           <div className='font-semibold text-lg'>${amount}</div>
         </div>
       : transactionType=="TRANSFER_EXTERNAL" ?

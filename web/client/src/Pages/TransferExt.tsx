@@ -24,8 +24,13 @@ export default function Transfer() {
   }, [navigate])
 
   const handleConfirm = () => {
+    const amountRegex = /^\d+(\.\d{2})?$/;
     if (!amount || !bankAccount) {
       setError('Please fill in all fields');
+      return;
+    }
+    else if(!amountRegex.test(amount)) {
+      setError('Please enter a valid amount of money with either 0 or 2 decimal places');
       return;
     }
     else if (!targetBank) {
