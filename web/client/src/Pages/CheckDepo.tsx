@@ -30,10 +30,16 @@ export default function CheckDepo() {
   };
 
   const handleConfirm = async () => {
+    const amountRegex = /^\d+(\.\d{2})?$/;
     if (!amount) {
       setError('Please fill in the amount field');
       return;
-    } else if (!isPhotoTaken) {
+    } 
+    else if(!amountRegex.test(amount)) {
+      setError('Please enter a valid amount of money with either 0 or 2 decimal places');
+      return;
+    }
+    else if (!isPhotoTaken) {
       setError('Please take a picture of the check');
       return;
     } else if (Number(amount) < 0) {
