@@ -3,7 +3,7 @@ services:
     build: ./web
     container_name: user
     ports:
-      - "3000:3000"
+      - "8001:8001"
     networks:
       - app-network
 
@@ -11,7 +11,7 @@ services:
     build: ./admin
     container_name: admin
     ports:
-      - "4000:4000"
+      - "8002:8002"
     depends_on:
       - user
     networks:
