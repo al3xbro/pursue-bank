@@ -47,7 +47,7 @@ export default function Transfer() {
         return;
       }
 
-      if (Number(recurringPeriod) > 31) {
+      if (Number(recurringPeriod) > 31 || Number(recurringPeriod) < 1) {
         setError('Please select a valid date');
         return;
       }
