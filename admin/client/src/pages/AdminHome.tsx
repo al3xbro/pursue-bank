@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import AccountBar from '../molecules/AccountBar';
 import TransactionBar from '../molecules/TransactionBar';
 import { adminGetTransactions, getAdminUsers, getUser } from '../services/transaction';
+import { IoSearchSharp } from "react-icons/io5";
 
 export default function Home() {
   const [accounts, setAccounts] = useState<any[]>([]);
@@ -16,12 +17,21 @@ export default function Home() {
   const [phone, setPhone] = useState('');
   const [dob, setDOB] = useState('');
   const navigate = useNavigate();
+  const [shownAccounts, setShownAccounts] = useState<any[]>([]);
+
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     if (!localStorage.getItem('adminToken')) {
       navigate('/login');
     }
   }, [navigate])
+
+  useEffect(() => {
+    setShownAccounts(accounts.filter((account) => {
+      return account.email.toLowerCase().includes(search.toLowerCase());
+    }));
+  }, [accounts, search]);
 
   const handleAccountClick = (id: number) => {
     setAccountID(id);
@@ -64,19 +74,21 @@ export default function Home() {
       <div className="mb-8">
         <h1 className="text-6xl font-bold text-indigo-600">Welcome Admin!</h1>
       </div>
+      <div className='h-10 p-2 gap-2 bg-white flex justify-center rounded-lg'>
+        <IoSearchSharp className='text-black w-full h-full' />
+        <input type="text" className='h-full outline-none' placeholder='Search...' value={search} onChange={(e) => setSearch(e.target.value)} />
+      </div>
       <div className="flex flex-col sm:flex-row gap-6 sm:gap-20 w-auto min-w-96 h-auto my-8 sm:my-8">
         <div className="flex flex-col w-full max-h-fit sm:w-[100%] gap-6 sm:gap-8 rounded-lg">
-
-
           {!accountClicked ?
             <div>
-              <div className="flex flex-col bg-white shadow-md rounded-lg overflow-hidden">
+              <div className="flex flex-col bg-white shadow-md h-[500px] w-[450px] rounded-lg overflow-hidden">
                 <div className="flex flex-col items-center w-full sm:p-8">
                   <div className="font-semibold text-3xl sm:text-3xl">Manage Accounts</div>
                 </div>
                 <div className="flex w-full justify-center p-4 space-x-4 overflow-y-auto max-h-[400px]">
                   <div className="font-semibold text-sm sm:text-[40pt]">
-                    {accounts
+                    {shownAccounts
                       .slice()
                       .reverse()
                       .map((account) => (
