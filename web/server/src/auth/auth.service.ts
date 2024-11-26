@@ -14,7 +14,7 @@ export class AuthService {
       where: { email: signInInfo.email },
     });
 
-    if (user === null || user.password !== signInInfo.password) {
+    if (user === null || user.password !== signInInfo.password || user.status == 'DELETED') {
       throw new UnauthorizedException('Invalid credentials');
     }
 

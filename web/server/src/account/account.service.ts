@@ -50,6 +50,10 @@ export class AccountService {
     }) as User;
   }
 
+  async deleteAccount(uid: number): Promise<boolean> {
+    return await this.accountPostgresService.deleteAccount(uid);
+  }
+
   async getUserData(uid: number): Promise<User> {
     const user = await this.accountPostgresService.getUserFromId(uid);
     if (user === null) {

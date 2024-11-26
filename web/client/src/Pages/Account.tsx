@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import { getUser } from '../services/transaction';
+import { deleteUser, getUser } from '../services/transaction';
 
 
 export default function Account() {
@@ -14,6 +14,7 @@ export default function Account() {
   const [dob, setDOB] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState('');
+  const [deleteError, setDeleteError] = useState('');
 
   useEffect(() => {
     if (!localStorage.getItem('accessToken')) {
@@ -28,6 +29,8 @@ export default function Account() {
 
         // Directly use the response
         const fetchedUser = res ?? {}; // Ensure it's an object even if undefined or null
+
+
 
         // Update individual fields
         setFirstName(fetchedUser.first_name ?? 'Unavailable');
@@ -168,11 +171,23 @@ export default function Account() {
             <br></br>
             <div className='font-semibold text-xl'>Date of Birth: {dob}</div>
             <br></br>
-            <div className="flex justify-center mt-4">
+            <div className="flex justify-center gap-5 mt-4">
               <button onClick={handleLogOut} className="px-4 py-2 shadow bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
                 Log Out
               </button>
+              <button onClick={async () => {
+                try {
+                  await deleteUser();
+                  handleLogOut();
+                  navigate('/');
+                } catch (e) {
+                  setDeleteError('You cannot delete an account with a balance.')
+                }
+              }} className="px-4 py-2 shadow bg-red-600 text-white rounded-md hover:bg-red-500">
+                Delete
+              </button>
             </div>
+            <div className='w-full text-red-600 text-center pt-4'>{deleteError}</div>
           </div>
           :
           <div className="mb-4">

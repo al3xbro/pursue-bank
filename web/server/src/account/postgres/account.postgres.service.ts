@@ -39,4 +39,16 @@ export class AccountPostgresService {
         data,
       })
   }
+
+  async deleteAccount(uid: number): Promise<boolean> {
+    const res = await this.prismaService.user.update({
+      where: {
+        id: uid,
+      },
+      data: {
+        status: 'DELETED',
+      },
+    });
+    return !!res
+  }
 }

@@ -34,6 +34,9 @@ export default function TransactionField() {
             required: {
               value: true,
               message: 'Please enter an amount.'
+            }, pattern: {
+              value: /^\d+(\.\d+)?$/,
+              message: 'Please enter a positive amount.'
             }
           })}
         />
