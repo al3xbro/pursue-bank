@@ -64,15 +64,10 @@ export default function Account() {
     }
   };
   function validateForm() {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const phoneRegex = /^\d{10}$/;
     let valid = true;
 
-    if (!emailRegex.test(email)) {
-      setError("Please enter a valid email address.");
-      valid = false;
-    }
-    else if (phone && !phoneRegex.test(phone)) {
+    if (phone && !phoneRegex.test(phone)) {
       setError("Please enter a valid 10-digit phone number.");
       valid = false;
     }
@@ -191,21 +186,6 @@ export default function Account() {
           </div>
           :
           <div className="mb-4">
-            {error && <div className="mb-4 text-red-600 text-center">{error}</div>}
-            <div className="mb-4">
-              <label htmlFor="email" className="block text-sm font-semibold text-gray-700">Email</label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 w-full p-2 border rounded-md outline-none focus:ring-2 focus:ring-indigo-600"
-                placeholder={email}
-                pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-                title="Please enter a valid email address"
-              />
-            </div>
-
             <div className="mb-4">
               <label htmlFor="password" className="block text-sm font-semibold text-gray-700">Password</label>
               <input

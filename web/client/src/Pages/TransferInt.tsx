@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import { internalTransaction, internalRecurring } from '../services/transaction';
+import { internalTransaction, internalRecurring, getBalance } from '../services/transaction';
 import Popup from 'reactjs-popup';
+import { validateCash } from '../util/validation';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export default function Transfer() {
   const [amount, setAmount] = useState('');
@@ -15,12 +17,18 @@ export default function Transfer() {
   const [recurringPeriod, setRecurringPeriod] = useState('');
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (!localStorage.getItem('accessToken')) {
       navigate('/login');
     }
   }, [navigate])
+
+  const { data } = useQuery({
+    queryKey: ['balance'],
+    queryFn: getBalance,
+  })
 
   const handleConfirm = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -29,7 +37,7 @@ export default function Transfer() {
       setError('Please fill in all fields');
       return;
     }
-    else if(!amountRegex.test(amount)) {
+    else if (!amountRegex.test(amount)) {
       setError('Please enter a valid amount of money with either 0 or 2 decimal places');
       return;
     }
@@ -37,8 +45,8 @@ export default function Transfer() {
       setError("Please enter a valid email address.");
       return;
     }
-    else if (Number(amount) < 0) {
-      setError('You cannot transfer a negative amount');
+    else if (Number(amount) <= 0) {
+      setError('You cannot transfer a negative or zero amount');
       return;
     }
     else if (isRecurringTransaction) {
@@ -51,6 +59,9 @@ export default function Transfer() {
         setError('Please select a valid date');
         return;
       }
+    } else if (amount > data.balance) {
+      setError('Insufficient funds');
+      return;
     }
     setIsPopupOpen(true);
     setError('');
@@ -62,9 +73,10 @@ export default function Transfer() {
     if (!isRecurringTransaction) {
       try {
         // Call the createTransaction function with the amount and bank account
-        const response = await internalTransaction(bankAccount, amount);
-        setTransactionId(response.id); // Set the transaction ID from response
         setIsPopupOpen(false);
+        const response = await internalTransaction(bankAccount, amount);
+        queryClient.invalidateQueries({ queryKey: ['balance'] })
+        setTransactionId(response.id); // Set the transaction ID from response
         setShowReceipt(true);
       } catch (error) {
         console.error('Transaction Error:', error);
@@ -124,10 +136,11 @@ export default function Transfer() {
               Amount
             </label> */}
             <input
-              type="number"
+              type="text"
+              inputMode='numeric'
               id="amount"
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={(e) => setAmount(prev => validateCash(prev, e.target.value))}
               placeholder="Amount"
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             />

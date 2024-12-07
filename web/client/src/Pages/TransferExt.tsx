@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import { externalTransaction, externalRecurring } from '../services/transaction';
+import { externalTransaction, externalRecurring, getBalance } from '../services/transaction';
 import Popup from 'reactjs-popup';
+import { validateCash } from '../util/validation';
+import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export default function Transfer() {
   const [amount, setAmount] = useState('');
@@ -17,6 +19,13 @@ export default function Transfer() {
 
   const navigate = useNavigate();
 
+  const queryClient = useQueryClient()
+
+  const { data } = useQuery({
+    queryKey: ['balance'],
+    queryFn: getBalance,
+  })
+
   useEffect(() => {
     if (!localStorage.getItem('accessToken')) {
       navigate('/login');
@@ -29,7 +38,7 @@ export default function Transfer() {
       setError('Please fill in all fields');
       return;
     }
-    else if(!amountRegex.test(amount)) {
+    else if (!amountRegex.test(amount)) {
       setError('Please enter a valid amount of money with either 0 or 2 decimal places');
       return;
     }
@@ -37,8 +46,8 @@ export default function Transfer() {
       setError('Please select a bank');
       return;
     }
-    else if (Number(amount) < 0) {
-      setError('You cannot transfer a negative amount');
+    else if (Number(amount) <= 0) {
+      setError('You cannot transfer a negative or zero amount');
       return;
     }
     else if (Number(bankAccount) < 0) {
@@ -55,6 +64,9 @@ export default function Transfer() {
         setError('Please select a valid date');
         return;
       }
+    } else if (amount > data.balance) {
+      setError('Insufficient funds');
+      return;
     }
     setIsPopupOpen(true);
     setError('');
@@ -66,9 +78,10 @@ export default function Transfer() {
     if (!isRecurringTransaction) {
       try {
         // Call the createTransaction function with the amount and bank account
-        const response = await externalTransaction(bankAccount, amount, targetBank);
-        setTransactionId(response.id); // Set the transaction ID from response
         setIsPopupOpen(false);
+        const response = await externalTransaction(bankAccount, amount, targetBank);
+        queryClient.invalidateQueries({ queryKey: ['balance'] })
+        setTransactionId(response.id); // Set the transaction ID from response
         setShowReceipt(true);
       } catch (error) {
         console.error('Transaction Error:', error);
@@ -128,10 +141,11 @@ export default function Transfer() {
               Amount
             </label> */}
             <input
-              type="number"
+              type="text"
+              inputMode='numeric'
               id="amount"
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={(e) => setAmount(prev => validateCash(prev, e.target.value))}
               placeholder="Amount"
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
             />
@@ -143,7 +157,7 @@ export default function Transfer() {
               Transfer To:
             </label> */}
             <input
-              type="number"
+              type="text"
               id="accountID"
               value={bankAccount}
               onChange={(e) => setBankAccount(e.target.value)}

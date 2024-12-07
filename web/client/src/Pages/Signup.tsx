@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { isValidBirthDate } from '../util/validation';
+import { parse } from 'date-fns';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -8,7 +10,7 @@ export default function Login() {
   const [lastName, setLast] = useState('');
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
-  const [dob, setDOB] = useState('');
+  const [dob, setDOB] = useState<string>('');
 
   const [error, setError] = useState(''); // For displaying error messages
   const navigate = useNavigate(); // Initialize navigate
@@ -55,7 +57,6 @@ export default function Login() {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const phoneRegex = /^\d{10}$/;
     let valid = true;
-
     if (!emailRegex.test(email)) {
       setError("Please enter a valid email address.");
       valid = false;
@@ -66,6 +67,10 @@ export default function Login() {
     }
     else if (password.length < 5) {
       setError("Password must be at least 5 characters long");
+      valid = false;
+    }
+    else if (!isValidBirthDate(parse(dob, 'yyyy-MM-dd', new Date()))) {
+      setError('Please enter a valid birth date.')
       valid = false;
     }
     else {

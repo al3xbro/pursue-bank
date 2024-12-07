@@ -111,15 +111,15 @@ export default function Home() {
             </div>
             :
             <div>
-              <div className="flex flex-col bg-white shadow-md rounded-lg overflow-hidden">
+              <div className="flex flex-col bg-white shadow-md w-[600px] rounded-lg overflow-hidden">
                 <div className="flex flex-col items-left w-full sm:p-8">
-                  <div className="font-semibold text-3xl sm:text-3xl">Account ID: {accountID}</div>
-                  <div className="font-semibold text-3xl sm:text-3xl">Account Email: {email}</div>
-                  <div className="font-semibold text-3xl sm:text-3xl">Account Name: {firstName} {lastName}</div>
-                  <div className="font-semibold text-3xl sm:text-3xl">Account Address: {address}</div>
-                  <div className="font-semibold text-3xl sm:text-3xl">Account Phone Number: {phone}</div>
-                  <div className="font-semibold text-3xl sm:text-3xl">Account Date of Birth: {dob}</div>
-                  <div className="font-semibold text-3xl sm:text-3xl">{`Transfer History: ${transactions.length ? '' : 'None'}`}</div>
+                  <div className="font-semibold text-3xl sm:text-3xl text-ellipsis whitespace-nowrap overflow-hidden">Account ID: {accountID}</div>
+                  <div className="font-semibold text-3xl sm:text-3xl text-ellipsis whitespace-nowrap overflow-hidden">Account Email: {email}</div>
+                  <div className="font-semibold text-3xl sm:text-3xl text-ellipsis whitespace-nowrap overflow-hidden">Account Name: {firstName} {lastName}</div>
+                  <div className="font-semibold text-3xl sm:text-3xl text-ellipsis whitespace-nowrap overflow-hidden">Account Address: {address}</div>
+                  <div className="font-semibold text-3xl sm:text-3xl text-ellipsis whitespace-nowrap overflow-hidden">Account Phone Number: {phone}</div>
+                  <div className="font-semibold text-3xl sm:text-3xl text-ellipsis whitespace-nowrap overflow-hidden">Account Date of Birth: {dob}</div>
+                  <div className="font-semibold text-3xl sm:text-3xl text-ellipsis whitespace-nowrap overflow-hidden">{`Transfer History: ${transactions.length ? '' : 'None'}`}</div>
                 </div>
                 <div className="flex w-full justify-center p-4 space-x-4 overflow-y-auto max-h-[400px]">
                   <div className="font-semibold text-sm sm:text-[40pt]">
