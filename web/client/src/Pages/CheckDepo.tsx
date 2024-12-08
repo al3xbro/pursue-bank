@@ -42,8 +42,8 @@ export default function CheckDepo() {
     else if (!isPhotoTaken) {
       setError('Please take a picture of the check');
       return;
-    } else if (Number(amount) < 0) {
-      setError('You cannot transfer a negative amount');
+    } else if (Number(amount) <= 0) {
+      setError('You cannot transfer a negative or zero amount');
       return;
     }
     setError('');
@@ -62,12 +62,22 @@ export default function CheckDepo() {
 
   };
 
-  const handlePhotoClick = () => {
-    if (webcamRef.current) {
-      webcamRef.current.capture(); // Call the capture function from WebcamComponent
-      setIsPhotoTaken(true);
+  const handlePhotoClick = async () => {
+    try {
+      // Check if camera permissions are granted
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      stream.getTracks().forEach((track) => track.stop()); // Stop the stream after checking access
+  
+      if (webcamRef.current) {
+        webcamRef.current.capture(); // Call the capture function from WebcamComponent
+        setIsPhotoTaken(true);
+      }
+    } catch (error) {
+      setError('Camera access is required to deposit checks. Please allow camera access.');
+      console.error('Camera access denied:', error);
     }
   };
+  
 
   const retakePhotoClick = () => {
     setIsPhotoTaken(false);
@@ -165,20 +175,4 @@ export default function CheckDepo() {
             <div className="flex justify-around mt-6">
               <button
                 onClick={() => navigate('/')}
-                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-red-700 transition"
-              >
-                Return
-              </button>
-              <button
-                onClick={reset}
-                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-green-700 transition"
-              >
-                New Deposit
-              </button>
-            </div>
-          </div>
-        </Popup>
-      </div>
-    </div>
-  );
-}
+                className="px
