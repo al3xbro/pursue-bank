@@ -175,4 +175,20 @@ export default function CheckDepo() {
             <div className="flex justify-around mt-6">
               <button
                 onClick={() => navigate('/')}
-                className="px
+                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-red-700 transition"
+              >
+                Return
+              </button>
+              <button
+                onClick={reset}
+                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-green-700 transition"
+              >
+                New Deposit
+              </button>
+            </div>
+          </div>
+        </Popup>
+      </div>
+    </div>
+  );
+}
