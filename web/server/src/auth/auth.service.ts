@@ -10,8 +10,8 @@ export class AuthService {
   ) { }
 
   async signIn(signInInfo: { email: string; password: string }): Promise<any> {
-    const user = await this.prismaService.user.findUnique({
-      where: { email: signInInfo.email },
+    const user = await this.prismaService.user.findFirst({
+      where: { email: signInInfo.email, status: 'ACTIVE' },
     });
 
     if (user === null || user.password !== signInInfo.password || user.status == 'DELETED') {
