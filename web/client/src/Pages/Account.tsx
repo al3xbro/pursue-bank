@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { deleteUser, getUser } from '../services/transaction';
+import { isValidBirthDate } from '../util/validation';
+import { parse } from 'date-fns';
 
 
 export default function Account() {
@@ -74,6 +76,14 @@ export default function Account() {
     else if (password.length < 5) {
       setError("Password must be at least 5 characters long");
       valid = false;
+    }
+    else if (!isValidBirthDate(parse(dob, 'yyyy-MM-dd', new Date()))) {
+      setError('Please enter a valid birth date.')
+      valid = false;
+    }
+    else if (!password || !firstName || !lastName || !address || !phone || !dob) {
+      setError("All fields are required.");
+      return;
     }
     else {
       setError("");

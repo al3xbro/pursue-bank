@@ -37,7 +37,8 @@ export default function TransactionField() {
             }, pattern: {
               value: /^\d+(\.\d{2})?$/,
               message: 'Please enter a positive amount with either 0 or 2 decimal places.'
-            }
+            },
+            validate: value => value > 0 || 'Amount must be greater than zero.',
           })}
         />
         <div className='flex gap-5'>
