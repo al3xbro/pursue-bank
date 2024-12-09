@@ -16,6 +16,7 @@ export default function Home() {
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
   const [dob, setDOB] = useState('');
+  const [status, setStatus] = useState('');
   const navigate = useNavigate();
   const [shownAccounts, setShownAccounts] = useState<any[]>([]);
 
@@ -50,6 +51,7 @@ export default function Home() {
         setAddress(fetchedUser.address ?? 'Unavailable');
         setPhone(fetchedUser.phone ?? 'Unavailable');
         setDOB(fetchedUser.dob ?? 'Unavailable');
+        setStatus(fetchedUser.status ?? 'Unavaliable');
       })
       .catch((err) => {
         console.error('Error fetching user:', err);
@@ -119,6 +121,7 @@ export default function Home() {
                   <div className="font-semibold text-3xl sm:text-3xl text-ellipsis whitespace-nowrap overflow-hidden">Account Address: {address}</div>
                   <div className="font-semibold text-3xl sm:text-3xl text-ellipsis whitespace-nowrap overflow-hidden">Account Phone Number: {phone}</div>
                   <div className="font-semibold text-3xl sm:text-3xl text-ellipsis whitespace-nowrap overflow-hidden">Account Date of Birth: {dob}</div>
+                  <div className="font-semibold text-3xl sm:text-3xl text-ellipsis whitespace-nowrap overflow-hidden">Account Status: {status}</div>
                   <div className="font-semibold text-3xl sm:text-3xl text-ellipsis whitespace-nowrap overflow-hidden">{`Transfer History: ${transactions.length ? '' : 'None'}`}</div>
                 </div>
                 <div className="flex w-full justify-center p-4 space-x-4 overflow-y-auto max-h-[400px]">
